@@ -67,6 +67,22 @@ var CONFIG = {
   },
 
   /* ------------------------------------------------------------------------
+     EQUIPES E MATERIAL PARA IMPRIMIR (plaquinhas.html e mapa.html)
+     - "nome": como a equipe aparece nas plaquinhas e na trilha do mapa.
+     - "cor": cor da borda das plaquinhas e das casas da trilha.
+     - "textoClaro": true se o nome fica melhor em letra branca sobre a cor.
+     - "casasNaTrilha": quantas casas cada equipe tem no mapa (sem contar
+       o INÍCIO). A última casa é a CHEGADA, no topo do morro.
+     ------------------------------------------------------------------------ */
+  equipes: [
+    { nome: "Vermelha", cor: "#d62828", textoClaro: true  },
+    { nome: "Azul",     cor: "#1f5fd1", textoClaro: true  },
+    { nome: "Verde",    cor: "#2a9440", textoClaro: true  },
+    { nome: "Amarela",  cor: "#f4c20d", textoClaro: false }
+  ],
+  casasNaTrilha: 10,
+
+  /* ------------------------------------------------------------------------
      VALORES PADRÃO DAS CONFIGURAÇÕES
      A professora pode mudar estes valores na tela "Configurações".
      O que ela escolher fica salvo no navegador. O botão "Restaurar padrões"

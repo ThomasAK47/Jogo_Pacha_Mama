@@ -1,0 +1,108 @@
+/* ==========================================================================
+   PLAQUINHAS.CSS — APARÊNCIA DAS PLAQUINHAS
+   ==========================================================================
+   Cada plaquinha tem uma borda grossa na cor da equipe (a cor vem do
+   config.js) e, no meio, a forma e a letra em preto, igual ao jogo.
+   ========================================================================== */
+
+/* Uma folha pode ter 1 plaquinha (A4 inteira) ou 2 (meia folha cada) */
+.folha.de-plaquinhas {
+  display: flex;
+  flex-direction: column;
+}
+
+.plaquinha {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6mm;
+  border: 14mm solid var(--cor);
+  border-radius: 17mm;
+  /* linha fina escura por dentro: a borda amarela também fica visível */
+  box-shadow: inset 0 0 0 0.8mm var(--borda);
+  position: relative;
+}
+
+/* Nome da equipe, no alto, na cor da equipe */
+.nome-equipe {
+  position: absolute;
+  top: 5mm;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--cor);
+  color: #1a1a1a;
+  border: 0.8mm solid var(--borda);
+  border-radius: 999px;
+  padding: 1.5mm 7mm;
+  font-size: 7mm;
+  font-weight: bold;
+  white-space: nowrap;
+  letter-spacing: 0.04em;
+}
+.nome-equipe.texto-claro { color: #ffffff; }
+
+.marca-plaquinha {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4mm;
+}
+.forma-grande {
+  width: 120mm;
+  height: 120mm;
+  fill: var(--texto);
+}
+.letra-grande {
+  font-size: 85mm;
+  font-weight: 800;
+  line-height: 0.9;
+}
+
+/* Duas por folha: forma e letra lado a lado, um pouco menores */
+.folha.duas .plaquinha {
+  border-width: 10mm;
+}
+.folha.duas .marca-plaquinha {
+  flex-direction: row;
+  gap: 10mm;
+  margin-top: 8mm;
+}
+.folha.duas .forma-grande {
+  width: 72mm;
+  height: 72mm;
+}
+.folha.duas .letra-grande {
+  font-size: 62mm;
+}
+.folha.duas .nome-equipe {
+  font-size: 5.5mm;
+  top: 3.5mm;
+}
+
+/* Linha tracejada entre as duas plaquinhas da mesma folha */
+.linha-corte {
+  flex: none;
+  height: 8mm;
+  display: flex;
+  align-items: center;
+  gap: 2mm;
+  color: var(--texto-suave);
+  font-size: 3.5mm;
+}
+.linha-corte::after {
+  content: "";
+  flex: 1;
+  border-top: 0.5mm dashed #8a8a8a;
+}
+
+/* Economizar tinta: a forma fica só com o contorno */
+.economia .forma-grande {
+  fill: none;
+  stroke: var(--texto);
+  stroke-width: 7;
+  stroke-linejoin: round;
+  /* o contorno fica dentro do desenho, sem cortar nas pontas */
+  overflow: visible;
+}

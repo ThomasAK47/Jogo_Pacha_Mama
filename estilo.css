@@ -947,6 +947,16 @@ body.na-pergunta .marca { display: none; }
 .caixa-erro p { margin-top: 6px; }
 .erro-fatal { margin: 60px auto; }
 
+/* Links discretos para as páginas de imprimir */
+.links-impressao {
+  font-size: 20px;
+  color: var(--texto-suave);
+}
+.links-impressao a {
+  color: var(--texto);
+  font-weight: bold;
+}
+
 .caixa-avisos {
   max-width: 900px;
   background: #fff3cd;

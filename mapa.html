@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mapa para imprimir – Pachamama</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%2313808a' d='M12 1.5C12 1.5 4.5 10 4.5 15a7.5 7.5 0 0 0 15 0C19.5 10 12 1.5 12 1.5Z'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="impressao.css">
+  <link rel="stylesheet" href="mapa.css">
+  <!-- Papel deitado, com 8 mm de margem. O mapa.js troca A4 por A3 quando
+       a professora escolhe no painel. -->
+  <style id="tamanho-papel">@page { size: A4 landscape; margin: 8mm; }</style>
+</head>
+<body>
+
+  <!-- ===================== PAINEL DE OPÇÕES (não sai na impressão) ===================== -->
+  <div class="painel">
+    <div class="painel-topo">
+      <div>
+        <p class="sobretitulo">Espaço Pachamama · UFSM</p>
+        <h1>Mapa para imprimir</h1>
+      </div>
+      <a class="voltar" href="index.html">← Voltar ao jogo</a>
+    </div>
+
+    <div class="grupo-opcoes">
+      <span class="rotulo">Papel</span>
+      <span class="grupo-opcoes">
+        <button id="papel-a4" class="opcao-impressao" type="button" aria-pressed="true">A4</button>
+        <button id="papel-a3" class="opcao-impressao" type="button" aria-pressed="false">A3 (maior, melhor para as peças)</button>
+      </span>
+    </div>
+
+    <div class="linha-imprimir">
+      <button id="botao-imprimir" class="botao-imprimir" type="button">Imprimir</button>
+      <span class="resumo">1 folha deitada</span>
+    </div>
+    <ul class="dicas">
+      <li>Imprima colorido e deixe a escala em 100% (ou “Tamanho real”).</li>
+      <li>Cada equipe usa uma peça na sua trilha: uma tampinha, um botão ou um feijão.</li>
+      <li>Os pontos 1, 2, 3 e 4 são os que aparecem nas perguntas com “OLHEM O MAPA”.</li>
+    </ul>
+  </div>
+
+  <!-- ===================== A FOLHA DO MAPA ===================== -->
+  <div class="folhas">
+    <div id="folha-mapa" class="folha paisagem folha-mapa">
+
+      <div class="cabecalho-mapa">
+        <strong>Mapa do Morro</strong>
+        <span>Espaço Pachamama · UFSM · Desastres Naturais</span>
+      </div>
+
+      <div class="corpo-mapa">
+        <div class="lado-mapa">
+          <!-- O desenho (rio, morro com curvas de nível e pontos) é feito
+               pelo mapa.js dentro deste quadro -->
+          <svg id="desenho-mapa" class="desenho-mapa" viewBox="0 0 700 620" role="img"
+               aria-label="Mapa de um morro com curvas de nível, um rio embaixo e os pontos 1, 2, 3 e 4"></svg>
+
+          <div class="legenda">
+            <span><i class="amostra amostra-rio"></i>Rio</span>
+            <span><i class="amostra amostra-curva"></i>Curva de nível (de 10 em 10 metros)</span>
+            <span><i class="amostra amostra-arvore"></i>Mata</span>
+            <span><i class="amostra amostra-ponto">1</i>Ponto das perguntas</span>
+          </div>
+        </div>
+
+        <div class="lado-trilhas">
+          <p class="titulo-trilhas">Trilha até o topo</p>
+          <!-- As trilhas das equipes são montadas pelo mapa.js, a partir do config.js -->
+          <div id="trilhas" class="trilhas"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="mapa.js"></script>
+</body>
+</html>
