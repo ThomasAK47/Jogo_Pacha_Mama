@@ -373,6 +373,9 @@ button:focus-visible {
   cursor: pointer;
 }
 .botao-barra:hover { background: rgba(255, 255, 255, 0.15); }
+.botao-barra:disabled { opacity: 0.4; cursor: default; }
+/* Na tela da pergunta, o nome "Pachamama" sai para dar lugar ao tema */
+body.na-pergunta .marca { display: none; }
 .botao-barra.desligado {
   background: #ffffff;
   color: var(--barra);
@@ -525,23 +528,25 @@ button:focus-visible {
 .faixa-pergunta {
   display: flex;
   align-items: center;
-  gap: 14px;
-  flex-wrap: wrap;
+  justify-content: center;
 }
 
-.chip-tema {
+/* Tema da pergunta, na barra do topo */
+.selo-tema {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  padding: 6px 20px 6px 14px;
+  gap: 8px;
+  padding: 4px 16px 4px 10px;
   border-radius: 999px;
+  border: 2px solid #ffffff;
   color: #ffffff;
-  font-size: 24px;
+  font-size: 20px;
   font-weight: bold;
+  white-space: nowrap;
 }
-.chip-tema .icone-tema {
-  width: 30px;
-  height: 30px;
+.selo-tema .icone-tema {
+  width: 24px;
+  height: 24px;
 }
 
 /* "OLHEM O MAPA" — amarelo forte, pisca algumas vezes para chamar atenção */
@@ -568,21 +573,6 @@ button:focus-visible {
   0%, 100% { transform: scale(1); }
   50%      { transform: scale(1.08); }
 }
-
-/* Botão discreto para trocar uma pergunta inadequada para a turma */
-.botao-trocar {
-  margin-left: auto;
-  font-family: inherit;
-  font-size: 17px;
-  padding: 8px 14px;
-  border-radius: 12px;
-  border: 2px solid #8a8a8a;
-  background: transparent;
-  color: #555555;
-  cursor: pointer;
-}
-.botao-trocar:hover { background: rgba(0, 0, 0, 0.06); }
-.botao-trocar:disabled { opacity: 0.4; cursor: default; }
 
 /* Enunciado: nunca menor que 40px */
 .texto-pergunta {
@@ -723,11 +713,11 @@ button:focus-visible {
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
-  gap: 6px 16px;
-  padding: 6px 20px;
+  gap: 4px 16px;
+  padding: 4px 20px;
   background: var(--listras-alerta);
   border-bottom: 3px solid var(--borda);
-  font-size: 22px;
+  font-size: 20px;
   font-weight: bold;
   text-align: center;
 }
