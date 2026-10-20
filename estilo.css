@@ -498,6 +498,282 @@ button:focus-visible {
   box-shadow: 0 10px 0 var(--principal-escuro);
 }
 
+/* Aviso embaixo do GIRAR (temas esgotados etc.) */
+.aviso-roleta {
+  font-size: 20px;
+  font-weight: bold;
+  background: #fff3cd;
+  border: 3px solid #c79a00;
+  border-radius: 14px;
+  padding: 10px 14px;
+}
+
+/* ----------------------------- Tela da pergunta ----------------------------- */
+
+#tela-pergunta {
+  /* --escala diminui as letras se o texto não couber (ver jogo.js) */
+  --escala: 1;
+  height: calc(100vh - var(--altura-barra));
+  min-height: 0;
+  overflow-y: auto;
+  padding: 12px 32px 28px;   /* espaço embaixo para a legenda de atalhos */
+  gap: 12px;
+}
+
+.faixa-pergunta {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.chip-tema {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 20px 6px 14px;
+  border-radius: 999px;
+  color: #ffffff;
+  font-size: 24px;
+  font-weight: bold;
+}
+.chip-tema .icone-tema {
+  width: 30px;
+  height: 30px;
+}
+
+/* "OLHEM O MAPA" — amarelo forte, pisca algumas vezes para chamar atenção */
+.aviso-mapa {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 20px 6px 12px;
+  border-radius: 14px;
+  background: #ffd166;
+  border: 4px solid var(--borda);
+  font-size: 28px;
+  font-weight: bold;
+  animation: chama-atencao 0.9s ease-in-out 4;
+}
+.aviso-mapa .icone-tema {
+  width: 34px;
+  height: 34px;
+}
+.aviso-mapa .pontos {
+  font-weight: normal;
+}
+@keyframes chama-atencao {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.08); }
+}
+
+/* Botão discreto para trocar uma pergunta inadequada para a turma */
+.botao-trocar {
+  margin-left: auto;
+  font-family: inherit;
+  font-size: 17px;
+  padding: 8px 14px;
+  border-radius: 12px;
+  border: 2px solid #8a8a8a;
+  background: transparent;
+  color: #555555;
+  cursor: pointer;
+}
+.botao-trocar:hover { background: rgba(0, 0, 0, 0.06); }
+.botao-trocar:disabled { opacity: 0.4; cursor: default; }
+
+/* Enunciado: nunca menor que 40px */
+.texto-pergunta {
+  font-size: max(40px, calc(clamp(40px, 6.6vh, 60px) * var(--escala)));
+  line-height: 1.18;
+  text-align: center;
+  margin: 2px 0;
+}
+
+/* Opções: 2 lado a lado; 3 uma embaixo da outra; 4 em grade 2 x 2 */
+.opcoes {
+  flex: 1;
+  display: grid;
+  gap: 14px;
+  align-content: center;
+}
+.opcoes.quantas-2 { grid-template-columns: 1fr 1fr; }
+.opcoes.quantas-3 { grid-template-columns: 1fr; }
+.opcoes.quantas-4 { grid-template-columns: 1fr 1fr; }
+
+.opcao {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background: var(--cartao);       /* fundo neutro, sem cor de equipe */
+  border: 4px solid var(--borda);
+  border-radius: 20px;
+  padding: 10px 22px;
+  font-size: max(26px, calc(clamp(28px, 5vh, 44px) * var(--escala)));
+  font-weight: 600;
+  line-height: 1.2;
+  transition: opacity 0.4s, filter 0.4s;
+}
+/* No Infantil (2 opções) as formas ficam bem maiores */
+.opcoes.quantas-2 .opcao {
+  flex-direction: column;
+  text-align: center;
+  padding: 16px 22px;
+}
+.marcador {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: none;
+}
+.marcador .forma {
+  width: 1.25em;
+  height: 1.25em;
+}
+.opcoes.quantas-2 .marcador .forma {
+  width: 2em;
+  height: 2em;
+}
+.marcador .letra {
+  font-size: 1.25em;
+  font-weight: 800;
+}
+.texto-opcao {
+  flex: 1;
+}
+.selo-certa {
+  flex: none;
+  background: var(--principal);
+  color: #ffffff;
+  font-size: 0.7em;
+  font-weight: bold;
+  padding: 4px 16px;
+  border-radius: 999px;
+}
+
+/* Depois de revelar */
+.opcao.certa {
+  border-color: var(--principal-escuro);
+  background: #dcf2e2;
+  box-shadow: 0 0 0 6px var(--principal);
+  animation: pulsa 0.55s ease-in-out 2;
+}
+.opcao.errada {
+  opacity: 0.3;
+  filter: grayscale(1);
+}
+.sem-animacao .opcao.certa,
+.sem-animacao .explicacao { animation: none; }
+@keyframes pulsa {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.04); }
+}
+
+.rodape-pergunta {
+  display: flex;
+  gap: 20px;
+  align-items: stretch;
+  justify-content: center;
+}
+.botao-grande {
+  font-size: max(30px, calc(clamp(32px, 6vh, 48px) * var(--escala)));
+  padding: 12px 40px;
+  white-space: nowrap;
+}
+.explicacao {
+  flex: 1;
+  background: var(--cartao);
+  border: 3px solid var(--borda);
+  border-left: 14px solid var(--principal);
+  border-radius: 16px;
+  padding: 10px 20px;
+  font-size: max(22px, calc(clamp(22px, 3.7vh, 32px) * var(--escala)));
+  line-height: 1.25;
+  animation: aparece 0.4s ease-out;
+}
+.explicacao .titulo-explicacao {
+  display: block;
+  font-size: 0.75em;
+  font-weight: bold;
+  color: var(--principal);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* ----------------------------- Contagem 3, 2, 1 ----------------------------- */
+
+.contagem {
+  position: fixed;
+  inset: 0;
+  z-index: 45;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(20, 32, 44, 0.82);
+}
+.contagem-texto {
+  color: #ffffff;
+  font-size: min(45vh, 380px);
+  font-weight: 900;
+  line-height: 1;
+  text-shadow: 0 10px 0 rgba(0, 0, 0, 0.35);
+}
+.contagem-texto.palavra {
+  font-size: min(17vh, 15vw);
+  color: #ffd166;
+}
+.contagem-texto.anima { animation: numero 0.85s ease-out forwards; }
+.contagem-texto.palavra.anima { animation: palavra 0.6s cubic-bezier(0.2, 1.5, 0.4, 1) forwards; }
+@keyframes numero {
+  0%   { transform: scale(2); opacity: 0; }
+  25%  { transform: scale(1); opacity: 1; }
+  80%  { opacity: 1; }
+  100% { transform: scale(0.8); opacity: 0; }
+}
+@keyframes palavra {
+  0%   { transform: scale(0.3); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* ----------------------------- Avisos sobre o perguntas.js ----------------------------- */
+
+.caixa-erro {
+  max-width: 900px;
+  background: #fde2e1;
+  border: 4px solid #b3261e;
+  border-radius: 18px;
+  padding: 18px 24px;
+  text-align: left;
+  font-size: 22px;
+}
+.caixa-erro strong {
+  display: block;
+  font-size: 28px;
+  margin-bottom: 8px;
+}
+.caixa-erro p { margin-top: 6px; }
+.erro-fatal { margin: 60px auto; }
+
+.caixa-avisos {
+  max-width: 900px;
+  background: #fff3cd;
+  border: 3px solid #c79a00;
+  border-radius: 14px;
+  padding: 8px 16px;
+  text-align: left;
+  font-size: 18px;
+}
+.caixa-avisos summary {
+  cursor: pointer;
+  font-weight: bold;
+}
+.caixa-avisos ul {
+  margin: 8px 0 4px;
+  padding-left: 22px;
+  max-height: 30vh;
+  overflow-y: auto;
+}
+
 /* ----------------------------- Janela de confirmação ----------------------------- */
 
 .modal {

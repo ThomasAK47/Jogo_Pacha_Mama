@@ -95,6 +95,7 @@ var Roleta = {
   canvas: null,
   ponteiro: null,
   temas: [],        // lista de temas (de CONFIG.temas)
+  inativos: {},     // temas sem perguntas sobrando: { chave: "esgotado" }
   angulo: 0,        // quanto a roleta está girada, em graus (sentido horário)
   girando: false,
 
@@ -166,6 +167,9 @@ var Roleta = {
     // Fatias
     for (var i = 0; i < this.temas.length; i++) {
       var tema = this.temas[i];
+      // Fatia cinza = tema sem perguntas sobrando (a roleta não para nela)
+      var rotuloInativo = this.inativos[tema.chave];
+      var corDesenho = rotuloInativo ? "#8f897c" : "#ffffff";
       // A fatia 0 começa no topo (-90°) e as próximas seguem no sentido horário.
       var inicio = -Math.PI / 2 + i * fatia;
 
@@ -173,7 +177,7 @@ var Roleta = {
       ctx.moveTo(centro, centro);
       ctx.arc(centro, centro, raio, inicio, inicio + fatia);
       ctx.closePath();
-      ctx.fillStyle = tema.cor;
+      ctx.fillStyle = rotuloInativo ? "#d6d1c4" : tema.cor;
       ctx.fill();
       ctx.lineWidth = 3;
       ctx.strokeStyle = "#ffffff";
@@ -191,7 +195,7 @@ var Roleta = {
         ctx.save();
         ctx.translate(-lado / 2, -raio * 0.40 - lado / 2);
         ctx.scale(lado / 24, lado / 24);
-        ctx.fillStyle = "#ffffff";
+        ctx.fillStyle = corDesenho;
         ctx.fill(new Path2D(icone.caminho), icone.regra);
         ctx.restore();
       }
@@ -204,11 +208,20 @@ var Roleta = {
       ctx.lineJoin = "round";
       for (var l = 0; l < linhas.length; l++) {
         var y = -this.raioDaLinha(raio, tamanhoLetra, l);
-        ctx.lineWidth = 4;
-        ctx.strokeStyle = "rgba(0, 0, 0, 0.35)";
-        ctx.strokeText(linhas[l], 0, y);
-        ctx.fillStyle = "#ffffff";
+        if (!rotuloInativo) {
+          ctx.lineWidth = 4;
+          ctx.strokeStyle = "rgba(0, 0, 0, 0.35)";
+          ctx.strokeText(linhas[l], 0, y);
+        }
+        ctx.fillStyle = corDesenho;
         ctx.fillText(linhas[l], 0, y);
+      }
+
+      // Palavra "esgotado" entre o ícone e o nome
+      if (rotuloInativo) {
+        ctx.font = "bold " + Math.round(tamanhoLetra * 0.72) + "px " + fonte;
+        ctx.fillStyle = "#5f5a50";
+        ctx.fillText(rotuloInativo, 0, -raio * 0.595);
       }
       ctx.restore();
     }
