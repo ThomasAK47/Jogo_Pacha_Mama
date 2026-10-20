@@ -3,61 +3,34 @@
    ==========================================================================
    A folha é feita para A4 deitada. No A3, o mapa.js aumenta tudo na mesma
    proporção (classe "a3"), então as medidas abaixo valem para os dois.
+   O desenho em si (cores do morro, trilhas, árvores...) fica no mapa.js.
    ========================================================================== */
 
 .folha-mapa {
   display: flex;
   flex-direction: column;
-  padding: 0;
+  gap: 1.5mm;
 }
 /* A3 tem 1,414 vez o tamanho do A4 */
 .folha-mapa.a3 { zoom: 1.4142; }
 
-.cabecalho-mapa {
-  flex: none;
-  height: 9mm;
-  display: flex;
-  align-items: baseline;
-  gap: 4mm;
-  padding: 0 1mm;
-}
-.cabecalho-mapa strong { font-size: 6mm; }
-.cabecalho-mapa span {
-  font-size: 3.6mm;
-  color: var(--texto-suave);
-}
-
-.corpo-mapa {
-  flex: 1;
-  display: flex;
-  gap: 4mm;
-  min-height: 0;
-}
-
-/* ----------------------------- Desenho do mapa ----------------------------- */
-
-.lado-mapa {
-  flex: none;
-  width: 199mm;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5mm;
-}
 .desenho-mapa {
   display: block;
-  width: 199mm;
-  height: 176.3mm;           /* mesma proporção do viewBox: 700 x 620 */
-  border: 0.6mm solid var(--borda);
+  width: 281mm;
+  height: 179.8mm;           /* mesma proporção do viewBox: 1000 x 640 */
+  border: 0.7mm solid var(--borda);
   border-radius: 3mm;
   font-family: var(--fonte);
 }
 
+/* ----------------------------- Legenda ----------------------------- */
+
 .legenda {
   display: flex;
-  gap: 5mm;
+  justify-content: center;
+  gap: 6mm;
   font-size: 3.3mm;
   align-items: center;
-  padding-left: 1mm;
 }
 .legenda span {
   display: inline-flex;
@@ -71,7 +44,7 @@
 .amostra-rio {
   width: 8mm;
   height: 3mm;
-  background: #5aa9e6;
+  background: #4fa3e3;
   border: 0.3mm solid #1f6fa8;
 }
 .amostra-curva {
@@ -83,116 +56,24 @@
   width: 3.4mm;
   height: 3.4mm;
   border-radius: 50%;
-  background: #4f9a4a;
-  border: 0.3mm solid #2f6b2c;
+  background: #3f9142;
+  border: 0.3mm solid #245c27;
 }
+.amostra-casa,
 .amostra-ponto {
   width: 5mm;
   height: 5mm;
-  line-height: 4.2mm;
+  line-height: 3.8mm;
   border-radius: 50%;
   background: #ffffff;
-  border: 0.5mm solid var(--borda);
   text-align: center;
-  font-size: 3.2mm;
-  font-weight: bold;
-}
-
-/* ----------------------------- Trilhas das equipes ----------------------------- */
-
-.lado-trilhas {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5mm;
-  min-width: 0;
-}
-.titulo-trilhas {
-  font-size: 4.2mm;
-  font-weight: bold;
-  text-align: center;
-}
-.trilhas {
-  flex: 1;
-  display: flex;
-  gap: 1.5mm;
-  min-height: 0;
-}
-
-/* Uma coluna por equipe: o nome em cima, a CHEGADA, as casas e o INÍCIO embaixo */
-.trilha {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  position: relative;
-  min-width: 0;
-}
-/* Linha que liga as casas, atrás delas */
-.trilha::before {
-  content: "";
-  position: absolute;
-  top: 12mm;
-  bottom: 6mm;
-  left: 50%;
-  width: 1.4mm;
-  margin-left: -0.7mm;
-  background: var(--cor);
-  opacity: 0.45;
-}
-
-.nome-trilha {
-  position: relative;
-  width: 100%;
-  text-align: center;
-  background: var(--cor);
-  color: #1a1a1a;
-  border: 0.4mm solid var(--borda);
-  border-radius: 2mm;
-  font-size: 3.2mm;
-  font-weight: bold;
-  padding: 0.8mm 0;
-  white-space: nowrap;
-}
-.nome-trilha.texto-claro { color: #ffffff; }
-
-.casa {
-  position: relative;
-  width: 12.5mm;
-  height: 12.5mm;
-  border-radius: 50%;
-  background: #ffffff;
-  border: 1.2mm solid var(--cor);
-  box-shadow: 0 0 0 0.3mm var(--borda);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 4.6mm;
-  font-weight: bold;
-}
-/* A última casa: topo do morro, com bandeirinha */
-.casa.chegada {
-  width: 14mm;
-  height: 14mm;
-  border-width: 1.6mm;
-  flex-direction: column;
-  font-size: 3.6mm;
-  line-height: 1;
-}
-.casa.chegada svg {
-  width: 5mm;
-  height: 5mm;
-}
-.inicio {
-  position: relative;
-  width: 100%;
-  text-align: center;
-  background: #ffffff;
-  border: 1mm solid var(--cor);
-  box-shadow: 0 0 0 0.3mm var(--borda);
-  border-radius: 2.5mm;
   font-size: 3mm;
   font-weight: bold;
-  padding: 1.6mm 0;
+}
+.amostra-casa {
+  border: 0.7mm solid #d62828;
+}
+.amostra-ponto {
+  border: 0.6mm solid var(--borda);
+  background: #ffe066;
 }
