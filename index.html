@@ -33,6 +33,12 @@
     </div>
   </header>
 
+  <!-- Faixa que lembra a rodada de alerta (durante a roleta e a pergunta) -->
+  <div id="faixa-alerta" class="faixa-alerta" hidden>
+    <strong id="faixa-alerta-titulo"></strong>
+    <span id="faixa-alerta-regra"></span>
+  </div>
+
   <!-- ===================== TELA INICIAL ===================== -->
   <section id="tela-inicial" class="tela">
     <div class="cabecalho-inicial">
@@ -178,6 +184,32 @@
       <button id="botao-proxima" class="botao botao-principal botao-grande" type="button" hidden>PRÓXIMA</button>
     </div>
   </section>
+
+  <!-- ===================== ALERTA DE ENCHENTE (evento especial) ===================== -->
+  <!-- Os textos vêm do config.js (CONFIG.evento) -->
+  <div id="alerta" class="alerta" hidden>
+    <div class="alerta-conteudo">
+      <p id="alerta-titulo" class="alerta-titulo"></p>
+      <p id="alerta-subtitulo" class="alerta-subtitulo"></p>
+      <div id="alerta-regra" class="alerta-regra" hidden>
+        <span class="alerta-regra-rotulo">Regra desta rodada</span>
+        <span id="alerta-regra-texto"></span>
+      </div>
+      <button id="botao-alerta-girar" class="botao botao-girar" type="button" hidden>GIRAR A ROLETA</button>
+    </div>
+
+    <!-- Água subindo, com um barquinho (desenho, nada assustador) -->
+    <div class="agua" aria-hidden="true">
+      <svg class="barquinho" viewBox="0 0 120 100">
+        <polygon points="58,8 58,62 20,62" fill="#ffffff" stroke="#1a1a1a" stroke-width="4" stroke-linejoin="round"/>
+        <polygon points="64,16 64,62 96,62" fill="#ffd166" stroke="#1a1a1a" stroke-width="4" stroke-linejoin="round"/>
+        <line x1="61" y1="6" x2="61" y2="68" stroke="#1a1a1a" stroke-width="5" stroke-linecap="round"/>
+        <path d="M8 68 H112 L98 92 H22 Z" fill="#c2491d" stroke="#1a1a1a" stroke-width="4" stroke-linejoin="round"/>
+      </svg>
+      <div class="onda onda-fundo"></div>
+      <div class="onda onda-frente"></div>
+    </div>
+  </div>
 
   <!-- ===================== CONTAGEM "3, 2, 1, LEVANTEM!" ===================== -->
   <div id="contagem" class="contagem" hidden>
