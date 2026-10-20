@@ -82,5 +82,28 @@ var Sons = {
     }
     // um brilho agudo no final
     this.nota(2093, 0.36, 0.3, "sine", 0.12);
+  },
+
+  /* Bipe de cada número da contagem "3, 2, 1". */
+  bipeContagem: function () {
+    this.nota(660, 0, 0.2, "square", 0.14);
+  },
+
+  /* Som do "LEVANTEM!": mais agudo e mais longo. */
+  levantem: function () {
+    this.nota(880, 0, 0.55, "square", 0.14);
+    this.nota(1320, 0, 0.55, "triangle", 0.12);
+  },
+
+  /* Fanfarra curta quando a resposta certa aparece. */
+  acerto: function () {
+    var notas = [392, 523, 659, 784];
+    for (var i = 0; i < notas.length; i++) {
+      this.nota(notas[i], i * 0.08, 0.15, "triangle", 0.3);
+    }
+    // acorde final (três notas juntas)
+    this.nota(523, 0.34, 0.7, "triangle", 0.22);
+    this.nota(659, 0.34, 0.7, "triangle", 0.22);
+    this.nota(1047, 0.34, 0.7, "triangle", 0.22);
   }
 };

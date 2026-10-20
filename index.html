@@ -41,15 +41,24 @@
       <div id="icones-temas" class="icones-temas"></div>
     </div>
 
-    <h2 class="chamada">Escolha o nível para começar:</h2>
+    <h2 id="chamada-nivel" class="chamada">Escolha o nível para começar:</h2>
     <!-- Os botões dos níveis são criados pelo jogo.js, a partir do config.js -->
     <div id="botoes-nivel" class="botoes-nivel"></div>
+
+    <!-- Aparece se o arquivo perguntas.js não puder ser lido -->
+    <div id="erro-banco" class="caixa-erro" hidden></div>
 
     <div class="linha-botoes">
       <button id="botao-continuar" class="botao botao-principal" type="button" hidden></button>
       <button id="botao-config" class="botao botao-secundario" type="button">Configurações</button>
       <button id="botao-tela-cheia-inicio" class="botao botao-secundario" type="button">Tela cheia</button>
     </div>
+
+    <!-- Avisos do verificador de perguntas (aparece só se houver problema) -->
+    <details id="avisos-banco" class="caixa-avisos" hidden>
+      <summary id="avisos-resumo"></summary>
+      <ul id="avisos-lista"></ul>
+    </details>
   </section>
 
   <!-- ===================== CONFIGURAÇÕES ===================== -->
@@ -96,10 +105,15 @@
       </div>
 
       <div class="cartao-config">
-        <h2>Revelar a resposta</h2>
+        <h2>Perguntas</h2>
         <div class="linha-ajuste">
-          <span>Contagem “3, 2, 1, LEVANTEM!”</span>
+          <span>Contagem “3, 2, 1, LEVANTEM!” antes de revelar</span>
           <button id="aj-contagem" class="alternar" type="button"></button>
+        </div>
+        <p id="resumo-banco" class="explica"></p>
+        <div class="linha-ajuste">
+          <span id="resumo-usadas" class="explica"></span>
+          <button id="aj-zerar-usadas" class="botao botao-secundario" type="button">Zerar perguntas usadas</button>
         </div>
       </div>
 
@@ -141,8 +155,34 @@
       </div>
       <p id="dica-roleta" class="dica-roleta">Clique em GIRAR para sortear o tema!</p>
       <button id="botao-girar" class="botao botao-girar" type="button">GIRAR</button>
+      <p id="aviso-roleta" class="aviso-roleta" hidden></p>
     </div>
   </section>
+
+  <!-- ===================== TELA DA PERGUNTA ===================== -->
+  <section id="tela-pergunta" class="tela">
+    <div class="faixa-pergunta">
+      <span id="chip-tema" class="chip-tema"></span>
+      <span id="aviso-mapa" class="aviso-mapa" hidden></span>
+      <button id="botao-trocar" class="botao-trocar" type="button">Trocar pergunta</button>
+    </div>
+
+    <h1 id="texto-pergunta" class="texto-pergunta"></h1>
+
+    <!-- As opções (A ▲, B ●, C ■, D ★) são criadas pelo jogo.js -->
+    <div id="opcoes" class="opcoes"></div>
+
+    <div class="rodape-pergunta">
+      <button id="botao-revelar" class="botao botao-principal botao-grande" type="button">REVELAR RESPOSTA</button>
+      <div id="explicacao" class="explicacao" hidden></div>
+      <button id="botao-proxima" class="botao botao-principal botao-grande" type="button" hidden>PRÓXIMA</button>
+    </div>
+  </section>
+
+  <!-- ===================== CONTAGEM "3, 2, 1, LEVANTEM!" ===================== -->
+  <div id="contagem" class="contagem" hidden>
+    <div id="contagem-texto" class="contagem-texto"></div>
+  </div>
 
   <!-- ===================== JANELA DE CONFIRMAÇÃO ===================== -->
   <div id="modal" class="modal" hidden>
@@ -162,8 +202,16 @@
   <!-- Legenda discreta dos atalhos de teclado -->
   <p class="atalhos">Atalhos: ESPAÇO girar/próxima · ENTER revelar · M som · F tela cheia · R reiniciar · ESC início</p>
 
+  <!-- Guarda erros de carregamento (ex.: erro de digitação no perguntas.js),
+       para o jogo poder avisar na tela em vez de ficar em branco -->
+  <script>
+    window.ERROS_DE_CARGA = [];
+    window.addEventListener("error", function (e) { window.ERROS_DE_CARGA.push(e); });
+  </script>
+
   <!-- Ordem importa: primeiro os textos e dados, depois o que usa eles -->
   <script src="config.js"></script>
+  <script src="perguntas.js"></script>
   <script src="sons.js"></script>
   <script src="roleta.js"></script>
   <script src="jogo.js"></script>
