@@ -56,13 +56,20 @@
      opções com até ~50 letras, explicação com até ~160 letras.
 
    A ordem das perguntas no arquivo não importa: o jogo sorteia.
+
+   SOBRE O CONTEÚDO
+   Todas as perguntas abaixo foram escritas como exemplo e estão marcadas
+   com "// REVISAR". Depois de conferir uma pergunta, pode apagar a marca.
    ========================================================================== */
 
 var PERGUNTAS = [
 
   /* ====================================================================
      NÍVEL INFANTIL — 2 opções (A ▲, B ●)
+     Linguagem simples. Foco no que a criança pode fazer.
      ==================================================================== */
+
+  /* ---------- Infantil · Enchentes ---------- */
 
   { // REVISAR
     id: "INF-ENC-01",
@@ -75,6 +82,48 @@ var PERGUNTAS = [
   },
 
   { // REVISAR
+    id: "INF-ENC-02",
+    nivel: "infantil",
+    tema: "enchentes",
+    pergunta: "Podemos beber a água da enchente?",
+    opcoes: ["Sim, é só água da chuva", "Não, ela pode estar suja"],
+    correta: "B",
+    explicacao: "A água da enchente se mistura com lixo e esgoto e pode deixar a gente doente. Só bebemos água limpa."
+  },
+
+  { // REVISAR
+    id: "INF-ENC-03",
+    nivel: "infantil",
+    tema: "enchentes",
+    pergunta: "Qual é o número da Defesa Civil, que ajuda as pessoas em emergências?",
+    opcoes: ["123", "199"],
+    correta: "B",
+    explicacao: "199 é o número da Defesa Civil, e a ligação é de graça. Peça para um adulto ligar."
+  },
+
+  { // REVISAR
+    id: "INF-ENC-04",
+    nivel: "infantil",
+    tema: "enchentes",
+    pergunta: "Se a água começar a entrar em casa, o que as crianças fazem?",
+    opcoes: ["Ficam junto dos adultos e fazem o que eles pedem", "Se escondem embaixo da cama"],
+    correta: "A",
+    explicacao: "Ficando junto dos adultos, todo mundo sai junto e em segurança."
+  },
+
+  { // REVISAR
+    id: "INF-ENC-05",
+    nivel: "infantil",
+    tema: "enchentes",
+    pergunta: "Quando chove muito, onde é melhor brincar?",
+    opcoes: ["Dentro de casa", "Perto do arroio"],
+    correta: "A",
+    explicacao: "Com chuva forte, rios e arroios enchem rápido e a água corre forte. Dentro de casa é mais seguro."
+  },
+
+  /* ---------- Infantil · Deslizamentos ---------- */
+
+  { // REVISAR
     id: "INF-DES-01",
     nivel: "infantil",
     tema: "deslizamentos",
@@ -83,6 +132,49 @@ var PERGUNTAS = [
     correta: "A",
     explicacao: "Rachaduras no barranco podem ser um aviso. Um adulto sabe chamar a Defesa Civil."
   },
+
+  { // REVISAR
+    id: "INF-DES-02",
+    nivel: "infantil",
+    tema: "deslizamentos",
+    pergunta: "O que ajuda a segurar a terra do morro?",
+    opcoes: ["As raízes das árvores e plantas", "O lixo jogado no morro"],
+    correta: "A",
+    explicacao: "As raízes seguram a terra como se fossem uma rede. O lixo junta água e deixa a terra mais fraca."
+  },
+
+  { // REVISAR
+    id: "INF-DES-03",
+    nivel: "infantil",
+    tema: "deslizamentos",
+    pergunta: "O que é um deslizamento?",
+    opcoes: ["Quando cai neve do céu", "Quando a terra do morro escorrega para baixo"],
+    correta: "B",
+    explicacao: "Com muita chuva, a terra do morro fica mole e pesada e pode escorregar. Isso é um deslizamento."
+  },
+
+  { // REVISAR
+    id: "INF-DES-04",
+    nivel: "infantil",
+    tema: "deslizamentos",
+    pergunta: "Olhem o mapa: em qual ponto o morro é mais empinado?",
+    opcoes: ["Ponto 3", "Ponto 4"],
+    correta: "B",
+    explicacao: "No ponto 4, as linhas do mapa estão bem juntinhas: o morro é empinado. Ali a terra pode escorregar com muita chuva.",
+    pontosMapa: ["3", "4"]
+  },
+
+  { // REVISAR
+    id: "INF-DES-05",
+    nivel: "infantil",
+    tema: "deslizamentos",
+    pergunta: "Depois de uma chuva muito forte, podemos brincar no barranco?",
+    opcoes: ["Não, a terra pode estar mole", "Sim, é o melhor dia para escorregar"],
+    correta: "A",
+    explicacao: "A chuva deixa a terra mole e pesada. É melhor brincar longe dos barrancos."
+  },
+
+  /* ---------- Infantil · Estiagem ---------- */
 
   { // REVISAR
     id: "INF-EST-01",
@@ -95,6 +187,48 @@ var PERGUNTAS = [
   },
 
   { // REVISAR
+    id: "INF-EST-02",
+    nivel: "infantil",
+    tema: "estiagem",
+    pergunta: "O que é estiagem?",
+    opcoes: ["Muitos dias sem chuva", "Muitos dias de neve"],
+    correta: "A",
+    explicacao: "Estiagem é quando passa muito tempo sem chover. Os rios e açudes baixam e pode faltar água."
+  },
+
+  { // REVISAR
+    id: "INF-EST-03",
+    nivel: "infantil",
+    tema: "estiagem",
+    pergunta: "Como podemos guardar água da chuva para usar depois?",
+    opcoes: ["Num balde ou cisterna com tampa", "Deixando escorrer pela rua"],
+    correta: "A",
+    explicacao: "A água da chuva guardada serve para regar plantas e limpar o chão. A tampa evita o mosquito da dengue!"
+  },
+
+  { // REVISAR
+    id: "INF-EST-04",
+    nivel: "infantil",
+    tema: "estiagem",
+    pergunta: "Qual banho gasta menos água?",
+    opcoes: ["Banho bem demorado", "Banho rápido"],
+    correta: "B",
+    explicacao: "Banho rápido gasta menos água. Cada minuto a menos ajuda!"
+  },
+
+  { // REVISAR
+    id: "INF-EST-05",
+    nivel: "infantil",
+    tema: "estiagem",
+    pergunta: "Sobrou água na garrafinha. Para onde ela pode ir?",
+    opcoes: ["Para regar uma planta", "Para o ralo, sem uso"],
+    correta: "A",
+    explicacao: "Dar a água que sobrou para uma planta é um jeito simples de não desperdiçar."
+  },
+
+  /* ---------- Infantil · Vendaval e Granizo ---------- */
+
+  { // REVISAR
     id: "INF-VEN-01",
     nivel: "infantil",
     tema: "vendaval",
@@ -103,6 +237,48 @@ var PERGUNTAS = [
     correta: "A",
     explicacao: "As pedrinhas de granizo podem machucar. Dentro de casa, longe das janelas, ficamos protegidos."
   },
+
+  { // REVISAR
+    id: "INF-VEN-02",
+    nivel: "infantil",
+    tema: "vendaval",
+    pergunta: "Está ventando muito forte. Onde é melhor ficar?",
+    opcoes: ["Embaixo de uma árvore", "Dentro de casa"],
+    correta: "B",
+    explicacao: "Com vento muito forte, galhos podem cair. Dentro de casa estamos protegidos."
+  },
+
+  { // REVISAR
+    id: "INF-VEN-03",
+    nivel: "infantil",
+    tema: "vendaval",
+    pergunta: "Depois da tempestade, tem um fio de luz caído no chão. O que fazer?",
+    opcoes: ["Ficar longe e avisar um adulto", "Pegar o fio para tirar do caminho"],
+    correta: "A",
+    explicacao: "Fio caído pode dar choque. Nunca toque! Fique longe e avise um adulto."
+  },
+
+  { // REVISAR
+    id: "INF-VEN-04",
+    nivel: "infantil",
+    tema: "vendaval",
+    pergunta: "Começou uma tempestade com raios. Onde é seguro ficar?",
+    opcoes: ["Na piscina", "Dentro de casa"],
+    correta: "B",
+    explicacao: "Durante os raios, o lugar seguro é dentro de casa. Piscina, campo aberto e árvores são perigosos."
+  },
+
+  { // REVISAR
+    id: "INF-VEN-05",
+    nivel: "infantil",
+    tema: "vendaval",
+    pergunta: "O que é granizo?",
+    opcoes: ["Pedrinhas de gelo que caem do céu", "Balas doces que caem das nuvens"],
+    correta: "A",
+    explicacao: "Granizo são pedrinhas de gelo que se formam dentro de nuvens de tempestade. No Rio Grande do Sul, ele é comum."
+  },
+
+  /* ---------- Infantil · Mapas e Satélites ---------- */
 
   { // REVISAR
     id: "INF-MAP-01",
@@ -116,6 +292,49 @@ var PERGUNTAS = [
   },
 
   { // REVISAR
+    id: "INF-MAP-02",
+    nivel: "infantil",
+    tema: "mapas",
+    pergunta: "Olhem o mapa: qual ponto fica bem pertinho do rio?",
+    opcoes: ["Ponto 1", "Ponto 3"],
+    correta: "A",
+    explicacao: "O ponto 1 fica na beira do rio. Quando o rio enche, a água chega primeiro ali.",
+    pontosMapa: ["1", "3"]
+  },
+
+  { // REVISAR
+    id: "INF-MAP-03",
+    nivel: "infantil",
+    tema: "mapas",
+    pergunta: "O que é um mapa?",
+    opcoes: ["Um desenho de um lugar visto de cima", "Uma foto de uma pessoa"],
+    correta: "A",
+    explicacao: "O mapa mostra um lugar como se a gente estivesse voando lá no alto, igual a um passarinho."
+  },
+
+  { // REVISAR
+    id: "INF-MAP-04",
+    nivel: "infantil",
+    tema: "mapas",
+    pergunta: "O satélite tira fotos da Terra de onde?",
+    opcoes: ["Do fundo do mar", "Lá do espaço, bem alto"],
+    correta: "B",
+    explicacao: "Os satélites ficam no espaço, girando em volta da Terra. Lá de cima, eles fotografam as nuvens."
+  },
+
+  { // REVISAR
+    id: "INF-MAP-05",
+    nivel: "infantil",
+    tema: "mapas",
+    pergunta: "Para que servem as fotos das nuvens tiradas pelos satélites?",
+    opcoes: ["Para saber se vai chover forte", "Para escolher a cor do céu"],
+    correta: "A",
+    explicacao: "Vendo as nuvens lá de cima, os cientistas avisam quando vem chuva forte. Assim as pessoas se preparam."
+  },
+
+  /* ---------- Infantil · Mochila de Emergência ---------- */
+
+  { // REVISAR
     id: "INF-MOC-01",
     nivel: "infantil",
     tema: "mochila",
@@ -125,9 +344,51 @@ var PERGUNTAS = [
     explicacao: "A lanterna ajuda a enxergar se a luz acabar. O videogame pode ficar em casa!"
   },
 
+  { // REVISAR
+    id: "INF-MOC-02",
+    nivel: "infantil",
+    tema: "mochila",
+    pergunta: "Qual destes vai na mochila de emergência?",
+    opcoes: ["Bola de futebol", "Garrafa de água"],
+    correta: "B",
+    explicacao: "Água limpa para beber é uma das coisas mais importantes da mochila."
+  },
+
+  { // REVISAR
+    id: "INF-MOC-03",
+    nivel: "infantil",
+    tema: "mochila",
+    pergunta: "Quem ajuda a montar a mochila de emergência da família?",
+    opcoes: ["Toda a família, junta", "Ninguém, ela aparece pronta"],
+    correta: "A",
+    explicacao: "Montar a mochila é tarefa de todos! As crianças podem ajudar a lembrar da água e da lanterna."
+  },
+
+  { // REVISAR
+    id: "INF-MOC-04",
+    nivel: "infantil",
+    tema: "mochila",
+    pergunta: "E o bichinho de estimação? O que levar para ele?",
+    opcoes: ["Nada", "Ração, água e a coleira"],
+    correta: "B",
+    explicacao: "Os animais também fazem parte da família. Eles precisam de ração, água e coleira."
+  },
+
+  { // REVISAR
+    id: "INF-MOC-05",
+    nivel: "infantil",
+    tema: "mochila",
+    pergunta: "Os documentos da família vão na mochila guardados em quê?",
+    opcoes: ["Num saquinho plástico fechado", "Numa folha de jornal"],
+    correta: "A",
+    explicacao: "O saquinho plástico fechado protege os documentos da água."
+  },
+
   /* ====================================================================
      NÍVEL INTERMEDIÁRIO — 3 opções (A ▲, B ●, C ■)
      ==================================================================== */
+
+  /* ---------- Intermediário · Enchentes ---------- */
 
   { // REVISAR
     id: "INT-ENC-01",
@@ -144,6 +405,56 @@ var PERGUNTAS = [
   },
 
   { // REVISAR
+    id: "INT-ENC-02",
+    nivel: "intermediario",
+    tema: "enchentes",
+    pergunta: "Por que não se deve atravessar uma rua alagada a pé?",
+    opcoes: [
+      "A água pode esconder buracos e ter correnteza",
+      "A água é sempre gelada",
+      "Molha o tênis"
+    ],
+    correta: "A",
+    explicacao: "Mesmo água baixa, se estiver correndo, pode derrubar uma pessoa. E ela esconde buracos e bueiros abertos."
+  },
+
+  { // REVISAR
+    id: "INT-ENC-03",
+    nivel: "intermediario",
+    tema: "enchentes",
+    pergunta: "Qual é o número de telefone da Defesa Civil?",
+    opcoes: ["190", "193", "199"],
+    correta: "C",
+    explicacao: "199 é a Defesa Civil. 193 são os Bombeiros e 190 é a Polícia. As ligações são gratuitas."
+  },
+
+  { // REVISAR
+    id: "INT-ENC-04",
+    nivel: "intermediario",
+    tema: "enchentes",
+    pergunta: "Por que a água da enchente pode deixar a gente doente?",
+    opcoes: [
+      "Porque ela vem do mar",
+      "Porque se mistura com esgoto e lixo",
+      "Porque é muito fria"
+    ],
+    correta: "B",
+    explicacao: "A água da enchente carrega esgoto, lixo e até urina de ratos, que causa a leptospirose. Evite contato com ela."
+  },
+
+  { // REVISAR
+    id: "INT-ENC-05",
+    nivel: "intermediario",
+    tema: "enchentes",
+    pergunta: "Antes de a água entrar em casa, os adultos devem desligar o quê?",
+    opcoes: ["A chave geral de energia", "O despertador", "A campainha"],
+    correta: "A",
+    explicacao: "Água e eletricidade juntas dão choque. Desligar a energia geral antes de sair deixa a casa mais segura."
+  },
+
+  /* ---------- Intermediário · Deslizamentos ---------- */
+
+  { // REVISAR
     id: "INT-DES-01",
     nivel: "intermediario",
     tema: "deslizamentos",
@@ -156,6 +467,57 @@ var PERGUNTAS = [
     correta: "A",
     explicacao: "Rachaduras, árvores e postes tortos e água barrenta saindo do morro são sinais de alerta. Avise um adulto."
   },
+
+  { // REVISAR
+    id: "INT-DES-02",
+    nivel: "intermediario",
+    tema: "deslizamentos",
+    pergunta: "O que ajuda a prevenir deslizamentos num morro?",
+    opcoes: ["Cortar as árvores", "Plantar árvores e plantas", "Jogar entulho no barranco"],
+    correta: "B",
+    explicacao: "As raízes seguram o solo, e as plantas fazem a água da chuva escorrer mais devagar."
+  },
+
+  { // REVISAR
+    id: "INT-DES-03",
+    nivel: "intermediario",
+    tema: "deslizamentos",
+    pergunta: "Olhem o mapa: em qual ponto há mais risco de a terra deslizar?",
+    opcoes: ["Ponto 2", "Ponto 3", "Ponto 4"],
+    correta: "C",
+    explicacao: "No ponto 4 as curvas de nível estão bem juntinhas: a encosta é muito inclinada. Com muita chuva, a terra pode deslizar.",
+    pontosMapa: ["2", "3", "4"]
+  },
+
+  { // REVISAR
+    id: "INT-DES-04",
+    nivel: "intermediario",
+    tema: "deslizamentos",
+    pergunta: "Numa casa no morro, para onde deve ir a água da chuva do telhado?",
+    opcoes: [
+      "Para calhas e canos que levam a água embora",
+      "Direto para o barranco",
+      "Para dentro de casa"
+    ],
+    correta: "A",
+    explicacao: "Água escorrendo sem controle encharca e enfraquece o barranco. Calhas e canos levam a água para o lugar certo."
+  },
+
+  { // REVISAR
+    id: "INT-DES-05",
+    nivel: "intermediario",
+    tema: "deslizamentos",
+    pergunta: "Numa casa no morro, portas e janelas começaram a emperrar. Isso pode indicar o quê?",
+    opcoes: [
+      "Que a casa precisa de pintura",
+      "Que o terreno pode estar se mexendo",
+      "Que está muito calor"
+    ],
+    correta: "B",
+    explicacao: "Quando o terreno se movimenta, a casa entorta e as portas emperram. Avise um adulto e a Defesa Civil (199)."
+  },
+
+  /* ---------- Intermediário · Estiagem ---------- */
 
   { // REVISAR
     id: "INT-EST-01",
@@ -172,6 +534,56 @@ var PERGUNTAS = [
   },
 
   { // REVISAR
+    id: "INT-EST-02",
+    nivel: "intermediario",
+    tema: "estiagem",
+    pergunta: "O que é uma estiagem?",
+    opcoes: [
+      "Um período longo com pouca ou nenhuma chuva",
+      "Uma chuva muito forte",
+      "Um vento muito forte"
+    ],
+    correta: "A",
+    explicacao: "Na estiagem, passa muito tempo com pouca chuva. Rios, açudes e poços baixam e pode faltar água."
+  },
+
+  { // REVISAR
+    id: "INT-EST-03",
+    nivel: "intermediario",
+    tema: "estiagem",
+    pergunta: "Na estiagem, o que acontece com as plantações de soja e milho do Rio Grande do Sul?",
+    opcoes: ["Crescem mais rápido", "Secam e produzem menos", "Viram flores"],
+    correta: "B",
+    explicacao: "Sem chuva, as plantas não crescem direito. Nas estiagens de 2020 a 2022, muitos agricultores gaúchos perderam parte da colheita."
+  },
+
+  { // REVISAR
+    id: "INT-EST-04",
+    nivel: "intermediario",
+    tema: "estiagem",
+    pergunta: "Qual destas é uma boa forma de reaproveitar água?",
+    opcoes: [
+      "Usar a água da máquina de lavar para limpar o quintal",
+      "Deixar a mangueira ligada",
+      "Jogar fora a água da chuva"
+    ],
+    correta: "A",
+    explicacao: "A água que sai da máquina de lavar ainda serve para lavar o quintal ou a calçada, sem gastar água limpa."
+  },
+
+  { // REVISAR
+    id: "INT-EST-05",
+    nivel: "intermediario",
+    tema: "estiagem",
+    pergunta: "Na estiagem, o ar seco e o mato seco aumentam o risco de quê?",
+    opcoes: ["Neve", "Granizo", "Incêndios e queimadas"],
+    correta: "C",
+    explicacao: "Com tudo seco, o fogo se espalha fácil. Nunca brinque com fogo e não queime lixo."
+  },
+
+  /* ---------- Intermediário · Vendaval e Granizo ---------- */
+
+  { // REVISAR
     id: "INT-VEN-01",
     nivel: "intermediario",
     tema: "vendaval",
@@ -186,6 +598,52 @@ var PERGUNTAS = [
   },
 
   { // REVISAR
+    id: "INT-VEN-02",
+    nivel: "intermediario",
+    tema: "vendaval",
+    pergunta: "Durante uma tempestade com raios, o que é mais seguro?",
+    opcoes: ["Ficar dentro de casa, longe das janelas", "Empinar pipa", "Nadar no açude"],
+    correta: "A",
+    explicacao: "Dentro de casa estamos protegidos dos raios. Pipas, água e campos abertos são perigosos durante a tempestade."
+  },
+
+  { // REVISAR
+    id: "INT-VEN-03",
+    nivel: "intermediario",
+    tema: "vendaval",
+    pergunta: "Você viu um raio e contou 3 segundos até ouvir o trovão. O raio caiu a mais ou menos quanto?",
+    opcoes: ["1 quilômetro", "100 quilômetros", "1 metro"],
+    correta: "A",
+    explicacao: "O som anda cerca de 1 km a cada 3 segundos. Se o trovão chega rápido, a tempestade está perto: fique abrigado!"
+  },
+
+  { // REVISAR
+    id: "INT-VEN-04",
+    nivel: "intermediario",
+    tema: "vendaval",
+    pergunta: "O que é granizo?",
+    opcoes: [
+      "Chuva com areia",
+      "Pedras de gelo que caem das nuvens de tempestade",
+      "Neblina bem fria"
+    ],
+    correta: "B",
+    explicacao: "O granizo se forma dentro de nuvens de tempestade muito altas e frias. O Sul do Brasil é uma das regiões onde mais cai granizo."
+  },
+
+  { // REVISAR
+    id: "INT-VEN-05",
+    nivel: "intermediario",
+    tema: "vendaval",
+    pergunta: "O que é um ciclone extratropical, comum no Rio Grande do Sul?",
+    opcoes: ["Um terremoto", "Um tipo de vulcão", "Um sistema que gira e traz vento forte e chuva"],
+    correta: "C",
+    explicacao: "Os ciclones extratropicais giram e trazem vento forte e muita chuva ao Sul do Brasil, mais no outono e no inverno."
+  },
+
+  /* ---------- Intermediário · Mapas e Satélites ---------- */
+
+  { // REVISAR
     id: "INT-MAP-01",
     nivel: "intermediario",
     tema: "mapas",
@@ -197,6 +655,53 @@ var PERGUNTAS = [
   },
 
   { // REVISAR
+    id: "INT-MAP-02",
+    nivel: "intermediario",
+    tema: "mapas",
+    pergunta: "Olhem o mapa: qual ponto é o melhor lugar de encontro numa enchente?",
+    opcoes: ["Ponto 1", "Ponto 2", "Ponto 3"],
+    correta: "C",
+    explicacao: "O ponto 3 fica no alto, em terreno plano, longe do rio e da encosta íngreme.",
+    pontosMapa: ["1", "2", "3"]
+  },
+
+  { // REVISAR
+    id: "INT-MAP-03",
+    nivel: "intermediario",
+    tema: "mapas",
+    pergunta: "Num mapa, o que as curvas de nível mostram?",
+    opcoes: ["O caminho do ônibus", "Onde mora cada pessoa", "A altura do terreno"],
+    correta: "C",
+    explicacao: "Cada curva de nível liga pontos da mesma altura. Curvas juntinhas mostram um morro bem inclinado."
+  },
+
+  { // REVISAR
+    id: "INT-MAP-04",
+    nivel: "intermediario",
+    tema: "mapas",
+    pergunta: "Para que servem os satélites meteorológicos?",
+    opcoes: [
+      "Para levar cartas",
+      "Para observar as nuvens e ajudar a prever o tempo",
+      "Para iluminar a noite"
+    ],
+    correta: "B",
+    explicacao: "Os satélites meteorológicos ficam no espaço e fotografam as nuvens o tempo todo. Assim dá para prever chuvas fortes."
+  },
+
+  { // REVISAR
+    id: "INT-MAP-05",
+    nivel: "intermediario",
+    tema: "mapas",
+    pergunta: "Num mapa, a cor azul geralmente representa o quê?",
+    opcoes: ["Florestas", "Rios, lagos e mar", "Estradas"],
+    correta: "B",
+    explicacao: "Nos mapas, o azul costuma mostrar a água: rios, lagos e o mar. O verde costuma mostrar a vegetação."
+  },
+
+  /* ---------- Intermediário · Mochila de Emergência ---------- */
+
+  { // REVISAR
     id: "INT-MOC-01",
     nivel: "intermediario",
     tema: "mochila",
@@ -206,9 +711,63 @@ var PERGUNTAS = [
     explicacao: "Água potável vem primeiro. A mochila também leva lanterna, remédios, documentos e uma muda de roupa."
   },
 
+  { // REVISAR
+    id: "INT-MOC-02",
+    nivel: "intermediario",
+    tema: "mochila",
+    pergunta: "Por que é bom ter um rádio a pilha na mochila de emergência?",
+    opcoes: [
+      "Para ouvir avisos mesmo sem luz e sem internet",
+      "Para ouvir música bem alto",
+      "Para enfeitar a mochila"
+    ],
+    correta: "A",
+    explicacao: "Se faltar luz e internet, o rádio a pilha continua trazendo os avisos da Defesa Civil."
+  },
+
+  { // REVISAR
+    id: "INT-MOC-03",
+    nivel: "intermediario",
+    tema: "mochila",
+    pergunta: "Como guardar os documentos na mochila de emergência?",
+    opcoes: ["Soltos no bolso", "Num saco plástico bem fechado", "Dentro de um copo"],
+    correta: "B",
+    explicacao: "No saco plástico fechado, os documentos ficam protegidos da água e não se perdem."
+  },
+
+  { // REVISAR
+    id: "INT-MOC-04",
+    nivel: "intermediario",
+    tema: "mochila",
+    pergunta: "O que é o ponto de encontro da família?",
+    opcoes: [
+      "Um lugar seguro combinado para todos se encontrarem",
+      "Uma loja de brinquedos",
+      "A casa de um vizinho que viajou"
+    ],
+    correta: "A",
+    explicacao: "Se a família se separar numa emergência, todos sabem para onde ir. Combine o ponto de encontro antes!"
+  },
+
+  { // REVISAR
+    id: "INT-MOC-05",
+    nivel: "intermediario",
+    tema: "mochila",
+    pergunta: "Por que anotar telefones importantes num papel e guardar na mochila?",
+    opcoes: [
+      "Porque o papel é bonito",
+      "Porque o celular pode ficar sem bateria",
+      "Porque é proibido usar celular"
+    ],
+    correta: "B",
+    explicacao: "Sem bateria, não dá para ver os contatos do celular. No papel, os números estão sempre à mão."
+  },
+
   /* ====================================================================
      NÍVEL ADULTO — 4 opções (A ▲, B ●, C ■, D ★)
      ==================================================================== */
+
+  /* ---------- Adulto · Enchentes ---------- */
 
   { // REVISAR
     id: "ADU-ENC-01",
@@ -219,6 +778,58 @@ var PERGUNTAS = [
     correta: "A",
     explicacao: "Basta enviar o CEP por SMS para 40199. O serviço é gratuito e avisa sobre riscos na sua região."
   },
+
+  { // REVISAR
+    id: "ADU-ENC-02",
+    nivel: "adulto",
+    tema: "enchentes",
+    pergunta: "Dirigindo, você encontra uma rua alagada. Qual é a atitude correta?",
+    opcoes: [
+      "Acelerar para passar rápido",
+      "Seguir o carro da frente",
+      "Não atravessar e procurar outro caminho",
+      "Passar devagar se a água parecer rasa"
+    ],
+    correta: "C",
+    explicacao: "Pouca água em movimento já pode arrastar um carro, e a profundidade engana. Na dúvida, não atravesse."
+  },
+
+  { // REVISAR
+    id: "ADU-ENC-03",
+    nivel: "adulto",
+    tema: "enchentes",
+    pergunta: "Ao voltar para casa depois de uma enchente, o que fazer antes de religar a energia?",
+    opcoes: [
+      "Ligar todos os aparelhos para testar",
+      "Pedir a um eletricista que verifique a instalação",
+      "Religar o disjuntor com as mãos molhadas",
+      "Nada, pode religar direto"
+    ],
+    correta: "B",
+    explicacao: "Fios e tomadas molhados podem causar choque e curto-circuito. Só religue depois que um eletricista verificar."
+  },
+
+  { // REVISAR
+    id: "ADU-ENC-04",
+    nivel: "adulto",
+    tema: "enchentes",
+    pergunta: "Qual doença, transmitida pela urina de ratos, é comum depois de enchentes?",
+    opcoes: ["Leptospirose", "Dengue", "Sarampo", "Catapora"],
+    correta: "A",
+    explicacao: "A leptospirose pega pelo contato com água ou lama contaminadas. Use botas e luvas na limpeza e procure atendimento se tiver febre."
+  },
+
+  { // REVISAR
+    id: "ADU-ENC-05",
+    nivel: "adulto",
+    tema: "enchentes",
+    pergunta: "Os rios Jacuí, Taquari, Caí e dos Sinos fazem parte de qual região hidrográfica do RS?",
+    opcoes: ["Região do Uruguai", "Região Litorânea", "Região do Guaíba", "Região Amazônica"],
+    correta: "C",
+    explicacao: "As águas desses rios chegam ao Guaíba. O Vacacaí, aqui da região de Santa Maria, também faz parte dela: ele deságua no Jacuí."
+  },
+
+  /* ---------- Adulto · Deslizamentos ---------- */
 
   { // REVISAR
     id: "ADU-DES-01",
@@ -236,6 +847,63 @@ var PERGUNTAS = [
   },
 
   { // REVISAR
+    id: "ADU-DES-02",
+    nivel: "adulto",
+    tema: "deslizamentos",
+    pergunta: "Qual destes NÃO é um sinal de alerta de deslizamento?",
+    opcoes: [
+      "Rachaduras em paredes e no chão",
+      "Árvores, postes ou muros inclinados",
+      "Água barrenta minando do barranco",
+      "Céu azul depois de vários dias secos"
+    ],
+    correta: "D",
+    explicacao: "Rachaduras, inclinações e água barrenta saindo do solo indicam que o terreno se move. Saia do local e ligue 199."
+  },
+
+  { // REVISAR
+    id: "ADU-DES-03",
+    nivel: "adulto",
+    tema: "deslizamentos",
+    pergunta: "Em encostas, o que costuma aumentar o risco de deslizamento?",
+    opcoes: [
+      "Cortes e aterros feitos sem orientação técnica",
+      "Calhas e canaletas",
+      "Muros de contenção bem feitos",
+      "Plantas de raízes profundas"
+    ],
+    correta: "A",
+    explicacao: "Cortes e aterros mal feitos deixam o terreno instável. Antes de construir em encosta, procure orientação técnica."
+  },
+
+  { // REVISAR
+    id: "ADU-DES-04",
+    nivel: "adulto",
+    tema: "deslizamentos",
+    pergunta: "Que tipo de chuva é mais perigoso para deslizamentos?",
+    opcoes: [
+      "Garoa de poucos minutos",
+      "Chuva forte ou prolongada que encharca o solo",
+      "Granizo miúdo",
+      "Sereno da madrugada"
+    ],
+    correta: "B",
+    explicacao: "O solo encharcado fica pesado e perde firmeza. O risco aumenta depois de vários dias de chuva ou de temporais fortes."
+  },
+
+  { // REVISAR
+    id: "ADU-DES-05",
+    nivel: "adulto",
+    tema: "deslizamentos",
+    pergunta: "Que órgão federal monitora áreas de risco e envia alertas de desastres naturais no Brasil?",
+    opcoes: ["IBGE", "INSS", "CEMADEN", "ANATEL"],
+    correta: "C",
+    explicacao: "O CEMADEN (Centro Nacional de Monitoramento e Alertas de Desastres Naturais) acompanha chuva e risco e alerta a Defesa Civil."
+  },
+
+  /* ---------- Adulto · Estiagem ---------- */
+
+  { // REVISAR
     id: "ADU-EST-01",
     nivel: "adulto",
     tema: "estiagem",
@@ -244,6 +912,63 @@ var PERGUNTAS = [
     correta: "A",
     explicacao: "A La Niña tende a deixar o Sul do Brasil mais seco. O El Niño costuma trazer mais chuva para o RS."
   },
+
+  { // REVISAR
+    id: "ADU-EST-02",
+    nivel: "adulto",
+    tema: "estiagem",
+    pergunta: "O que é uma cisterna?",
+    opcoes: [
+      "Um filtro de ar",
+      "Um reservatório que armazena água da chuva",
+      "Uma bomba de irrigação a diesel",
+      "Um tipo de poço de petróleo"
+    ],
+    correta: "B",
+    explicacao: "A água da cisterna serve para limpeza, descarga e irrigação, poupando água tratada. Mantenha tampada contra o mosquito da dengue."
+  },
+
+  { // REVISAR
+    id: "ADU-EST-03",
+    nivel: "adulto",
+    tema: "estiagem",
+    pergunta: "Qual setor da economia gaúcha costuma ser o mais atingido pelas estiagens?",
+    opcoes: ["Turismo de praia", "Indústria de software", "Mineração de ouro", "Agropecuária"],
+    correta: "D",
+    explicacao: "Lavouras como soja e milho e a criação de gado dependem da chuva. Estiagens recentes causaram grandes perdas no campo gaúcho."
+  },
+
+  { // REVISAR
+    id: "ADU-EST-04",
+    nivel: "adulto",
+    tema: "estiagem",
+    pergunta: "Qual atitude economiza mais água em casa?",
+    opcoes: [
+      "Lavar a calçada com mangueira",
+      "Consertar vazamentos e torneiras pingando",
+      "Descongelar alimentos em água corrente",
+      "Deixar a torneira aberta ao lavar a louça"
+    ],
+    correta: "B",
+    explicacao: "Uma torneira pingando pode desperdiçar dezenas de litros por dia. Consertar vazamentos é uma das medidas mais eficazes."
+  },
+
+  { // REVISAR
+    id: "ADU-EST-05",
+    nivel: "adulto",
+    tema: "estiagem",
+    pergunta: "Durante a estiagem, por que o risco de incêndios aumenta?",
+    opcoes: [
+      "Porque a vegetação e o ar ficam secos",
+      "Porque chove mais",
+      "Porque a temperatura cai",
+      "Porque os rios enchem"
+    ],
+    correta: "A",
+    explicacao: "Mato seco e baixa umidade fazem o fogo se espalhar rápido. Não queime lixo nem jogue bitucas de cigarro na beira da estrada."
+  },
+
+  /* ---------- Adulto · Vendaval e Granizo ---------- */
 
   { // REVISAR
     id: "ADU-VEN-01",
@@ -261,6 +986,58 @@ var PERGUNTAS = [
   },
 
   { // REVISAR
+    id: "ADU-VEN-02",
+    nivel: "adulto",
+    tema: "vendaval",
+    pergunta: "Durante uma tempestade com raios, qual destes lugares é o mais seguro?",
+    opcoes: [
+      "Dentro de casa ou de um carro fechado",
+      "Embaixo de uma árvore isolada",
+      "Em campo aberto",
+      "Na beira de um lago"
+    ],
+    correta: "A",
+    explicacao: "Casas e carros fechados protegem contra raios. Árvores isoladas, campos abertos e a beira da água são os lugares mais perigosos."
+  },
+
+  { // REVISAR
+    id: "ADU-VEN-03",
+    nivel: "adulto",
+    tema: "vendaval",
+    pergunta: "Você contou 9 segundos entre o clarão do raio e o trovão. A que distância, mais ou menos, ele caiu?",
+    opcoes: ["300 metros", "3 quilômetros", "30 quilômetros", "9 quilômetros"],
+    correta: "B",
+    explicacao: "O som percorre cerca de 1 km a cada 3 segundos. Nove segundos são uns 3 km: a tempestade está perto. Procure abrigo."
+  },
+
+  { // REVISAR
+    id: "ADU-VEN-04",
+    nivel: "adulto",
+    tema: "vendaval",
+    pergunta: "Qual sistema, comum no Sul do Brasil, traz ventos fortes e chuva ao se formar perto do litoral?",
+    opcoes: ["Monção", "Tufão", "Ciclone extratropical", "Tsunami"],
+    correta: "C",
+    explicacao: "Ciclones extratropicais são frequentes no Sul do Brasil e trazem vendaval, ressaca no mar e muita chuva. Acompanhe os alertas."
+  },
+
+  { // REVISAR
+    id: "ADU-VEN-05",
+    nivel: "adulto",
+    tema: "vendaval",
+    pergunta: "Depois de um vendaval, há um fio da rede elétrica caído na calçada. O que fazer?",
+    opcoes: [
+      "Afastar o fio com um galho seco",
+      "Pular por cima com cuidado",
+      "Tocar rapidamente para ver se tem energia",
+      "Manter distância e avisar a companhia de energia"
+    ],
+    correta: "D",
+    explicacao: "O fio pode estar energizado mesmo parado. Mantenha todos longe e avise a companhia de energia ou a Defesa Civil (199)."
+  },
+
+  /* ---------- Adulto · Mapas e Satélites ---------- */
+
+  { // REVISAR
     id: "ADU-MAP-01",
     nivel: "adulto",
     tema: "mapas",
@@ -272,6 +1049,50 @@ var PERGUNTAS = [
   },
 
   { // REVISAR
+    id: "ADU-MAP-02",
+    nivel: "adulto",
+    tema: "mapas",
+    pergunta: "Olhem o mapa: qual ponto é o mais indicado para um abrigo temporário numa enchente?",
+    opcoes: ["Ponto 1", "Ponto 2", "Ponto 3", "Ponto 4"],
+    correta: "C",
+    explicacao: "O ponto 3 é alto e plano: fica longe da cheia do rio e fora da encosta íngreme, onde há risco de deslizamento.",
+    pontosMapa: ["1", "2", "3", "4"]
+  },
+
+  { // REVISAR
+    id: "ADU-MAP-03",
+    nivel: "adulto",
+    tema: "mapas",
+    pergunta: "Olhem o mapa: o que as curvas de nível muito próximas, no ponto 4, indicam?",
+    opcoes: ["Terreno plano", "Terreno muito inclinado", "Um rio", "Uma estrada"],
+    correta: "B",
+    explicacao: "Quanto mais juntas as curvas de nível, mais a altura muda em pouco espaço: o terreno é íngreme.",
+    pontosMapa: ["4"]
+  },
+
+  { // REVISAR
+    id: "ADU-MAP-04",
+    nivel: "adulto",
+    tema: "mapas",
+    pergunta: "O que cada curva de nível representa num mapa topográfico?",
+    opcoes: ["Limites entre municípios", "Rotas de ônibus", "Pontos com a mesma altitude", "Linhas de energia"],
+    correta: "C",
+    explicacao: "Cada curva liga pontos de mesma altitude. Lendo as curvas, dá para ver morros, vales e áreas planas."
+  },
+
+  { // REVISAR
+    id: "ADU-MAP-05",
+    nivel: "adulto",
+    tema: "mapas",
+    pergunta: "Qual instituto brasileiro usa imagens de satélite para monitorar queimadas e desmatamento?",
+    opcoes: ["INPE", "IBGE", "INMET", "IBAMA"],
+    correta: "A",
+    explicacao: "O INPE (Instituto Nacional de Pesquisas Espaciais) acompanha queimadas, desmatamento e o tempo com imagens de satélite."
+  },
+
+  /* ---------- Adulto · Mochila de Emergência ---------- */
+
+  { // REVISAR
     id: "ADU-MOC-01",
     nivel: "adulto",
     tema: "mochila",
@@ -279,6 +1100,56 @@ var PERGUNTAS = [
     opcoes: ["Algumas horas", "Cerca de 3 dias (72 horas)", "Um mês", "Não precisa ter comida"],
     correta: "B",
     explicacao: "O mais comum é recomendar itens para cerca de 72 horas: água, comida que não estraga, remédios, documentos e lanterna."
+  },
+
+  { // REVISAR
+    id: "ADU-MOC-02",
+    nivel: "adulto",
+    tema: "mochila",
+    pergunta: "Qual item é mais útil para pedir ajuda se você ficar preso num local?",
+    opcoes: ["Um apito", "Um perfume", "Um livro", "Um guarda-chuva"],
+    correta: "A",
+    explicacao: "O som do apito vai longe e cansa menos do que gritar. Por isso ele faz parte de muitos kits de emergência."
+  },
+
+  { // REVISAR
+    id: "ADU-MOC-03",
+    nivel: "adulto",
+    tema: "mochila",
+    pergunta: "Na mochila de emergência, os remédios de uso contínuo devem ser:",
+    opcoes: [
+      "Deixados em casa para não estragar",
+      "Levados para alguns dias, junto com a receita",
+      "Trocados por chá",
+      "Comprados só depois da emergência"
+    ],
+    correta: "B",
+    explicacao: "Numa emergência, farmácias podem estar fechadas. Leve remédios para alguns dias e a receita para conseguir mais."
+  },
+
+  { // REVISAR
+    id: "ADU-MOC-04",
+    nivel: "adulto",
+    tema: "mochila",
+    pergunta: "Por que incluir um carregador portátil (power bank) carregado na mochila?",
+    opcoes: [
+      "Para iluminar a casa toda",
+      "Para esquentar comida",
+      "Para dar partida no carro",
+      "Para manter o celular ligado e receber alertas"
+    ],
+    correta: "D",
+    explicacao: "Sem luz, o celular descarrega. Com o carregador, dá para receber alertas e falar com a família."
+  },
+
+  { // REVISAR
+    id: "ADU-MOC-05",
+    nivel: "adulto",
+    tema: "mochila",
+    pergunta: "Qual destes alimentos é mais adequado para a mochila de emergência?",
+    opcoes: ["Carne crua", "Leite fresco", "Barras de cereal e enlatados", "Sorvete"],
+    correta: "C",
+    explicacao: "Prefira alimentos que não estragam e não precisam de geladeira nem de fogão. Lembre do abridor de latas!"
   },
 
 ];

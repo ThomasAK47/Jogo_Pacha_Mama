@@ -22,11 +22,15 @@
   <!-- ===================== BARRA DO TOPO (durante o jogo) ===================== -->
   <header id="barra-jogo" class="barra-jogo" hidden>
     <div class="barra-esquerda">
-      <span class="marca">Pachamama</span>
+      <span id="barra-marca" class="marca">Pachamama</span>
       <span id="barra-nivel" class="selo-nivel"></span>
+      <!-- Tema da pergunta (só na tela da pergunta) -->
+      <span id="barra-tema" class="selo-tema" hidden></span>
     </div>
     <div id="barra-rodada" class="barra-rodada"></div>
     <div class="barra-direita">
+      <!-- Botão discreto para trocar uma pergunta inadequada para a turma -->
+      <button id="botao-trocar" class="botao-barra" type="button" hidden>Trocar pergunta</button>
       <button id="botao-som" class="botao-barra" type="button"></button>
       <button id="botao-tela-cheia" class="botao-barra" type="button">Tela cheia</button>
       <button id="botao-inicio" class="botao-barra" type="button">Início</button>
@@ -167,10 +171,9 @@
 
   <!-- ===================== TELA DA PERGUNTA ===================== -->
   <section id="tela-pergunta" class="tela">
-    <div class="faixa-pergunta">
-      <span id="chip-tema" class="chip-tema"></span>
-      <span id="aviso-mapa" class="aviso-mapa" hidden></span>
-      <button id="botao-trocar" class="botao-trocar" type="button">Trocar pergunta</button>
+    <!-- Só aparece nas perguntas que usam o mapa impresso -->
+    <div id="faixa-mapa" class="faixa-pergunta" hidden>
+      <span id="aviso-mapa" class="aviso-mapa"></span>
     </div>
 
     <h1 id="texto-pergunta" class="texto-pergunta"></h1>

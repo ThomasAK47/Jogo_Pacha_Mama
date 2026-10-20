@@ -324,6 +324,12 @@ function mostrarTela(nome) {
   document.getElementById("barra-jogo").hidden = !emJogo;
   document.body.classList.toggle("em-jogo", emJogo);
   document.body.classList.toggle("na-config", nome === "config");
+  document.body.classList.toggle("na-pergunta", nome === "pergunta");
+  // Tema e "Trocar pergunta" na barra: só na tela da pergunta
+  if (nome !== "pergunta") {
+    document.getElementById("barra-tema").hidden = true;
+    document.getElementById("botao-trocar").hidden = true;
+  }
   atualizarFaixaAlerta();
 
   if (nome === "inicial") atualizarTelaInicial();
@@ -837,12 +843,13 @@ function prepararTelaPergunta() {
   atualizarBarra();
   var tema = temaPorChave(pergunta.tema);
 
-  // Tema da pergunta
-  var chip = document.getElementById("chip-tema");
-  chip.innerHTML = "";
-  chip.style.background = tema.cor;
-  chip.appendChild(criarIconeSVG(tema.chave));
-  chip.appendChild(document.createTextNode(tema.nome));
+  // Tema da pergunta, na barra do topo
+  var seloTema = document.getElementById("barra-tema");
+  seloTema.innerHTML = "";
+  seloTema.style.background = tema.cor;
+  seloTema.appendChild(criarIconeSVG(tema.chave));
+  seloTema.appendChild(document.createTextNode(tema.nome));
+  seloTema.hidden = false;
 
   // Aviso "OLHEM O MAPA" (só nas perguntas com pontosMapa)
   var avisoMapa = document.getElementById("aviso-mapa");
@@ -855,10 +862,8 @@ function prepararTelaPergunta() {
     pontos.textContent = (pergunta.pontosMapa.length === 1 ? "Ponto " : "Pontos ") +
       juntarComE(pergunta.pontosMapa);
     avisoMapa.appendChild(pontos);
-    avisoMapa.hidden = false;
-  } else {
-    avisoMapa.hidden = true;
   }
+  document.getElementById("faixa-mapa").hidden = !pergunta.pontosMapa;
 
   document.getElementById("texto-pergunta").textContent = pergunta.pergunta;
 
