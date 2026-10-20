@@ -37,7 +37,7 @@
     </div>
     <ul class="dicas">
       <li>Imprima colorido e deixe a escala em 100% (ou “Tamanho real”).</li>
-      <li>Cada equipe usa uma peça na sua trilha: uma tampinha, um botão ou um feijão.</li>
+      <li>Cada equipe usa uma peça na trilha da sua cor: um botão, um feijão ou, no A3, uma tampinha.</li>
       <li>Os pontos 1, 2, 3 e 4 são os que aparecem nas perguntas com “OLHEM O MAPA”.</li>
     </ul>
   </div>
@@ -45,34 +45,18 @@
   <!-- ===================== A FOLHA DO MAPA ===================== -->
   <div class="folhas">
     <div id="folha-mapa" class="folha paisagem folha-mapa">
+      <!-- Todo o desenho (rio, morro, curvas de nível, trilhas das equipes e
+           pontos 1 a 4) é feito pelo mapa.js dentro deste quadro -->
+      <svg id="desenho-mapa" class="desenho-mapa" viewBox="0 0 1000 640" role="img"
+           aria-label="Mapa de um morro com curvas de nível, um rio embaixo, quatro trilhas coloridas subindo o morro e os pontos 1, 2, 3 e 4"></svg>
 
-      <div class="cabecalho-mapa">
-        <strong>Mapa do Morro</strong>
-        <span>Espaço Pachamama · UFSM · Desastres Naturais</span>
+      <div class="legenda">
+        <span><i class="amostra amostra-rio"></i>Rio</span>
+        <span><i class="amostra amostra-curva"></i>Curva de nível (de 10 em 10 metros)</span>
+        <span><i class="amostra amostra-arvore"></i>Mata</span>
+        <span><i class="amostra amostra-casa">1</i>Casa da trilha</span>
+        <span><i class="amostra amostra-ponto">1</i>Ponto das perguntas</span>
       </div>
-
-      <div class="corpo-mapa">
-        <div class="lado-mapa">
-          <!-- O desenho (rio, morro com curvas de nível e pontos) é feito
-               pelo mapa.js dentro deste quadro -->
-          <svg id="desenho-mapa" class="desenho-mapa" viewBox="0 0 700 620" role="img"
-               aria-label="Mapa de um morro com curvas de nível, um rio embaixo e os pontos 1, 2, 3 e 4"></svg>
-
-          <div class="legenda">
-            <span><i class="amostra amostra-rio"></i>Rio</span>
-            <span><i class="amostra amostra-curva"></i>Curva de nível (de 10 em 10 metros)</span>
-            <span><i class="amostra amostra-arvore"></i>Mata</span>
-            <span><i class="amostra amostra-ponto">1</i>Ponto das perguntas</span>
-          </div>
-        </div>
-
-        <div class="lado-trilhas">
-          <p class="titulo-trilhas">Trilha até o topo</p>
-          <!-- As trilhas das equipes são montadas pelo mapa.js, a partir do config.js -->
-          <div id="trilhas" class="trilhas"></div>
-        </div>
-      </div>
-
     </div>
   </div>
 
