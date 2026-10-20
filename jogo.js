@@ -238,6 +238,7 @@ var partida = null;      // partida em andamento (nível, rodada...) ou null
 var telaAtual = "inicial";
 var esperaPergunta = null;  // temporizador entre a roleta parar e a pergunta abrir
 var contando = false;       // contagem "3, 2, 1" acontecendo
+var etapaAlerta = null;     // alerta de enchente: null (fechado), "tremendo", "titulo" ou "regra"
 var avisoRoleta = "";       // recado temporário embaixo do botão GIRAR
 
 // Tempo que o tema sorteado fica na tela antes de abrir a pergunta (milissegundos)
@@ -260,6 +261,8 @@ function carregarPartida() {
   var salva = lerSalvo(CHAVE_PARTIDA);
   if (!salva || !CONFIG.niveis[salva.nivel]) return null;
   if (!Array.isArray(salva.usadas)) salva.usadas = [];
+  if (!Array.isArray(salva.rodadasComAlerta)) salva.rodadasComAlerta = [];
+  if (salva.alerta !== true && salva.alerta !== false) salva.alerta = null;
   // Se o perguntas.js mudou e a pergunta da tela sumiu, volta para a roleta
   if (salva.perguntaAtual && !acharPergunta(salva.perguntaAtual)) {
     salva.perguntaAtual = null;
@@ -284,7 +287,10 @@ function novaPartida(nivel) {
     usadas: [],           // ids das perguntas que já saíram nesta partida
     temaAtual: null,      // tema sorteado na rodada
     perguntaAtual: null,  // id da pergunta da rodada
-    revelada: false       // a resposta da rodada já foi revelada?
+    ultimaPergunta: null, // id da pergunta da rodada anterior
+    revelada: false,      // a resposta da rodada já foi revelada?
+    alerta: null,         // esta rodada é de alerta? (null = ainda não sorteado)
+    rodadasComAlerta: []  // números das rodadas que tiveram alerta
   };
   avisoRoleta = "";
   salvarPartida();
@@ -318,6 +324,7 @@ function mostrarTela(nome) {
   document.getElementById("barra-jogo").hidden = !emJogo;
   document.body.classList.toggle("em-jogo", emJogo);
   document.body.classList.toggle("na-config", nome === "config");
+  atualizarFaixaAlerta();
 
   if (nome === "inicial") atualizarTelaInicial();
   if (nome === "config") atualizarTelaConfig();
@@ -328,7 +335,7 @@ function mostrarTela(nome) {
 /* Volta para a tela inicial. A partida NÃO é apagada: aparece o botão
    "Continuar partida". */
 function irParaInicio() {
-  if (Roleta.girando || contando) return;
+  if (Roleta.girando || contando || etapaAlerta !== null) return;
   mostrarTela("inicial");
 }
 
@@ -697,7 +704,7 @@ function prepararTelaRoleta() {
 /* Botão GIRAR (ou tecla ESPAÇO, ou clique na roleta). Depois que a roleta
    para, o mesmo botão vira "VER PERGUNTA". */
 function aoClicarGirar() {
-  if (telaAtual !== "roleta" || Roleta.girando || !partida) return;
+  if (telaAtual !== "roleta" || Roleta.girando || etapaAlerta !== null || !partida) return;
   if (partida.perguntaAtual) {
     abrirPergunta();
   } else {
@@ -711,11 +718,16 @@ function girar() {
 
   var disponiveis = temasDisponiveis(temasInativos());
   if (disponiveis.length === 0 && partida.usadas.length > 0) {
-    // Todas as perguntas do nível já saíram nesta partida: libera todas de novo.
-    partida.usadas = [];
+    // Todas as perguntas do nível já saíram nesta partida: libera todas de novo,
+    // menos a da rodada anterior (para não repetir logo em seguida).
+    partida.usadas = partida.ultimaPergunta ? [partida.ultimaPergunta] : [];
+    disponiveis = temasDisponiveis(temasInativos());
+    if (disponiveis.length === 0) {
+      partida.usadas = [];
+      disponiveis = temasDisponiveis(temasInativos());
+    }
     avisoRoleta = "Todas as perguntas do nível " + nomeDoNivel(partida.nivel) +
       " já tinham saído. Elas foram liberadas de novo.";
-    disponiveis = temasDisponiveis(temasInativos());
   }
   atualizarRoletaEAviso();
 
@@ -726,10 +738,25 @@ function girar() {
   }
 
   partida.rodadaJogada = true;
-  salvarPartida();
 
+  // Esta rodada é de alerta? (sorteado uma vez só por rodada)
+  if (partida.alerta === null) {
+    partida.alerta = sortearAlerta();
+    if (partida.alerta) partida.rodadasComAlerta.push(partida.rodada);
+    if (partida.alerta) {
+      salvarPartida();
+      anunciarAlerta(); // a roleta gira depois, no botão "GIRAR A ROLETA"
+      return;
+    }
+  }
+  salvarPartida();
+  girarRoleta();
+}
+
+/* Faz a roleta girar de verdade. */
+function girarRoleta() {
   // Sorteia o tema ANTES de girar; a animação só mostra o resultado.
-  var indice = sortear(disponiveis);
+  var indice = sortear(temasDisponiveis(temasInativos()));
 
   var botao = document.getElementById("botao-girar");
   botao.disabled = true;
@@ -969,9 +996,11 @@ function proxima() {
   if (telaAtual !== "pergunta" || !partida || !partida.revelada || contando) return;
   partida.rodada++;
   partida.rodadaJogada = false;
+  partida.ultimaPergunta = partida.perguntaAtual;
   partida.temaAtual = null;
   partida.perguntaAtual = null;
   partida.revelada = false;
+  partida.alerta = null;
   salvarPartida();
   mostrarTela("roleta");
 }
@@ -993,6 +1022,106 @@ function ligarTelaPergunta() {
   document.getElementById("botao-revelar").addEventListener("click", revelar);
   document.getElementById("botao-proxima").addEventListener("click", proxima);
   document.getElementById("botao-trocar").addEventListener("click", trocarPergunta);
+}
+
+
+/* --------------------------------------------------------------------------
+   8b. RODADA DE ALERTA (evento especial da enchente)
+   Ao clicar em GIRAR, o jogo sorteia se a rodada é de alerta. Se for:
+   a roleta treme, toca a sirene, aparece "ALERTA! A ENCHENTE CHEGOU!" com
+   água subindo, depois a regra do nível e o botão "GIRAR A ROLETA".
+   Os textos ficam no config.js (CONFIG.evento).
+   -------------------------------------------------------------------------- */
+
+// Tempos da animação do alerta (milissegundos)
+var TEMPO_ROLETA_TREMENDO = 700;   // a roleta treme antes da tela de alerta
+var TEMPO_ATE_A_REGRA = 3200;      // título e água sozinhos, antes da regra aparecer
+
+/* Decide se a rodada atual é de alerta, conforme as configurações. */
+function sortearAlerta() {
+  if (!ajustes.eventoLigado) return false;
+  var rodada = partida.rodada;
+
+  // Modo "a cada N rodadas"
+  if (ajustes.eventoModo === "intervalo") {
+    return rodada % ajustes.eventoIntervalo === 0;
+  }
+
+  // Modo "sorteio em cada rodada"
+  var lista = partida.rodadasComAlerta;
+  var ultimoAlerta = lista.length > 0 ? lista[lista.length - 1] : 0;
+  if (rodada < CONFIG.evento.nuncaAntesDaRodada) return false;   // rodadas 1 e 2: nunca
+  if (ultimoAlerta === rodada - 1) return false;                 // nunca duas seguidas
+  if (lista.length === 0 && rodada >= CONFIG.evento.garantidoNaRodada) return true; // garantia
+  return Math.random() * 100 < ajustes.eventoChance;
+}
+
+/* Mostra ou esconde a faixa "RODADA DE ALERTA" embaixo da barra. */
+function atualizarFaixaAlerta() {
+  var faixa = document.getElementById("faixa-alerta");
+  var mostrar = partida !== null && partida.alerta === true &&
+    (telaAtual === "roleta" || telaAtual === "pergunta");
+  if (mostrar) {
+    document.getElementById("faixa-alerta-titulo").textContent = CONFIG.evento.faixa;
+    document.getElementById("faixa-alerta-regra").textContent = CONFIG.evento.regras[partida.nivel] || "";
+  }
+  faixa.hidden = !mostrar;
+  // As telas descontam a altura da faixa (ver --altura-faixa no estilo.css)
+  document.documentElement.style.setProperty("--altura-faixa", mostrar ? faixa.offsetHeight + "px" : "0px");
+}
+
+/* O alerta acontece em etapas. Cada etapa só começa se a anterior ainda
+   estiver valendo (evita que um clique rápido bagunce a sequência). */
+function anunciarAlerta() {
+  // Etapa 1: a roleta treme e fica alaranjada; a sirene começa
+  etapaAlerta = "tremendo";
+  document.getElementById("alerta-regra").hidden = true;
+  document.getElementById("botao-alerta-girar").hidden = true;
+  document.getElementById("botao-girar").disabled = true;
+  document.getElementById("dica-roleta").hidden = true;
+  document.getElementById("caixa-roleta").classList.add("transforma");
+  Sons.sirene();
+  setTimeout(mostrarTituloDoAlerta, TEMPO_ROLETA_TREMENDO);
+}
+
+function mostrarTituloDoAlerta() {
+  // Etapa 2: tela de alerta com título e água subindo
+  if (etapaAlerta !== "tremendo") return;
+  etapaAlerta = "titulo";
+  document.getElementById("caixa-roleta").classList.remove("transforma");
+  var camada = document.getElementById("alerta");
+  camada.classList.remove("agua-subiu", "com-regra");
+  document.getElementById("alerta-titulo").textContent = CONFIG.evento.titulo;
+  document.getElementById("alerta-subtitulo").textContent = CONFIG.evento.subtitulo;
+  camada.hidden = false;
+  void camada.offsetWidth; // garante que a água comece do zero
+  camada.classList.add("agua-subiu");
+  setTimeout(mostrarRegraDoAlerta, TEMPO_ATE_A_REGRA);
+}
+
+function mostrarRegraDoAlerta() {
+  // Etapa 3: a regra do nível e o botão para girar
+  if (etapaAlerta !== "titulo") return;
+  etapaAlerta = "regra";
+  document.getElementById("alerta-regra-texto").textContent =
+    CONFIG.evento.regras[partida.nivel] || "";
+  document.getElementById("alerta-regra").hidden = false;
+  document.getElementById("botao-alerta-girar").hidden = false;
+  document.getElementById("alerta").classList.add("com-regra");
+  Sons.regra();
+}
+
+/* Botão "GIRAR A ROLETA" da tela de alerta (ou ESPAÇO/ENTER).
+   Só funciona depois que a regra apareceu. */
+function fecharAlertaEGirar() {
+  if (etapaAlerta !== "regra") return;
+  etapaAlerta = null;
+  document.getElementById("alerta").hidden = true;
+  document.getElementById("alerta-regra").hidden = true;
+  document.getElementById("botao-alerta-girar").hidden = true;
+  atualizarFaixaAlerta();
+  Roleta.desenhar(); // a faixa apareceu: a roleta muda de tamanho
+  girarRoleta();
 }
 
 
@@ -1045,6 +1174,7 @@ function atualizarBotoesTelaCheia() {
 }
 
 function aoMudarTamanho() {
+  atualizarFaixaAlerta(); // a faixa pode quebrar em duas linhas
   if (telaAtual === "roleta") Roleta.desenhar();
   if (telaAtual === "pergunta") ajustarTamanhoDaPergunta();
 }
@@ -1092,7 +1222,8 @@ function ligarModal() {
 
 /* Tecla R: reiniciar a partida (mesmo nível, rodada 1, perguntas zeradas). */
 function pedirReinicio() {
-  if (!partida || (telaAtual !== "roleta" && telaAtual !== "pergunta") || Roleta.girando || contando) return;
+  if (!partida || (telaAtual !== "roleta" && telaAtual !== "pergunta") ||
+      Roleta.girando || contando || etapaAlerta !== null) return;
   confirmar(
     "Reiniciar a partida?",
     "Volta para a rodada 1 e zera as perguntas usadas. O nível continua " +
@@ -1121,6 +1252,14 @@ function aoApertarTecla(evento) {
   if (ehEspaco || tecla === "Enter") evento.preventDefault();
   if (evento.repeat) return; // tecla segurada: ignora as repetições
   if (contando) return;      // durante a contagem, nada de atalhos
+
+  // Na tela de alerta: ESPAÇO/ENTER = "GIRAR A ROLETA"; M e F continuam valendo
+  if (etapaAlerta !== null) {
+    if (ehEspaco || tecla === "Enter") fecharAlertaEGirar();
+    else if (tecla === "m" || tecla === "M") alternarSom();
+    else if (tecla === "f" || tecla === "F") alternarTelaCheia();
+    return;
+  }
 
   // Com a janela de confirmação aberta, só o ESC funciona (= fechar).
   if (modalAberto()) {
@@ -1197,6 +1336,7 @@ function iniciarJogo() {
   document.getElementById("botao-tela-cheia").addEventListener("click", alternarTelaCheia);
   document.getElementById("botao-tela-cheia-inicio").addEventListener("click", alternarTelaCheia);
   document.getElementById("botao-inicio").addEventListener("click", irParaInicio);
+  document.getElementById("botao-alerta-girar").addEventListener("click", fecharAlertaEGirar);
 
   document.addEventListener("keydown", aoApertarTecla);
   document.addEventListener("keyup", aoSoltarTecla);

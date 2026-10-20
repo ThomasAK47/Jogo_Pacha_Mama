@@ -95,6 +95,38 @@ var Sons = {
     this.nota(1320, 0, 0.55, "triangle", 0.12);
   },
 
+  /* Sirene curta, estilo desenho animado ("uí-ú, uí-ú"), cerca de 2 segundos.
+     Sobe e desce de tom suavemente, sem o som realista de alarme. */
+  sirene: function () {
+    if (!this.podeTocar()) return;
+    var agora = this.contexto.currentTime;
+    var duracao = 2.0;
+    var oscilador = this.contexto.createOscillator();
+    var envelope = this.contexto.createGain();
+    oscilador.type = "triangle";
+    // Quatro "uí-ú": sobe de 620 Hz para 940 Hz e desce de novo
+    for (var i = 0; i < 4; i++) {
+      var inicio = agora + i * 0.5;
+      oscilador.frequency.setValueAtTime(620, inicio);
+      oscilador.frequency.linearRampToValueAtTime(940, inicio + 0.25);
+      oscilador.frequency.linearRampToValueAtTime(620, inicio + 0.5);
+    }
+    envelope.gain.setValueAtTime(0.0001, agora);
+    envelope.gain.exponentialRampToValueAtTime(0.22, agora + 0.08);
+    envelope.gain.setValueAtTime(0.22, agora + duracao - 0.3);
+    envelope.gain.exponentialRampToValueAtTime(0.0001, agora + duracao);
+    oscilador.connect(envelope);
+    envelope.connect(this.saida);
+    oscilador.start(agora);
+    oscilador.stop(agora + duracao + 0.05);
+  },
+
+  /* "Plim" quando a regra da rodada de alerta aparece. */
+  regra: function () {
+    this.nota(784, 0, 0.4, "sine", 0.3);
+    this.nota(1175, 0.15, 0.6, "sine", 0.3);
+  },
+
   /* Fanfarra curta quando a resposta certa aparece. */
   acerto: function () {
     var notas = [392, 523, 659, 784];
