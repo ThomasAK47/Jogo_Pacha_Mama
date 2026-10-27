@@ -43,7 +43,7 @@ var PONTOS_DO_MAPA = [
   { numero: "2", x: 500, y: 66,  desenho: "casa",   raio: 42, numeroEm: [-44, -18] },  // casa na encosta íngreme
   { numero: "3", x: 112, y: 170, desenho: "arvore", raio: 72, numeroEm: [-40, -46] },  // árvore sozinha e poste
   { numero: "4", x: 900, y: 178, desenho: "acude",  raio: 62, numeroEm: [-46, -34] },  // açude quase seco e lavoura
-  { numero: "5", x: 500, y: 168, desenho: "escola", raio: 48, numeroEm: [0, -50] }     // escola no topo (abrigo)
+  { numero: "5", x: 500, y: 170, desenho: "escola", raio: 56, numeroEm: [62, -32] }     // escola no topo (abrigo)
 ];
 
 // Caminho de cada trilha: do INÍCIO (primeiro par) até a CHEGADA (último).
@@ -191,7 +191,9 @@ function escreverAlturas(pai) {
         if (distancia(p, rotulosDasCurvas[r]) < 70) livre = false;
       }
       for (var k = 0; k < PONTOS_DO_MAPA.length && livre; k++) {
-        if (distancia(p, PONTOS_DO_MAPA[k]) < PONTOS_DO_MAPA[k].raio + 12) livre = false;
+        var ponto = PONTOS_DO_MAPA[k];
+        if (distancia(p, ponto) < ponto.raio + 12) livre = false;
+        if (distancia(p, { x: ponto.x + ponto.numeroEm[0], y: ponto.y + ponto.numeroEm[1] }) < 36) livre = false;
       }
       for (var i = 0; i < pontosDasTrilhas.length && livre; i++) {
         if (distancia(p, pontosDasTrilhas[i]) < 48) livre = false;
@@ -486,15 +488,32 @@ function desenhoAcude(g) {
   }
 }
 
-/* Escola: o abrigo no topo do morro. */
+/* Escola: prédio comprido com torre do sino, placa ESCOLA, fileira de
+   janelas e bandeira do Brasil no mastro. É o abrigo no topo do morro. */
 function desenhoEscola(g) {
-  criar("ellipse", { cx: 3, cy: 26, rx: 46, ry: 7, fill: "#000000", opacity: 0.15 }, g);
-  criar("rect", { x: -40, y: -8, width: 80, height: 34, fill: "#ffffff", stroke: "#1a1a1a", "stroke-width": 2.5 }, g);
-  criar("path", { d: "M-46 -6 L0 -28 L46 -6 Z", fill: "#1d6b40", stroke: "#1a1a1a", "stroke-width": 2.5, "stroke-linejoin": "round" }, g);
-  criar("circle", { cx: 0, cy: -14, r: 5, fill: "#ffe066", stroke: "#1a1a1a", "stroke-width": 1.5 }, g);
-  criar("rect", { x: -7, y: 8, width: 14, height: 18, fill: "#8a5a2b", stroke: "#1a1a1a", "stroke-width": 2 }, g);
-  criar("rect", { x: -31, y: 2, width: 14, height: 11, fill: "#9ad0ff", stroke: "#1a1a1a", "stroke-width": 2 }, g);
-  criar("rect", { x: 17, y: 2, width: 14, height: 11, fill: "#9ad0ff", stroke: "#1a1a1a", "stroke-width": 2 }, g);
+  criar("ellipse", { cx: 3, cy: 28, rx: 58, ry: 7, fill: "#000000", opacity: 0.15 }, g);
+  // Prédio de tijolos e telhado
+  criar("rect", { x: -48, y: -12, width: 96, height: 40, fill: "#e8735a", stroke: "#1a1a1a", "stroke-width": 2.5 }, g);
+  criar("path", { d: "M-54 -10 L-40 -26 L40 -26 L54 -10 Z", fill: "#8b3a2b", stroke: "#1a1a1a", "stroke-width": 2.5, "stroke-linejoin": "round" }, g);
+  // Torre do sino
+  criar("rect", { x: -11, y: -46, width: 22, height: 22, fill: "#fff3d6", stroke: "#1a1a1a", "stroke-width": 2.2 }, g);
+  criar("path", { d: "M-15 -45 L0 -60 L15 -45 Z", fill: "#8b3a2b", stroke: "#1a1a1a", "stroke-width": 2.2, "stroke-linejoin": "round" }, g);
+  criar("path", { d: "M-6 -28 q0 -12 6 -12 q6 0 6 12 Z", fill: "#ffd23f", stroke: "#1a1a1a", "stroke-width": 1.6 }, g);
+  // Placa
+  criar("rect", { x: -30, y: -8, width: 60, height: 14, rx: 3, fill: "#ffffff", stroke: "#1a1a1a", "stroke-width": 1.8 }, g);
+  escrever(g, "ESCOLA", 0, 3.5, { "font-size": 11, "font-weight": "bold", fill: "#1d6b40", "letter-spacing": "1" });
+  // Janelas e porta
+  var janelas = [-42, -28, 16, 30];
+  for (var i = 0; i < janelas.length; i++) {
+    criar("rect", { x: janelas[i], y: 10, width: 11, height: 10, fill: "#9ad0ff", stroke: "#1a1a1a", "stroke-width": 1.6 }, g);
+  }
+  criar("rect", { x: -9, y: 10, width: 18, height: 18, fill: "#8a5a2b", stroke: "#1a1a1a", "stroke-width": 2 }, g);
+  criar("line", { x1: 0, y1: 10, x2: 0, y2: 28, stroke: "#1a1a1a", "stroke-width": 1.4 }, g);
+  // Mastro com a bandeira do Brasil
+  criar("rect", { x: -66, y: -50, width: 3, height: 78, fill: "#3b2a1a" }, g);
+  criar("rect", { x: -63, y: -50, width: 26, height: 18, fill: "#1f9e44", stroke: "#1a1a1a", "stroke-width": 1.4 }, g);
+  criar("path", { d: "M-60 -41 L-50 -48 L-40 -41 L-50 -34 Z", fill: "#ffd23f" }, g);
+  criar("circle", { cx: -50, cy: -41, r: 4, fill: "#1f4fa8" }, g);
 }
 
 var DESENHOS_DOS_PONTOS = { casa: desenhoCasa, arvore: desenhoArvore, acude: desenhoAcude, escola: desenhoEscola };
