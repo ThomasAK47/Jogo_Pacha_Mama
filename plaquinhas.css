@@ -5,7 +5,7 @@
    config.js) e, no meio, a forma e a letra em preto, igual ao jogo.
    ========================================================================== */
 
-/* Uma folha pode ter 1 plaquinha (A4 inteira) ou 2 (meia folha cada) */
+/* Uma folha pode ter 1 plaquinha (A4 inteira), 2 (meia folha cada) ou 4 (um quarto cada) */
 .folha.de-plaquinhas {
   display: flex;
   flex-direction: column;
@@ -96,6 +96,69 @@
   flex: 1;
   border-top: 0.5mm dashed #8a8a8a;
 }
+
+/* Quatro por folha: uma grade 2 x 2, com forma em cima e letra embaixo.
+   O espaço de 10 mm entre elas é onde passa a tesoura. */
+.folha.quatro {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 10mm;
+}
+.folha.quatro .plaquinha {
+  border-width: 7mm;
+  border-radius: 10mm;
+  gap: 2mm;
+}
+.folha.quatro .marca-plaquinha {
+  gap: 3mm;
+  margin-top: 9mm;
+}
+.folha.quatro .forma-grande {
+  width: 52mm;
+  height: 52mm;
+}
+.folha.quatro .letra-grande {
+  font-size: 44mm;
+}
+.folha.quatro .nome-equipe {
+  font-size: 5mm;
+  top: 3mm;
+  padding: 1mm 5mm;
+}
+
+/* Cruz tracejada no meio da folha, com uma tesourinha no começo de cada linha */
+.cruz-corte {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.corte-vertical,
+.corte-horizontal {
+  position: absolute;
+  color: #6b6b6b;
+  font-size: 5mm;
+  line-height: 1;
+}
+.corte-vertical {
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  border-left: 0.5mm dashed #8a8a8a;
+}
+.corte-horizontal {
+  left: 0;
+  right: 0;
+  top: 50%;
+  border-top: 0.5mm dashed #8a8a8a;
+}
+.corte-vertical > span,
+.corte-horizontal > span {
+  position: absolute;
+  background: #ffffff;
+}
+.corte-vertical > span   { top: 0;  left: -2.6mm; transform: rotate(90deg); }
+.corte-horizontal > span { left: 0; top: -2.8mm; }
 
 /* Economizar tinta: a forma fica só com o contorno */
 .economia .forma-grande {
