@@ -42,10 +42,12 @@
                    Exemplo:  pontosMapa: ["1", "2", "3"],
 
    PONTOS DO MAPA IMPRESSO (combinação usada nas perguntas)
-   - Ponto 1: beira do rio (o lugar mais baixo)
-   - Ponto 2: baixada (terreno plano e baixo, perto do rio)
-   - Ponto 3: topo do morro (alto e plano)
-   - Ponto 4: encosta íngreme (curvas de nível bem juntas)
+   Cada ponto tem um desenho e mostra um perigo; só o ponto 5 é seguro.
+   - Ponto 1: casa na beira do rio (o lugar mais baixo) ... enchente
+   - Ponto 2: casa na encosta íngreme (curvas juntas) ..... deslizamento
+   - Ponto 3: árvore sozinha e poste no campo aberto ...... vendaval e raios
+   - Ponto 4: açude quase seco e lavoura .................. estiagem
+   - Ponto 5: escola no topo do morro (alto e plano) ...... abrigo
 
    CUIDADOS QUE EVITAM ERROS
    - Toda pergunta termina com "}," (chave e vírgula).
@@ -157,11 +159,11 @@ var PERGUNTAS = [
     id: "INF-DES-04",
     nivel: "infantil",
     tema: "deslizamentos",
-    pergunta: "Olhem o mapa: em qual ponto o morro é mais empinado?",
-    opcoes: ["Ponto 3", "Ponto 4"],
+    pergunta: "Olhem o mapa: qual casa fica no morro bem empinado, onde a terra pode escorregar?",
+    opcoes: ["Casa do ponto 1", "Casa do ponto 2"],
     correta: "B",
-    explicacao: "No ponto 4, as linhas do mapa estão bem juntinhas: o morro é empinado. Ali a terra pode escorregar com muita chuva.",
-    pontosMapa: ["3", "4"]
+    explicacao: "A casa do ponto 2 fica num morro bem empinado. Com muita chuva, a terra ali pode escorregar.",
+    pontosMapa: ["1", "2"]
   },
 
   { // REVISAR
@@ -226,6 +228,17 @@ var PERGUNTAS = [
     explicacao: "Dar a água que sobrou para uma planta é um jeito simples de não desperdiçar."
   },
 
+  { // REVISAR
+    id: "INF-EST-06",
+    nivel: "infantil",
+    tema: "estiagem",
+    pergunta: "Olhem o mapa: o açude do ponto 4 está quase sem água. Por quê?",
+    opcoes: ["Faz muitos dias que não chove", "Choveu demais"],
+    correta: "A",
+    explicacao: "Quando passa muito tempo sem chover, o açude seca e as plantinhas da lavoura ficam com sede.",
+    pontosMapa: ["4"]
+  },
+
   /* ---------- Infantil · Vendaval e Granizo ---------- */
 
   { // REVISAR
@@ -278,28 +291,39 @@ var PERGUNTAS = [
     explicacao: "Granizo são pedrinhas de gelo que se formam dentro de nuvens de tempestade. No Rio Grande do Sul, ele é comum."
   },
 
+  { // REVISAR
+    id: "INF-VEN-06",
+    nivel: "infantil",
+    tema: "vendaval",
+    pergunta: "Olhem o mapa: começou uma tempestade com raios. Onde é melhor ficar?",
+    opcoes: ["Embaixo da árvore do ponto 3", "Dentro da escola do ponto 5"],
+    correta: "B",
+    explicacao: "Árvore sozinha no campo atrai raios e pode perder galhos com o vento. Dentro de casa ou da escola estamos protegidos.",
+    pontosMapa: ["3", "5"]
+  },
+
   /* ---------- Infantil · Mapas e Satélites ---------- */
 
   { // REVISAR
     id: "INF-MAP-01",
     nivel: "infantil",
     tema: "mapas",
-    pergunta: "Olhem o mapa: qual ponto fica mais longe da água do rio?",
-    opcoes: ["Ponto 1", "Ponto 3"],
-    correta: "B",
-    explicacao: "O ponto 1 fica na beira do rio. O ponto 3 fica lá no alto do morro, longe da água.",
-    pontosMapa: ["1", "3"]
+    pergunta: "Olhem o mapa: se o rio encher, qual lugar pode ficar com água dentro?",
+    opcoes: ["A casa do ponto 1", "A escola do ponto 5"],
+    correta: "A",
+    explicacao: "A casa do ponto 1 fica bem pertinho do rio. Quando o rio enche, a água chega primeiro ali.",
+    pontosMapa: ["1", "5"]
   },
 
   { // REVISAR
     id: "INF-MAP-02",
     nivel: "infantil",
     tema: "mapas",
-    pergunta: "Olhem o mapa: qual ponto fica bem pertinho do rio?",
-    opcoes: ["Ponto 1", "Ponto 3"],
-    correta: "A",
-    explicacao: "O ponto 1 fica na beira do rio. Quando o rio enche, a água chega primeiro ali.",
-    pontosMapa: ["1", "3"]
+    pergunta: "Olhem o mapa: o rio está enchendo. Para onde a família do ponto 1 deve ir?",
+    opcoes: ["Ficar em casa, perto do rio", "Ir para a escola lá no alto"],
+    correta: "B",
+    explicacao: "A escola do ponto 5 fica lá no alto, longe do rio. É para lá que a família vai quando o rio enche.",
+    pontosMapa: ["1", "5"]
   },
 
   { // REVISAR
@@ -482,11 +506,11 @@ var PERGUNTAS = [
     id: "INT-DES-03",
     nivel: "intermediario",
     tema: "deslizamentos",
-    pergunta: "Olhem o mapa: em qual ponto há mais risco de a terra deslizar?",
-    opcoes: ["Ponto 2", "Ponto 3", "Ponto 4"],
-    correta: "C",
-    explicacao: "No ponto 4 as curvas de nível estão bem juntinhas: a encosta é muito inclinada. Com muita chuva, a terra pode deslizar.",
-    pontosMapa: ["2", "3", "4"]
+    pergunta: "Olhem o mapa: qual lugar tem mais risco de a terra deslizar?",
+    opcoes: ["Ponto 1", "Ponto 2", "Ponto 4"],
+    correta: "B",
+    explicacao: "A casa do ponto 2 fica na encosta íngreme: as curvas de nível ali estão bem juntinhas. Com muita chuva, a terra pode deslizar.",
+    pontosMapa: ["1", "2", "4"]
   },
 
   { // REVISAR
@@ -581,6 +605,17 @@ var PERGUNTAS = [
     explicacao: "Com tudo seco, o fogo se espalha fácil. Nunca brinque com fogo e não queime lixo."
   },
 
+  { // REVISAR
+    id: "INT-EST-06",
+    nivel: "intermediario",
+    tema: "estiagem",
+    pergunta: "Olhem o mapa: o açude do ponto 4 está quase seco e a lavoura está murcha. Que desastre é esse?",
+    opcoes: ["Enchente", "Granizo", "Estiagem"],
+    correta: "C",
+    explicacao: "Na estiagem passa muito tempo sem chuva. Açudes e rios baixam e as plantações secam.",
+    pontosMapa: ["4"]
+  },
+
   /* ---------- Intermediário · Vendaval e Granizo ---------- */
 
   { // REVISAR
@@ -641,28 +676,39 @@ var PERGUNTAS = [
     explicacao: "Os ciclones extratropicais giram e trazem vento forte e muita chuva ao Sul do Brasil, mais no outono e no inverno."
   },
 
+  { // REVISAR
+    id: "INT-VEN-06",
+    nivel: "intermediario",
+    tema: "vendaval",
+    pergunta: "Olhem o mapa: no ponto 3 há uma árvore sozinha e um poste. Por que ali é perigoso num vendaval?",
+    opcoes: ["Galhos e fios podem cair", "A árvore faz muita sombra", "O poste faz barulho"],
+    correta: "A",
+    explicacao: "O vento forte pode quebrar galhos e derrubar fios elétricos. Árvores sozinhas também atraem raios.",
+    pontosMapa: ["3"]
+  },
+
   /* ---------- Intermediário · Mapas e Satélites ---------- */
 
   { // REVISAR
     id: "INT-MAP-01",
     nivel: "intermediario",
     tema: "mapas",
-    pergunta: "Olhem o mapa: se o rio encher, qual ponto a água alcança primeiro?",
-    opcoes: ["Ponto 1", "Ponto 2", "Ponto 3"],
+    pergunta: "Olhem o mapa: se o rio encher, qual lugar a água alcança primeiro?",
+    opcoes: ["Ponto 1", "Ponto 4", "Ponto 5"],
     correta: "A",
-    explicacao: "O ponto 1 é o mais baixo e fica na beira do rio. A água ocupa primeiro os lugares mais baixos.",
-    pontosMapa: ["1", "2", "3"]
+    explicacao: "A casa do ponto 1 fica na beira do rio, no lugar mais baixo. A água ocupa primeiro os lugares mais baixos.",
+    pontosMapa: ["1", "4", "5"]
   },
 
   { // REVISAR
     id: "INT-MAP-02",
     nivel: "intermediario",
     tema: "mapas",
-    pergunta: "Olhem o mapa: qual ponto é o melhor lugar de encontro numa enchente?",
-    opcoes: ["Ponto 1", "Ponto 2", "Ponto 3"],
+    pergunta: "Olhem o mapa: a Defesa Civil avisou que o rio vai subir. Para onde vai a família do ponto 1?",
+    opcoes: ["Ponto 2", "Ponto 3", "Ponto 5"],
     correta: "C",
-    explicacao: "O ponto 3 fica no alto, em terreno plano, longe do rio e da encosta íngreme.",
-    pontosMapa: ["1", "2", "3"]
+    explicacao: "A escola do ponto 5 fica no alto, em terreno plano e longe do rio. O ponto 2 fica na encosta íngreme e o 3 num campo aberto.",
+    pontosMapa: ["2", "3", "5"]
   },
 
   { // REVISAR
@@ -968,6 +1014,17 @@ var PERGUNTAS = [
     explicacao: "Mato seco e baixa umidade fazem o fogo se espalhar rápido. Não queime lixo nem jogue bitucas de cigarro na beira da estrada."
   },
 
+  { // REVISAR
+    id: "ADU-EST-06",
+    nivel: "adulto",
+    tema: "estiagem",
+    pergunta: "Olhem o mapa: o açude do ponto 4 baixou muito. Qual medida ajuda a enfrentar a próxima estiagem?",
+    opcoes: ["Lavar o pátio com mangueira", "Desmatar a beira do açude", "Irrigar nas horas mais quentes", "Guardar água da chuva em cisterna"],
+    correta: "D",
+    explicacao: "A cisterna guarda a água da chuva para os meses secos. Mata na beira do açude protege a água; irrigar no calor perde água.",
+    pontosMapa: ["4"]
+  },
+
   /* ---------- Adulto · Vendaval e Granizo ---------- */
 
   { // REVISAR
@@ -1035,6 +1092,17 @@ var PERGUNTAS = [
     explicacao: "O fio pode estar energizado mesmo parado. Mantenha todos longe e avise a companhia de energia ou a Defesa Civil (199)."
   },
 
+  { // REVISAR
+    id: "ADU-VEN-06",
+    nivel: "adulto",
+    tema: "vendaval",
+    pergunta: "Olhem o mapa: uma pessoa está no campo, perto do ponto 3, e começa um temporal com raios. O que fazer?",
+    opcoes: ["Abrigar-se embaixo da árvore", "Afastar-se e buscar abrigo fechado", "Encostar no poste", "Deitar no chão molhado"],
+    correta: "B",
+    explicacao: "Árvores isoladas e postes atraem raios e podem cair com o vento. O mais seguro é uma construção ou um carro fechado.",
+    pontosMapa: ["3"]
+  },
+
   /* ---------- Adulto · Mapas e Satélites ---------- */
 
   { // REVISAR
@@ -1042,32 +1110,32 @@ var PERGUNTAS = [
     nivel: "adulto",
     tema: "mapas",
     pergunta: "Olhem o mapa: qual ponto tem mais risco de deslizamento?",
-    opcoes: ["Ponto 1", "Ponto 2", "Ponto 3", "Ponto 4"],
-    correta: "D",
-    explicacao: "No ponto 4 as curvas de nível estão bem juntas: a encosta é íngreme. Com muita chuva, ela tem mais risco de deslizar.",
-    pontosMapa: ["1", "2", "3", "4"]
+    opcoes: ["Ponto 1", "Ponto 2", "Ponto 3", "Ponto 5"],
+    correta: "B",
+    explicacao: "A casa do ponto 2 fica na encosta íngreme, onde as curvas de nível estão bem juntas. Com muita chuva, ela tem mais risco de deslizar.",
+    pontosMapa: ["1", "2", "3", "5"]
   },
 
   { // REVISAR
     id: "ADU-MAP-02",
     nivel: "adulto",
     tema: "mapas",
-    pergunta: "Olhem o mapa: qual ponto é o mais indicado para um abrigo temporário numa enchente?",
-    opcoes: ["Ponto 1", "Ponto 2", "Ponto 3", "Ponto 4"],
+    pergunta: "Olhem o mapa: os pontos 2 e 5 ficam no morro. Por que só o 5 serve de abrigo numa enchente?",
+    opcoes: ["O 5 fica mais perto do rio", "Os dois servem igualmente", "O 5 é alto e plano; o 2 fica na encosta", "O 2 fica numa área de estiagem"],
     correta: "C",
-    explicacao: "O ponto 3 é alto e plano: fica longe da cheia do rio e fora da encosta íngreme, onde há risco de deslizamento.",
-    pontosMapa: ["1", "2", "3", "4"]
+    explicacao: "O abrigo precisa estar longe da cheia e fora de área de deslizamento. O ponto 5 é o topo plano; o 2 fica na encosta íngreme.",
+    pontosMapa: ["2", "5"]
   },
 
   { // REVISAR
     id: "ADU-MAP-03",
     nivel: "adulto",
     tema: "mapas",
-    pergunta: "Olhem o mapa: o que as curvas de nível muito próximas, no ponto 4, indicam?",
+    pergunta: "Olhem o mapa: o que as curvas de nível muito próximas, perto do ponto 2, indicam?",
     opcoes: ["Terreno plano", "Terreno muito inclinado", "Um rio", "Uma estrada"],
     correta: "B",
-    explicacao: "Quanto mais juntas as curvas de nível, mais a altura muda em pouco espaço: o terreno é íngreme.",
-    pontosMapa: ["4"]
+    explicacao: "Quanto mais juntas as curvas de nível, mais a altura muda em pouco espaço: o terreno é íngreme e tem mais risco de deslizar.",
+    pontosMapa: ["2"]
   },
 
   { // REVISAR
