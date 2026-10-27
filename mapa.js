@@ -8,7 +8,7 @@
 
    Os pontos 1 a 5 são os que as perguntas citam (perguntas.js). Cada um
    tem um desenho, para a criança reconhecer o lugar sem ler o mapa:
-     - Ponto 1: casa de madeira com deck no rio . perigo de ENCHENTE
+     - Ponto 1: casa de madeira com deck no rio . perigo de INUNDAÇÃO
      - Ponto 2: casa de palafitas na encosta .... perigo de DESLIZAMENTO
      - Ponto 3: linha de alta tensão e árvores .. perigo no VENDAVAL e nos raios
      - Ponto 4: açude quase seco e lavoura ...... ESTIAGEM

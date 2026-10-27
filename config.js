@@ -36,7 +36,7 @@ var CONFIG = {
        amarelo puros, para ninguém confundir com as cores das equipes.
      ------------------------------------------------------------------------ */
   temas: [
-    { chave: "enchentes",     nome: "Enchentes",             cor: "#13808a" },
+    { chave: "inundacoes",    nome: "Inundações",            cor: "#13808a" },
     { chave: "deslizamentos", nome: "Deslizamentos",         cor: "#8b5a2b" },
     { chave: "estiagem",      nome: "Estiagem",              cor: "#c25a10" },
     { chave: "vendaval",      nome: "Vendaval e Granizo",    cor: "#56657c" },
@@ -52,7 +52,7 @@ var CONFIG = {
        e aplica no mapa impresso. ESTE É O ÚNICO LUGAR ONDE AS REGRAS FICAM.
      ------------------------------------------------------------------------ */
   evento: {
-    titulo: "ALERTA! A ENCHENTE CHEGOU!",
+    titulo: "ALERTA! A INUNDAÇÃO CHEGOU!",
     subtitulo: "Hora de agir com calma!",
     faixa: "RODADA DE ALERTA",
     regras: {
