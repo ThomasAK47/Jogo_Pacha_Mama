@@ -22,7 +22,7 @@ var LETRAS = ["A", "B", "C", "D"];
 var escolha = {
   opcoes: 4,         // 2 = Infantil (A, B) · 3 = Intermediário (A a C) · 4 = Adulto (A a D)
   equipe: "todas",   // "todas" ou o número da equipe na lista do config.js (0, 1, 2...)
-  porFolha: 1,       // 1 = uma plaquinha por folha A4 · 2 = duas (meia folha cada)
+  porFolha: 4,       // 1 = uma por folha A4 · 2 = duas (meia folha) · 4 = quatro (um quarto de folha)
   economia: false    // true = forma só com contorno, para gastar menos tinta
 };
 
@@ -67,6 +67,23 @@ function criarPlaquinha(equipe, letra) {
   return plaquinha;
 }
 
+/* Cria a cruz tracejada que separa as 4 plaquinhas de uma folha. */
+function criarCruzDeCorte() {
+  var cruz = document.createElement("div");
+  cruz.className = "cruz-corte";
+  cruz.setAttribute("aria-hidden", "true");
+  var linhas = ["corte-vertical", "corte-horizontal"];
+  for (var i = 0; i < linhas.length; i++) {
+    var linha = document.createElement("span");
+    linha.className = linhas[i];
+    var tesoura = document.createElement("span");
+    tesoura.textContent = "✂";
+    linha.appendChild(tesoura);
+    cruz.appendChild(linha);
+  }
+  return cruz;
+}
+
 /* Lista as equipes escolhidas no painel. */
 function equipesEscolhidas() {
   if (escolha.equipe === "todas") return CONFIG.equipes;
@@ -88,14 +105,17 @@ function montarFolhas() {
     }
   }
 
-  // Distribui nas folhas (1 ou 2 por folha)
+  // Distribui nas folhas (1, 2 ou 4 por folha)
+  var tipoFolha = { 1: "", 2: " duas", 4: " quatro" };
   var folha = null;
   for (var p = 0; p < plaquinhas.length; p++) {
     if (p % escolha.porFolha === 0) {
       folha = document.createElement("div");
-      folha.className = "folha retrato de-plaquinhas" + (escolha.porFolha === 2 ? " duas" : "");
+      folha.className = "folha retrato de-plaquinhas" + tipoFolha[escolha.porFolha];
       caixa.appendChild(folha);
-    } else {
+      // Com 4 por folha, as linhas de corte formam uma cruz no meio da folha
+      if (escolha.porFolha === 4) folha.appendChild(criarCruzDeCorte());
+    } else if (escolha.porFolha === 2) {
       var corte = document.createElement("div");
       corte.className = "linha-corte";
       corte.textContent = "✂ cortar aqui";
@@ -170,7 +190,8 @@ function montarPainel() {
 
   criarGrupo("op-tamanho", "porFolha", [
     { texto: "1 por folha (grande)", valor: 1 },
-    { texto: "2 por folha (menor)", valor: 2 }
+    { texto: "2 por folha (menor)", valor: 2 },
+    { texto: "4 por folha (pequena)", valor: 4 }
   ]);
 
   criarGrupo("op-tinta", "economia", [
