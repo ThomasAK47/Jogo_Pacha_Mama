@@ -10,7 +10,7 @@
    tem um desenho, para a criança reconhecer o lugar sem ler o mapa:
      - Ponto 1: casa de madeira com deck no rio . perigo de ENCHENTE
      - Ponto 2: casa de palafitas na encosta .... perigo de DESLIZAMENTO
-     - Ponto 3: árvore sozinha e poste no campo . perigo no VENDAVAL e nos raios
+     - Ponto 3: linha de alta tensão e árvores .. perigo no VENDAVAL e nos raios
      - Ponto 4: açude quase seco e lavoura ...... ESTIAGEM
      - Ponto 5: escola no topo plano ............ ABRIGO e ponto de encontro
    Se mudar um ponto de lugar aqui, confira as perguntas de mapa.
@@ -41,7 +41,7 @@ var LARGURA = 1000, ALTURA = 640;
 var PONTOS_DO_MAPA = [
   { numero: "1", x: 96,  y: 530, desenho: "casaDoRio", raio: 50, numeroEm: [-46, -30] },  // casa na beira do rio
   { numero: "2", x: 372, y: 74,  desenho: "casaDaEncosta", raio: 52, numeroEm: [-40, -24] },  // casa na encosta íngreme
-  { numero: "3", x: 112, y: 170, desenho: "arvore", raio: 72, numeroEm: [-40, -46] },  // árvore sozinha e poste
+  { numero: "3", x: 118, y: 178, desenho: "altaTensao", raio: 94, numeroEm: [-86, -44] },  // linha de alta tensão e raio
   { numero: "4", x: 880, y: 172, desenho: "acude",  raio: 80, numeroEm: [-96, -6] },  // açude quase seco e lavoura
   { numero: "5", x: 500, y: 170, desenho: "escola", raio: 56, numeroEm: [62, -32] }     // escola no topo (abrigo)
 ];
@@ -553,6 +553,50 @@ function desenhoCasaDoRio(g) {
   criar("path", { d: "M60 30 q4 10 2 14", fill: "none", stroke: "#3b2a1a", "stroke-width": 1.5 }, g);
 }
 
+/* Linha de alta tensão: duas torres de ferro com os cabos passando por
+   cima de árvores, uma nuvem de tempestade e um raio caindo numa árvore. */
+function desenhoAltaTensao(g) {
+  var borda = "#1a1a1a";
+  // Árvores embaixo da linha
+  [[-34, 22, 17], [2, 30, 19], [38, 22, 16]].forEach(function (a) {
+    criar("ellipse", { cx: a[0] + 3, cy: a[1] + a[2] + 4, rx: a[2], ry: 4, fill: "#000000", opacity: 0.15 }, g);
+    criar("rect", { x: a[0] - 3, y: a[1] + 6, width: 6, height: a[2] - 2, fill: "#7a4b22", stroke: borda, "stroke-width": 1.5 }, g);
+    criar("circle", { cx: a[0], cy: a[1], r: a[2], fill: "#2f7d3a", stroke: borda, "stroke-width": 2 }, g);
+    criar("circle", { cx: a[0] - a[2] * 0.3, cy: a[1] - a[2] * 0.32, r: a[2] * 0.4, fill: "#5aa84f" }, g);
+  });
+  // Torres de ferro (treliça)
+  function torre(x, y) {
+    var t = criar("g", { transform: "translate(" + x + " " + y + ")", fill: "none", stroke: "#4d4d4d", "stroke-width": 2, "stroke-linejoin": "round" }, g);
+    criar("path", { d: "M-11 44 L-3 -28 L3 -28 L11 44 M-9 26 L9 26 M-7 8 L7 8 M-5 -10 L5 -10 M-9 26 L7 8 M9 26 L-7 8 M-7 8 L5 -10 M7 8 L-5 -10" }, t);
+    criar("path", { d: "M-16 -24 L16 -24 M-12 -16 L12 -16", "stroke-width": 2.6 }, t);
+  }
+  torre(-70, -2);
+  torre(74, -8);
+  // Cabos: saem da borda do mapa, passam pelas torres e por cima das árvores
+  var cabos = criar("g", { fill: "none", stroke: "#1a1a1a", "stroke-width": 1.6 }, g);
+  [[-26, -16], [-18, -8]].forEach(function (c, i) {
+    var yA = c[0] + 0, yB = c[0] - 6, xA = -70 + (i ? 12 : -16), xB = 74 + (i ? 12 : -16);
+    var xA2 = -70 + (i ? -12 : 16), xB2 = 74 + (i ? -12 : 16);
+    criar("path", { d: "M-130 " + (yA + 6) + " Q-100 " + (yA + 14) + " " + xA + " " + yA }, cabos);
+    criar("path", { d: "M" + xA2 + " " + (yA + (i ? 8 : 0)) + " Q2 " + (yA + 26) + " " + xB + " " + (yB + (i ? 8 : 0)) }, cabos);
+  });
+  // Nuvem de tempestade
+  var nuvem = criar("g", { fill: "#8d96a6", stroke: borda, "stroke-width": 2 }, g);
+  criar("path", { d: "M-34 -58 q-14 0 -14 -11 q0 -11 14 -11 q4 -13 20 -11 q8 -10 22 -4 q16 -3 18 11 q12 2 10 13 q-2 13 -16 13 Z" }, nuvem);
+  // Raio caindo na árvore do meio
+  criar("path", {
+    d: "M-2 -58 L-14 -28 L-2 -28 L-6 12 L12 -34 L0 -34 L10 -58 Z",
+    fill: "#ffd23f", stroke: borda, "stroke-width": 2, "stroke-linejoin": "round"
+  }, g);
+  var brilho = criar("g", { stroke: "#ffd23f", "stroke-width": 3, "stroke-linecap": "round" }, g);
+  criar("path", { d: "M-16 8 l-8 -5 M-16 16 l-9 1 M4 8 l8 -5 M5 16 l9 1" }, brilho);
+  // Vento
+  var vento = criar("g", { fill: "none", stroke: "#1f6fa8", "stroke-width": 3, "stroke-linecap": "round" }, g);
+  criar("path", { d: "M-118 34 h16 q8 0 8 -7" }, vento);
+  criar("path", { d: "M-122 46 h22" }, vento);
+  criar("path", { d: "M-118 58 h14 q8 0 8 7" }, vento);
+}
+
 /* Árvore grande e sozinha, um poste com fio e riscos de vento. */
 function desenhoArvore(g) {
   criar("ellipse", { cx: -8, cy: 34, rx: 30, ry: 7, fill: "#000000", opacity: 0.15 }, g);
@@ -647,7 +691,7 @@ function desenhoEscola(g) {
   criar("circle", { cx: -50, cy: -41, r: 4, fill: "#1f4fa8" }, g);
 }
 
-var DESENHOS_DOS_PONTOS = { casa: desenhoCasa, casaDaEncosta: desenhoCasaDaEncosta, casaDoRio: desenhoCasaDoRio, arvore: desenhoArvore, acude: desenhoAcude, escola: desenhoEscola };
+var DESENHOS_DOS_PONTOS = { casa: desenhoCasa, altaTensao: desenhoAltaTensao, casaDaEncosta: desenhoCasaDaEncosta, casaDoRio: desenhoCasaDoRio, arvore: desenhoArvore, acude: desenhoAcude, escola: desenhoEscola };
 
 function desenharPontos(svg) {
   for (var i = 0; i < PONTOS_DO_MAPA.length; i++) {

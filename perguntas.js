@@ -45,7 +45,7 @@
    Cada ponto tem um desenho e mostra um perigo; só o ponto 5 é seguro.
    - Ponto 1: casa na beira do rio (o lugar mais baixo) ... enchente
    - Ponto 2: casa na encosta íngreme (curvas juntas) ..... deslizamento
-   - Ponto 3: árvore sozinha e poste no campo aberto ...... vendaval e raios
+   - Ponto 3: linha de alta tensão sobre árvores ......... vendaval e raios
    - Ponto 4: açude quase seco e lavoura .................. estiagem
    - Ponto 5: escola no topo do morro (alto e plano) ...... abrigo
 
@@ -296,9 +296,9 @@ var PERGUNTAS = [
     nivel: "infantil",
     tema: "vendaval",
     pergunta: "Olhem o mapa: começou uma tempestade com raios. Onde é melhor ficar?",
-    opcoes: ["Embaixo da árvore do ponto 3", "Dentro da escola do ponto 5"],
+    opcoes: ["Embaixo das árvores do ponto 3", "Dentro da escola do ponto 5"],
     correta: "B",
-    explicacao: "Árvore sozinha no campo atrai raios e pode perder galhos com o vento. Dentro de casa ou da escola estamos protegidos.",
+    explicacao: "Árvores e fios de alta tensão atraem raios, e galhos podem cair com o vento. Dentro de casa ou da escola estamos protegidos.",
     pontosMapa: ["3", "5"]
   },
 
@@ -680,8 +680,8 @@ var PERGUNTAS = [
     id: "INT-VEN-06",
     nivel: "intermediario",
     tema: "vendaval",
-    pergunta: "Olhem o mapa: no ponto 3 há uma árvore sozinha e um poste. Por que ali é perigoso num vendaval?",
-    opcoes: ["Galhos e fios podem cair", "A árvore faz muita sombra", "O poste faz barulho"],
+    pergunta: "Olhem o mapa: no ponto 3, a linha de alta tensão passa sobre árvores. Por que ali é perigoso num vendaval?",
+    opcoes: ["Galhos e fios podem cair", "As árvores fazem sombra", "A torre faz barulho"],
     correta: "A",
     explicacao: "O vento forte pode quebrar galhos e derrubar fios elétricos. Árvores sozinhas também atraem raios.",
     pontosMapa: ["3"]
@@ -707,7 +707,7 @@ var PERGUNTAS = [
     pergunta: "Olhem o mapa: a Defesa Civil avisou que o rio vai subir. Para onde vai a família do ponto 1?",
     opcoes: ["Ponto 2", "Ponto 3", "Ponto 5"],
     correta: "C",
-    explicacao: "A escola do ponto 5 fica no alto, em terreno plano e longe do rio. O ponto 2 fica na encosta íngreme e o 3 num campo aberto.",
+    explicacao: "A escola do ponto 5 fica no alto, em terreno plano e longe do rio. O ponto 2 fica na encosta íngreme e o 3 embaixo da linha de alta tensão.",
     pontosMapa: ["2", "3", "5"]
   },
 
@@ -1097,9 +1097,9 @@ var PERGUNTAS = [
     nivel: "adulto",
     tema: "vendaval",
     pergunta: "Olhem o mapa: uma pessoa está no campo, perto do ponto 3, e começa um temporal com raios. O que fazer?",
-    opcoes: ["Abrigar-se embaixo da árvore", "Afastar-se e buscar abrigo fechado", "Encostar no poste", "Deitar no chão molhado"],
+    opcoes: ["Abrigar-se embaixo da árvore", "Afastar-se e buscar abrigo fechado", "Encostar na torre de energia", "Deitar no chão molhado"],
     correta: "B",
-    explicacao: "Árvores isoladas e postes atraem raios e podem cair com o vento. O mais seguro é uma construção ou um carro fechado.",
+    explicacao: "Árvores e torres de energia atraem raios, e galhos e fios podem cair com o vento. O mais seguro é uma construção ou carro fechado.",
     pontosMapa: ["3"]
   },
 
