@@ -4,13 +4,15 @@
 
    O mapa mostra um morro visto de cima, com curvas de nível, um rio
    embaixo e quatro trilhas coloridas (uma por equipe) que sobem do INÍCIO,
-   na baixada, até a CHEGADA, no topo do morro.
+   na baixada, até a CHEGADA, na escola do topo do morro.
 
-   Os pontos 1 a 4 são os que as perguntas citam (perguntas.js):
-     - Ponto 1: beira do rio (o lugar mais baixo)
-     - Ponto 2: baixada (terreno plano e baixo, perto do rio)
-     - Ponto 3: topo do morro (alto e plano)
-     - Ponto 4: encosta íngreme (curvas de nível bem juntas)
+   Os pontos 1 a 5 são os que as perguntas citam (perguntas.js). Cada um
+   tem um desenho, para a criança reconhecer o lugar sem ler o mapa:
+     - Ponto 1: casa na beira do rio ............ perigo de ENCHENTE
+     - Ponto 2: casa na encosta íngreme ......... perigo de DESLIZAMENTO
+     - Ponto 3: árvore sozinha e poste no campo . perigo no VENDAVAL e nos raios
+     - Ponto 4: açude quase seco e lavoura ...... ESTIAGEM
+     - Ponto 5: escola no topo plano ............ ABRIGO e ponto de encontro
    Se mudar um ponto de lugar aqui, confira as perguntas de mapa.
 
    Os nomes, as cores e o número de casas das trilhas vêm do config.js.
@@ -33,12 +35,15 @@
    -------------------------------------------------------------------------- */
 var LARGURA = 1000, ALTURA = 640;
 
-// Onde fica cada ponto das perguntas (x, y no desenho)
+// Onde fica cada ponto das perguntas (x, y no desenho), qual desenho ele
+// tem, quanto espaço livre o desenho precisa em volta (raio) e onde fica o
+// número, em relação ao meio do desenho (numeroEm)
 var PONTOS_DO_MAPA = [
-  { numero: "1", x: 95,  y: 545 },   // beira do rio
-  { numero: "2", x: 928, y: 532 },   // baixada
-  { numero: "3", x: 500, y: 178 },   // topo do morro
-  { numero: "4", x: 500, y: 70 }     // encosta íngreme (lado de cima do morro)
+  { numero: "1", x: 92,  y: 535, desenho: "casa",   raio: 42, numeroEm: [-36, -28] },  // casa na beira do rio
+  { numero: "2", x: 500, y: 66,  desenho: "casa",   raio: 42, numeroEm: [-44, -18] },  // casa na encosta íngreme
+  { numero: "3", x: 112, y: 170, desenho: "arvore", raio: 72, numeroEm: [-40, -46] },  // árvore sozinha e poste
+  { numero: "4", x: 900, y: 178, desenho: "acude",  raio: 62, numeroEm: [-46, -34] },  // açude quase seco e lavoura
+  { numero: "5", x: 500, y: 168, desenho: "escola", raio: 48, numeroEm: [0, -50] }     // escola no topo (abrigo)
 ];
 
 // Caminho de cada trilha: do INÍCIO (primeiro par) até a CHEGADA (último).
@@ -186,7 +191,7 @@ function escreverAlturas(pai) {
         if (distancia(p, rotulosDasCurvas[r]) < 70) livre = false;
       }
       for (var k = 0; k < PONTOS_DO_MAPA.length && livre; k++) {
-        if (distancia(p, PONTOS_DO_MAPA[k]) < 50) livre = false;
+        if (distancia(p, PONTOS_DO_MAPA[k]) < PONTOS_DO_MAPA[k].raio + 12) livre = false;
       }
       for (var i = 0; i < pontosDasTrilhas.length && livre; i++) {
         if (distancia(p, pontosDasTrilhas[i]) < 48) livre = false;
@@ -318,7 +323,7 @@ function lugarLivre(p, raio, ocupados) {
     if (distancia(p, casasDesenhadas[j]) < raio + 52) return false;
   }
   for (var k = 0; k < PONTOS_DO_MAPA.length; k++) {
-    if (distancia(p, PONTOS_DO_MAPA[k]) < raio + 40) return false;
+    if (distancia(p, PONTOS_DO_MAPA[k]) < raio + PONTOS_DO_MAPA[k].raio) return false;
   }
   for (var o = 0; o < ocupados.length; o++) {
     if (distancia(p, ocupados[o]) < raio + ocupados[o].raio + 4) return false;
@@ -437,13 +442,73 @@ function desenharEnfeites(svg) {
 /* --------------------------------------------------------------------------
    6. PONTOS DAS PERGUNTAS, TÍTULO E NORTE
    -------------------------------------------------------------------------- */
+/* Casa vista de frente: parede, telhado, porta e janela. */
+function desenhoCasa(g) {
+  criar("ellipse", { cx: 3, cy: 26, rx: 34, ry: 7, fill: "#000000", opacity: 0.15 }, g);
+  criar("rect", { x: -24, y: -6, width: 48, height: 32, fill: "#fff3d6", stroke: "#1a1a1a", "stroke-width": 2.5 }, g);
+  criar("path", { d: "M-31 -4 L0 -30 L31 -4 Z", fill: "#d9480f", stroke: "#1a1a1a", "stroke-width": 2.5, "stroke-linejoin": "round" }, g);
+  criar("rect", { x: -16, y: 6, width: 12, height: 20, fill: "#8a5a2b", stroke: "#1a1a1a", "stroke-width": 2 }, g);
+  criar("rect", { x: 4, y: 3, width: 13, height: 12, fill: "#9ad0ff", stroke: "#1a1a1a", "stroke-width": 2 }, g);
+}
+
+/* Árvore grande e sozinha, um poste com fio e riscos de vento. */
+function desenhoArvore(g) {
+  criar("ellipse", { cx: -8, cy: 34, rx: 30, ry: 7, fill: "#000000", opacity: 0.15 }, g);
+  criar("rect", { x: -13, y: 2, width: 10, height: 32, fill: "#7a4b22", stroke: "#1a1a1a", "stroke-width": 2 }, g);
+  criar("circle", { cx: -8, cy: -12, r: 26, fill: "#2f7d3a", stroke: "#1a1a1a", "stroke-width": 2.5 }, g);
+  criar("circle", { cx: -17, cy: -21, r: 10, fill: "#5aa84f" }, g);
+  // Poste com o fio saindo para fora do mapa
+  criar("rect", { x: 26, y: -24, width: 6, height: 58, fill: "#8d8d8d", stroke: "#1a1a1a", "stroke-width": 1.8 }, g);
+  criar("rect", { x: 18, y: -24, width: 22, height: 5, fill: "#8d8d8d", stroke: "#1a1a1a", "stroke-width": 1.5 }, g);
+  criar("path", { d: "M39 -20 q14 10 30 2", fill: "none", stroke: "#1a1a1a", "stroke-width": 2 }, g);
+  // Vento
+  var vento = criar("g", { fill: "none", stroke: "#1f6fa8", "stroke-width": 3, "stroke-linecap": "round" }, g);
+  criar("path", { d: "M-62 -30 h18 q8 0 8 -7" }, vento);
+  criar("path", { d: "M-66 -16 h22" }, vento);
+  criar("path", { d: "M-62 -2 h16 q8 0 8 7" }, vento);
+}
+
+/* Açude quase seco (chão rachado e uma poça) e a lavoura murcha ao lado. */
+function desenhoAcude(g) {
+  criar("path", {
+    d: "M-52 -6 C-50 -30 -10 -38 12 -30 C34 -22 40 2 26 16 C10 30 -30 30 -46 18 C-56 10 -54 2 -52 -6 Z",
+    fill: "#c9a26b", stroke: "#7a4b22", "stroke-width": 2.5
+  }, g);
+  var rachaduras = criar("g", { fill: "none", stroke: "#7a4b22", "stroke-width": 1.6, "stroke-linecap": "round" }, g);
+  criar("path", { d: "M-40 -10 l10 6 l-4 10 M-30 -4 l12 -4 M-8 -24 l4 10 l-8 8 M14 -18 l-6 12 l10 6 M-24 16 l8 -8 l10 4" }, rachaduras);
+  criar("ellipse", { cx: 0, cy: 2, rx: 13, ry: 7, fill: "#4fa3e3", stroke: "#1f6fa8", "stroke-width": 2 }, g);
+  // Lavoura: fileiras de plantinhas amareladas
+  for (var linha = 0; linha < 4; linha++) {
+    for (var col = 0; col < 3; col++) {
+      var x = 44 + col * 9, y = -30 + linha * 13;
+      criar("path", { d: "M" + x + " " + (y + 6) + " l0 -8 M" + x + " " + (y + 1) + " l-4 -4 M" + x + " " + (y + 1) + " l4 -4", fill: "none", stroke: "#b08d1e", "stroke-width": 2, "stroke-linecap": "round" }, g);
+    }
+  }
+}
+
+/* Escola: o abrigo no topo do morro. */
+function desenhoEscola(g) {
+  criar("ellipse", { cx: 3, cy: 26, rx: 46, ry: 7, fill: "#000000", opacity: 0.15 }, g);
+  criar("rect", { x: -40, y: -8, width: 80, height: 34, fill: "#ffffff", stroke: "#1a1a1a", "stroke-width": 2.5 }, g);
+  criar("path", { d: "M-46 -6 L0 -28 L46 -6 Z", fill: "#1d6b40", stroke: "#1a1a1a", "stroke-width": 2.5, "stroke-linejoin": "round" }, g);
+  criar("circle", { cx: 0, cy: -14, r: 5, fill: "#ffe066", stroke: "#1a1a1a", "stroke-width": 1.5 }, g);
+  criar("rect", { x: -7, y: 8, width: 14, height: 18, fill: "#8a5a2b", stroke: "#1a1a1a", "stroke-width": 2 }, g);
+  criar("rect", { x: -31, y: 2, width: 14, height: 11, fill: "#9ad0ff", stroke: "#1a1a1a", "stroke-width": 2 }, g);
+  criar("rect", { x: 17, y: 2, width: 14, height: 11, fill: "#9ad0ff", stroke: "#1a1a1a", "stroke-width": 2 }, g);
+}
+
+var DESENHOS_DOS_PONTOS = { casa: desenhoCasa, arvore: desenhoArvore, acude: desenhoAcude, escola: desenhoEscola };
+
 function desenharPontos(svg) {
   for (var i = 0; i < PONTOS_DO_MAPA.length; i++) {
     var ponto = PONTOS_DO_MAPA[i];
     var g = criar("g", { transform: "translate(" + ponto.x + " " + ponto.y + ")" }, svg);
-    criar("circle", { r: 25, fill: "#1a1a1a", opacity: 0.18, cx: 3, cy: 4 }, g);
-    criar("circle", { r: 22, fill: "#ffe066", stroke: "#1a1a1a", "stroke-width": 4.5 }, g);
-    escrever(g, ponto.numero, 0, 10, { "font-size": 28, "font-weight": "bold", fill: "#1a1a1a" });
+    DESENHOS_DOS_PONTOS[ponto.desenho](g);
+    // Número do ponto
+    var n = criar("g", { transform: "translate(" + ponto.numeroEm[0] + " " + ponto.numeroEm[1] + ")" }, g);
+    criar("circle", { r: 20, fill: "#1a1a1a", opacity: 0.18, cx: 2, cy: 3 }, n);
+    criar("circle", { r: 18, fill: "#ffe066", stroke: "#1a1a1a", "stroke-width": 4 }, n);
+    escrever(n, ponto.numero, 0, 8.5, { "font-size": 24, "font-weight": "bold", fill: "#1a1a1a" });
   }
 }
 
