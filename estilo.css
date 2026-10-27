@@ -822,8 +822,24 @@ body.na-pergunta .marca { display: none; }
   animation: aparece 0.45s ease-out;
 }
 
-/* Água subindo com ondinhas (desenho), e o barquinho boiando */
-.agua {
+/* Desenhos de cada desastre. Só aparece o do desastre sorteado
+   (o jogo.js põe a chave dele em data-evento). */
+.cena {
+  position: absolute;
+  inset: 0;
+  display: none;
+  pointer-events: none;
+}
+.alerta[data-evento="inundacao"] .cena-inundacao,
+.alerta[data-evento="temporal"] .cena-temporal,
+.alerta[data-evento="deslizamento"] .cena-deslizamento,
+.alerta[data-evento="tornado"] .cena-tornado,
+.alerta[data-evento="estiagem"] .cena-estiagem {
+  display: block;
+}
+
+/* O chão (ou a água) sobe de baixo, levando os desenhos em cima dele */
+.chao {
   position: absolute;
   left: 0;
   right: 0;
@@ -832,15 +848,20 @@ body.na-pergunta .marca { display: none; }
   transition: height 2.6s ease-out;
 }
 /* O jogo.js põe estas classes na hora certa */
-.alerta.agua-subiu .agua {
+.alerta.cena-entrou .chao {
   height: 30vh;
 }
-/* Quando a regra aparece, a água baixa um pouco (a inundação passa) */
-.alerta.com-regra .agua {
-  height: 14vh;
+.alerta.cena-entrou .chao:not(.chao-agua) {
+  height: 18vh;
+}
+/* Quando a regra aparece, o desenho baixa um pouco (o desastre passa) */
+.alerta.com-regra .chao,
+.alerta.com-regra .chao:not(.chao-agua) {
+  height: 10vh;
   transition: height 1.5s ease-in-out;
 }
 
+/* Inundação: água subindo com ondinhas e o barquinho boiando */
 .onda {
   position: absolute;
   left: 0;
@@ -891,6 +912,120 @@ body.na-pergunta .marca { display: none; }
 @keyframes barco-boia {
   0%, 100% { transform: translateY(0) rotate(-5deg); }
   50%      { transform: translateY(8px) rotate(5deg); }
+}
+
+/* Temporal: chuva caindo, nuvens com raio e árvore balançando no vento */
+.chuva {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 1.2s ease-out;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Cg stroke='%231f5fd1' stroke-width='5' stroke-linecap='round' opacity='0.75'%3E%3Cpath d='M20 10 l-6 20'/%3E%3Cpath d='M80 30 l-6 20'/%3E%3Cpath d='M50 70 l-6 20'/%3E%3Cpath d='M105 85 l-6 20'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 120px 120px;
+  animation: chove 0.5s linear infinite;
+}
+.alerta.cena-entrou .chuva { opacity: 1; }
+@keyframes chove {
+  from { background-position: 0 0; }
+  to   { background-position: -30px 120px; }
+}
+.nuvem {
+  position: absolute;
+  top: 36vh;
+  width: min(20vw, 240px);
+  animation: nuvem-anda 3s ease-in-out infinite;
+}
+.nuvem-esquerda { left: 1vw; }
+.nuvem-direita  { right: 1vw; top: 28vh; animation-delay: -1.5s; }
+@keyframes nuvem-anda {
+  0%, 100% { transform: translateX(0); }
+  50%      { transform: translateX(14px); }
+}
+.raio {
+  transform-box: fill-box;
+  transform-origin: top center;
+  animation: raio-pulsa 1.2s ease-in-out infinite;
+}
+@keyframes raio-pulsa {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.15); }
+}
+.chao-grama {
+  background: #6ab04c;
+  border-top: 5px solid #1a1a1a;
+}
+.arvore-vento {
+  position: absolute;
+  left: 7%;
+  bottom: calc(100% - 8px);
+  height: 26vh;
+  transform-origin: 50% 100%;
+  animation: arvore-balanca 1.4s ease-in-out infinite;
+}
+@keyframes arvore-balanca {
+  0%, 100% { transform: rotate(-4deg); }
+  50%      { transform: rotate(9deg); }
+}
+
+/* Deslizamento: morro com a terra e as pedras escorregando */
+.chao-terra {
+  background: #8b5a2b;
+  border-top: 5px solid #1a1a1a;
+}
+.morro {
+  position: absolute;
+  left: 0;
+  bottom: calc(100% - 6px);
+  width: min(38vw, 520px);
+}
+
+/* Tornado: funil girando, indo e voltando pelo lado direito */
+.tornado {
+  position: absolute;
+  bottom: calc(100% - 14px);
+  left: 74%;
+  height: 36vh;
+  animation: tornado-anda 4s ease-in-out infinite alternate;
+}
+.tornado svg { height: 100%; }
+.funil {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: funil-ginga 0.8s ease-in-out infinite alternate;
+}
+@keyframes tornado-anda {
+  from { transform: translateX(-4vw); }
+  to   { transform: translateX(10vw); }
+}
+@keyframes funil-ginga {
+  from { transform: skewX(-7deg); }
+  to   { transform: skewX(7deg); }
+}
+
+/* Estiagem: sol forte girando, chão rachado e plantinha murcha */
+.sol {
+  position: absolute;
+  top: 30vh;
+  right: 3vw;
+  width: min(18vw, 220px);
+}
+.chao-seco {
+  background-color: #d9a35b;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 100'%3E%3Cpath d='M10 20 l30 15 l-8 25 l35 10 M120 10 l-10 30 l30 20 l40 -5 M60 90 l25 -20 l30 15 M150 70 l-5 25' fill='none' stroke='%237a4a1e' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-size: 200px 100px;
+  border-top: 5px solid #1a1a1a;
+}
+.planta-murcha {
+  position: absolute;
+  left: 8%;
+  bottom: calc(100% - 4px);
+  height: 22vh;
+  transform-origin: 50% 100%;
+  animation: murcha 3s ease-in-out infinite;
+}
+@keyframes murcha {
+  0%, 100% { transform: rotate(0deg); }
+  50%      { transform: rotate(-5deg) scaleY(0.95); }
 }
 
 /* ----------------------------- Contagem 3, 2, 1 ----------------------------- */
