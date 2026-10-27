@@ -238,7 +238,7 @@ var partida = null;      // partida em andamento (nível, rodada...) ou null
 var telaAtual = "inicial";
 var esperaPergunta = null;  // temporizador entre a roleta parar e a pergunta abrir
 var contando = false;       // contagem "3, 2, 1" acontecendo
-var etapaAlerta = null;     // alerta de inundação: null (fechado), "tremendo", "titulo" ou "regra"
+var etapaAlerta = null;     // alerta de desastre: null (fechado), "tremendo", "titulo" ou "regra"
 var avisoRoleta = "";       // recado temporário embaixo do botão GIRAR
 
 // Tempo que o tema sorteado fica na tela antes de abrir a pergunta (milissegundos)
@@ -263,6 +263,10 @@ function carregarPartida() {
   if (!Array.isArray(salva.usadas)) salva.usadas = [];
   if (!Array.isArray(salva.rodadasComAlerta)) salva.rodadasComAlerta = [];
   if (salva.alerta !== true && salva.alerta !== false) salva.alerta = null;
+  // Partida salva antes dos vários desastres (ou desastre apagado do config.js)
+  if (salva.alerta === true && !eventoPorChave(salva.eventoAtual)) {
+    salva.eventoAtual = CONFIG.evento.tipos[0].chave;
+  }
   // Se o perguntas.js mudou e a pergunta da tela sumiu, volta para a roleta
   // (ou o tema da rodada mudou de nome no config.js)
   if ((salva.perguntaAtual && !acharPergunta(salva.perguntaAtual)) ||
@@ -292,7 +296,8 @@ function novaPartida(nivel) {
     ultimaPergunta: null, // id da pergunta da rodada anterior
     revelada: false,      // a resposta da rodada já foi revelada?
     alerta: null,         // esta rodada é de alerta? (null = ainda não sorteado)
-    rodadasComAlerta: []  // números das rodadas que tiveram alerta
+    rodadasComAlerta: [], // números das rodadas que tiveram alerta
+    eventoAtual: null     // chave do último desastre sorteado (CONFIG.evento.tipos)
   };
   avisoRoleta = "";
   salvarPartida();
@@ -546,6 +551,8 @@ function atualizarTelaConfig() {
     lista.appendChild(dt);
     lista.appendChild(dd);
   }
+  document.getElementById("lista-desastres").textContent =
+    CONFIG.evento.tipos.map(function (tipo) { return tipo.nome; }).join(", ") + ".";
 
   // Perguntas no banco e perguntas usadas
   var partes = [];
@@ -750,8 +757,9 @@ function girar() {
   // Esta rodada é de alerta? (sorteado uma vez só por rodada)
   if (partida.alerta === null) {
     partida.alerta = sortearAlerta();
-    if (partida.alerta) partida.rodadasComAlerta.push(partida.rodada);
     if (partida.alerta) {
+      partida.rodadasComAlerta.push(partida.rodada);
+      partida.eventoAtual = sortearEvento(partida.eventoAtual);
       salvarPartida();
       anunciarAlerta(); // a roleta gira depois, no botão "GIRAR A ROLETA"
       return;
@@ -1033,11 +1041,13 @@ function ligarTelaPergunta() {
 
 
 /* --------------------------------------------------------------------------
-   8b. RODADA DE ALERTA (evento especial da inundação)
-   Ao clicar em GIRAR, o jogo sorteia se a rodada é de alerta. Se for:
-   a roleta treme, toca a sirene, aparece "ALERTA! A INUNDAÇÃO CHEGOU!" com
-   água subindo, depois a regra do nível e o botão "GIRAR A ROLETA".
-   Os textos ficam no config.js (CONFIG.evento).
+   8b. RODADA DE ALERTA (evento especial: inundação, temporal, deslizamento,
+   tornado ou estiagem)
+   Ao clicar em GIRAR, o jogo sorteia se a rodada é de alerta. Se for, sorteia
+   também o desastre: a roleta treme, toca a sirene, aparece o título (por
+   exemplo "ALERTA! A INUNDAÇÃO CHEGOU!") com o desenho daquele desastre,
+   depois a regra do nível e o botão "GIRAR A ROLETA".
+   Os textos ficam no config.js (CONFIG.evento); os desenhos, no index.html.
    -------------------------------------------------------------------------- */
 
 // Tempos da animação do alerta (milissegundos)
@@ -1063,13 +1073,37 @@ function sortearAlerta() {
   return Math.random() * 100 < ajustes.eventoChance;
 }
 
+/* Procura um desastre pela chave ("temporal"...). Devolve null se não existir. */
+function eventoPorChave(chave) {
+  var tipos = CONFIG.evento.tipos;
+  for (var i = 0; i < tipos.length; i++) {
+    if (tipos[i].chave === chave) return tipos[i];
+  }
+  return null;
+}
+
+/* Sorteia o desastre da rodada de alerta, sem repetir o da última vez. */
+function sortearEvento(chaveAnterior) {
+  var opcoes = CONFIG.evento.tipos.filter(function (tipo) {
+    return tipo.chave !== chaveAnterior;
+  });
+  if (opcoes.length === 0) opcoes = CONFIG.evento.tipos; // só há um desastre
+  return opcoes[Math.floor(Math.random() * opcoes.length)].chave;
+}
+
+/* Desastre da rodada atual (o primeiro da lista, se algo der errado). */
+function eventoAtual() {
+  return eventoPorChave(partida.eventoAtual) || CONFIG.evento.tipos[0];
+}
+
 /* Mostra ou esconde a faixa "RODADA DE ALERTA" embaixo da barra. */
 function atualizarFaixaAlerta() {
   var faixa = document.getElementById("faixa-alerta");
   var mostrar = partida !== null && partida.alerta === true &&
     (telaAtual === "roleta" || telaAtual === "pergunta");
   if (mostrar) {
-    document.getElementById("faixa-alerta-titulo").textContent = CONFIG.evento.faixa;
+    document.getElementById("faixa-alerta-titulo").textContent =
+      CONFIG.evento.faixa + ": " + eventoAtual().nome.toUpperCase();
     document.getElementById("faixa-alerta-regra").textContent = CONFIG.evento.regras[partida.nivel] || "";
   }
   faixa.hidden = !mostrar;
@@ -1092,17 +1126,19 @@ function anunciarAlerta() {
 }
 
 function mostrarTituloDoAlerta() {
-  // Etapa 2: tela de alerta com título e água subindo
+  // Etapa 2: tela de alerta com título e o desenho do desastre entrando
   if (etapaAlerta !== "tremendo") return;
   etapaAlerta = "titulo";
   document.getElementById("caixa-roleta").classList.remove("transforma");
+  var tipo = eventoAtual();
   var camada = document.getElementById("alerta");
-  camada.classList.remove("agua-subiu", "com-regra");
-  document.getElementById("alerta-titulo").textContent = CONFIG.evento.titulo;
-  document.getElementById("alerta-subtitulo").textContent = CONFIG.evento.subtitulo;
+  camada.classList.remove("cena-entrou", "com-regra");
+  camada.setAttribute("data-evento", tipo.chave); // escolhe o desenho (estilo.css)
+  document.getElementById("alerta-titulo").textContent = tipo.titulo;
+  document.getElementById("alerta-subtitulo").textContent = tipo.subtitulo;
   camada.hidden = false;
-  void camada.offsetWidth; // garante que a água comece do zero
-  camada.classList.add("agua-subiu");
+  void camada.offsetWidth; // garante que o desenho comece do zero
+  camada.classList.add("cena-entrou");
   setTimeout(mostrarRegraDoAlerta, TEMPO_ATE_A_REGRA);
 }
 

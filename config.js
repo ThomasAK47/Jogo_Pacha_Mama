@@ -46,19 +46,30 @@ var CONFIG = {
 
   /* ------------------------------------------------------------------------
      EVENTO ESPECIAL (RODADA DE ALERTA)
-     - "titulo" e "subtitulo": frases grandes da tela de alerta.
+     - "tipos": os desastres que podem cair numa rodada de alerta. O jogo
+       sorteia um deles (nunca o mesmo duas vezes seguidas). Cada um tem:
+         "chave": não mude (liga o texto ao desenho da tela de alerta);
+         "nome": aparece na faixa do topo durante a rodada;
+         "titulo" e "subtitulo": frases grandes da tela de alerta.
+       Para tirar um desastre do sorteio, apague a linha dele.
      - "faixa": texto da faixa no topo durante a pergunta de alerta.
-     - "regras": a regra especial de cada nível. A professora lê em voz alta
-       e aplica no mapa impresso. ESTE É O ÚNICO LUGAR ONDE AS REGRAS FICAM.
+     - "regras": a regra especial de cada nível, igual para todos os
+       desastres. A professora lê em voz alta e aplica no mapa impresso.
+       ESTE É O ÚNICO LUGAR ONDE AS REGRAS FICAM.
      ------------------------------------------------------------------------ */
   evento: {
-    titulo: "ALERTA! A INUNDAÇÃO CHEGOU!",
-    subtitulo: "Hora de agir com calma!",
+    tipos: [
+      { chave: "inundacao",    nome: "Inundação",    titulo: "ALERTA! A INUNDAÇÃO CHEGOU!",     subtitulo: "Hora de agir com calma!" },
+      { chave: "temporal",     nome: "Temporal",     titulo: "ALERTA! VEM AÍ UM TEMPORAL!",     subtitulo: "Longe das árvores e da rede elétrica!" },
+      { chave: "deslizamento", nome: "Deslizamento", titulo: "ALERTA! DESLIZAMENTO!",          subtitulo: "Saia da encosta e vá para lugar seguro!" },
+      { chave: "tornado",      nome: "Tornado",      titulo: "ALERTA! TORNADO À VISTA!",        subtitulo: "Abrigue-se no cômodo mais seguro!" },
+      { chave: "estiagem",     nome: "Estiagem",     titulo: "ALERTA! A ESTIAGEM CHEGOU!",      subtitulo: "Hora de economizar água!" }
+    ],
     faixa: "RODADA DE ALERTA",
     regras: {
       infantil:      "Quem acertar anda 2 casas. Ninguém perde casa.",
-      intermediario: "Quem acertar anda 1 casa. Quem errar volta 1 casa (nunca antes do início).",
-      adulto:        "Quem acertar anda 1 casa. Quem errar volta 1 casa (nunca antes do início)."
+      intermediario: "Quem acertar anda 2 casas. Ninguém perde casa.",
+      adulto:        "Quem acertar anda 2 casas. Ninguém perde casa."
     },
 
     // Regras fixas do sorteio do alerta (números de rodada):
