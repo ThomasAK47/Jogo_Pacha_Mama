@@ -822,6 +822,21 @@ body.na-pergunta .marca { display: none; }
   animation: aparece 0.45s ease-out;
 }
 
+/* Cada desastre tem listras de uma cor diferente (a estiagem fica com
+   o laranja de "atenção" padrão) */
+.alerta[data-evento="inundacao"] {
+  background-image: repeating-linear-gradient(-45deg, #bde0fe 0 70px, #8ecae6 70px 140px);
+}
+.alerta[data-evento="temporal"] {
+  background-image: repeating-linear-gradient(-45deg, #c9c6e3 0 70px, #a9a4cf 70px 140px);
+}
+.alerta[data-evento="deslizamento"] {
+  background-image: repeating-linear-gradient(-45deg, #f3dfbf 0 70px, #e2c08f 70px 140px);
+}
+.alerta[data-evento="tornado"] {
+  background-image: repeating-linear-gradient(-45deg, #fad2e1 0 70px, #f4a9c4 70px 140px);
+}
+
 /* Desenhos de cada desastre. Só aparece o do desastre sorteado
    (o jogo.js põe a chave dele em data-evento). */
 .cena {
