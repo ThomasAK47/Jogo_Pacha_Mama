@@ -9,7 +9,7 @@
    Os pontos 1 a 5 são os que as perguntas citam (perguntas.js). Cada um
    tem um desenho, para a criança reconhecer o lugar sem ler o mapa:
      - Ponto 1: casa de madeira com deck no rio . perigo de ENCHENTE
-     - Ponto 2: casa na encosta íngreme ......... perigo de DESLIZAMENTO
+     - Ponto 2: casa de palafitas na encosta .... perigo de DESLIZAMENTO
      - Ponto 3: árvore sozinha e poste no campo . perigo no VENDAVAL e nos raios
      - Ponto 4: açude quase seco e lavoura ...... ESTIAGEM
      - Ponto 5: escola no topo plano ............ ABRIGO e ponto de encontro
@@ -40,7 +40,7 @@ var LARGURA = 1000, ALTURA = 640;
 // número, em relação ao meio do desenho (numeroEm)
 var PONTOS_DO_MAPA = [
   { numero: "1", x: 96,  y: 530, desenho: "casaDoRio", raio: 50, numeroEm: [-46, -30] },  // casa na beira do rio
-  { numero: "2", x: 500, y: 66,  desenho: "casa",   raio: 42, numeroEm: [-44, -18] },  // casa na encosta íngreme
+  { numero: "2", x: 372, y: 74,  desenho: "casaDaEncosta", raio: 52, numeroEm: [-40, -24] },  // casa na encosta íngreme
   { numero: "3", x: 112, y: 170, desenho: "arvore", raio: 72, numeroEm: [-40, -46] },  // árvore sozinha e poste
   { numero: "4", x: 880, y: 172, desenho: "acude",  raio: 80, numeroEm: [-96, -6] },  // açude quase seco e lavoura
   { numero: "5", x: 500, y: 170, desenho: "escola", raio: 56, numeroEm: [62, -32] }     // escola no topo (abrigo)
@@ -216,9 +216,10 @@ var rotulosDasCurvas = [];
 function escreverAlturas(pai) {
   for (var n = 0; n < QUANTAS_CURVAS; n++) {
     // procura pela encosta da esquerda, começando de baixo; depois pela da
-    // direita. Pula o lado de cima, onde as curvas ficam juntas demais.
-    for (var passo = 0; passo <= 80; passo++) {
-      var a = passo <= 35 ? 0.6 + passo * 0.02 : 0.4 - (passo - 36) * 0.02;
+    // direita. O lado de cima, onde as curvas ficam juntas demais, fica por
+    // último, só se não houver lugar nos outros.
+    for (var passo = 0; passo <= 100; passo++) {
+      var a = passo <= 35 ? 0.6 + passo * 0.02 : passo <= 80 ? 0.4 - (passo - 36) * 0.02 : 1.32 + (passo - 81) * 0.02;
       var p = pontoDaCurva(n, a * Math.PI);
       var livre = true;
       for (var r = 0; r < rotulosDasCurvas.length && livre; r++) {
@@ -234,6 +235,9 @@ function escreverAlturas(pai) {
       }
       for (var j = 0; j < casasDesenhadas.length && livre; j++) {
         if (distancia(p, casasDesenhadas[j]) < 60) livre = false;
+      }
+      for (var b = 0; b < bandeirasDesenhadas.length && livre; b++) {
+        if (distancia(p, bandeirasDesenhadas[b]) < 40) livre = false;
       }
       if (!livre) continue;
       escrever(pai, (n + 1) * 10 + " m", p.x.toFixed(1), (p.y + 5).toFixed(1), {
@@ -493,6 +497,35 @@ function desenhoCasa(g) {
   criar("rect", { x: 4, y: 3, width: 13, height: 12, fill: "#9ad0ff", stroke: "#1a1a1a", "stroke-width": 2 }, g);
 }
 
+/* Casa de encosta: pequena, em cima de palafitas (vigas da fundação à
+   mostra), com o chão do morro descendo em diagonal embaixo dela. Não tem
+   fundo pintado, para as curvas de nível continuarem aparecendo. */
+function desenhoCasaDaEncosta(fora) {
+  var g = criar("g", { transform: "scale(1.25)" }, fora);
+  var borda = "#1a1a1a";
+  function chao(x) { return 20 - 0.42 * x; }   // o morro desce para a esquerda
+  // Chão inclinado
+  criar("line", { x1: -34, y1: chao(-34), x2: 34, y2: chao(34), stroke: "#7a4b22", "stroke-width": 3.5, "stroke-linecap": "round" }, g);
+  // Vigas da fundação: cada uma desce até o chão, umas mais compridas
+  var vigas = [-17, -6, 6, 17];
+  for (var i = 0; i < vigas.length; i++) {
+    criar("rect", { x: vigas[i] - 2.2, y: 2, width: 4.4, height: chao(vigas[i]) - 2, fill: "#8d8d8d", stroke: borda, "stroke-width": 1.3 }, g);
+  }
+  // Travas em X entre as vigas
+  var travas = criar("g", { stroke: "#5f5a52", "stroke-width": 1.6 }, g);
+  for (var j = 0; j < vigas.length - 1; j++) {
+    var a = vigas[j], b = vigas[j + 1];
+    criar("line", { x1: a, y1: 4, x2: b, y2: chao(b) - 1 }, travas);
+    criar("line", { x1: b, y1: 4, x2: a, y2: Math.min(chao(a), chao(b) + 6) }, travas);
+  }
+  // Laje e casa
+  criar("rect", { x: -22, y: -1, width: 44, height: 5, fill: "#a7a29a", stroke: borda, "stroke-width": 1.8 }, g);
+  criar("rect", { x: -19, y: -24, width: 38, height: 23, fill: "#fff3d6", stroke: borda, "stroke-width": 2.2 }, g);
+  criar("path", { d: "M-24 -22 L0 -40 L24 -22 Z", fill: "#d9480f", stroke: borda, "stroke-width": 2.2, "stroke-linejoin": "round" }, g);
+  criar("rect", { x: -13, y: -16, width: 10, height: 15, fill: "#8a5a2b", stroke: borda, "stroke-width": 1.6 }, g);
+  criar("rect", { x: 3, y: -18, width: 11, height: 9, fill: "#9ad0ff", stroke: borda, "stroke-width": 1.6 }, g);
+}
+
 /* Casa de madeira na beira do rio, com um deck de madeira que avança
    sobre a água e uma canoa amarrada. */
 function desenhoCasaDoRio(g) {
@@ -614,7 +647,7 @@ function desenhoEscola(g) {
   criar("circle", { cx: -50, cy: -41, r: 4, fill: "#1f4fa8" }, g);
 }
 
-var DESENHOS_DOS_PONTOS = { casa: desenhoCasa, casaDoRio: desenhoCasaDoRio, arvore: desenhoArvore, acude: desenhoAcude, escola: desenhoEscola };
+var DESENHOS_DOS_PONTOS = { casa: desenhoCasa, casaDaEncosta: desenhoCasaDaEncosta, casaDoRio: desenhoCasaDoRio, arvore: desenhoArvore, acude: desenhoAcude, escola: desenhoEscola };
 
 function desenharPontos(svg) {
   for (var i = 0; i < PONTOS_DO_MAPA.length; i++) {
