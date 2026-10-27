@@ -22,7 +22,7 @@
      2. Ferramentas de desenho
      3. Terreno: morro, curvas de nível e rio
      4. Trilhas das equipes
-     5. Enfeites: árvores, flores, pedras, bichos
+     5. Enfeites: árvores, flores, pedras e bichinhos
      6. Pontos das perguntas, título e norte
      7. Papel A4 ou A3
      8. Início
@@ -369,7 +369,9 @@ function lugarLivre(p, raio, ocupados) {
     if (distancia(p, bandeirasDesenhadas[b]) < raio + 30) return false;
   }
   for (var k = 0; k < PONTOS_DO_MAPA.length; k++) {
-    if (distancia(p, PONTOS_DO_MAPA[k]) < raio + PONTOS_DO_MAPA[k].raio) return false;
+    var ponto = PONTOS_DO_MAPA[k];
+    if (distancia(p, ponto) < raio + ponto.raio) return false;
+    if (distancia(p, { x: ponto.x + ponto.numeroEm[0], y: ponto.y + ponto.numeroEm[1] }) < raio + 22) return false;
   }
   for (var o = 0; o < ocupados.length; o++) {
     if (distancia(p, ocupados[o]) < raio + ocupados[o].raio + 4) return false;
@@ -443,6 +445,92 @@ function borboleta(pai, x, y, cor) {
   criar("ellipse", { cx: 0, cy: 0, rx: 1.4, ry: 5, fill: "#1a1a1a" }, g);
 }
 
+/* Bichinhos fofos. Cada um cabe num círculo de raio ~16 em volta de (x, y). */
+function coelho(pai, x, y) {
+  var g = criar("g", { transform: "translate(" + x + " " + y + ") scale(1.3)" }, pai);
+  var pelo = { fill: "#f4f1ea", stroke: "#4d4d4d", "stroke-width": 1.3 };
+  criar("ellipse", Object.assign({ cx: -6, cy: -12, rx: 2.6, ry: 7, transform: "rotate(-12 -6 -12)" }, pelo), g);
+  criar("ellipse", Object.assign({ cx: 0, cy: -13, rx: 2.6, ry: 7, transform: "rotate(10 0 -13)" }, pelo), g);
+  criar("ellipse", { cx: -6, cy: -12, rx: 1.1, ry: 4.5, fill: "#ffb3c7", transform: "rotate(-12 -6 -12)" }, g);
+  criar("ellipse", { cx: 0, cy: -13, rx: 1.1, ry: 4.5, fill: "#ffb3c7", transform: "rotate(10 0 -13)" }, g);
+  criar("ellipse", Object.assign({ cx: 4, cy: 4, rx: 9, ry: 7 }, pelo), g);
+  criar("circle", Object.assign({ cx: 12, cy: 3, r: 3 }, pelo), g);
+  criar("circle", Object.assign({ cx: -3, cy: -3, r: 6.5 }, pelo), g);
+  criar("circle", { cx: -5, cy: -4, r: 1.2, fill: "#1a1a1a" }, g);
+  criar("circle", { cx: -8.6, cy: -2, r: 1, fill: "#ff6b9a" }, g);
+  criar("circle", { cx: -1, cy: -1, r: 1.4, fill: "#ffb3c7", opacity: 0.8 }, g);
+}
+
+function capivara(pai, x, y) {
+  var g = criar("g", { transform: "translate(" + x + " " + y + ") scale(1.3)" }, pai);
+  criar("ellipse", { cx: 2, cy: 2, rx: 14, ry: 8.5, fill: "#a8774a", stroke: "#5a3a1c", "stroke-width": 1.4 }, g);
+  criar("path", { d: "M-8 -2 q-4 -8 -14 -5 q-4 4 -2 9 q6 4 15 1 Z", fill: "#a8774a", stroke: "#5a3a1c", "stroke-width": 1.4 }, g);
+  criar("circle", { cx: -10, cy: -7, r: 2, fill: "#8a5a2b", stroke: "#5a3a1c", "stroke-width": 1 }, g);
+  criar("circle", { cx: -15, cy: -3, r: 1.2, fill: "#1a1a1a" }, g);
+  criar("circle", { cx: -23, cy: 0, r: 1, fill: "#3b2a1a" }, g);
+  criar("circle", { cx: -12, cy: 0, r: 1.5, fill: "#ffb3c7", opacity: 0.8 }, g);
+  criar("rect", { x: -6, y: 8, width: 3, height: 4, fill: "#8a5a2b" }, g);
+  criar("rect", { x: 8, y: 8, width: 3, height: 4, fill: "#8a5a2b" }, g);
+}
+
+function passarinho(pai, x, y, cor) {
+  var g = criar("g", { transform: "translate(" + x + " " + y + ") scale(1.3)" }, pai);
+  criar("path", { d: "M7 0 l7 -4 l-1 7 Z", fill: cor, stroke: "#1a1a1a", "stroke-width": 1 }, g);
+  criar("circle", { cx: 0, cy: 0, r: 7.5, fill: cor, stroke: "#1a1a1a", "stroke-width": 1.3 }, g);
+  criar("path", { d: "M-1 1 q4 6 8 0", fill: "#ffffff", opacity: 0.6 }, g);
+  criar("path", { d: "M-7 -1 l-5 1.5 l5 1.5 Z", fill: "#f08c00", stroke: "#1a1a1a", "stroke-width": 0.8 }, g);
+  criar("circle", { cx: -3.5, cy: -2.5, r: 1.3, fill: "#1a1a1a" }, g);
+  criar("path", { d: "M-1 7 l-1 4 M2 7 l1 4", stroke: "#f08c00", "stroke-width": 1.3 }, g);
+}
+
+function joaninha(pai, x, y) {
+  var g = criar("g", { transform: "translate(" + x + " " + y + ") scale(1.3)" }, pai);
+  criar("circle", { cx: -7, cy: 0, r: 3.5, fill: "#1a1a1a" }, g);
+  criar("circle", { cx: 0, cy: 0, r: 7, fill: "#e03131", stroke: "#1a1a1a", "stroke-width": 1.3 }, g);
+  criar("line", { x1: -7, y1: 0, x2: 7, y2: 0, stroke: "#1a1a1a", "stroke-width": 1.1 }, g);
+  [[-2, -3.5], [3, -3], [-2, 3.5], [3, 3]].forEach(function (b) {
+    criar("circle", { cx: b[0], cy: b[1], r: 1.4, fill: "#1a1a1a" }, g);
+  });
+}
+
+function tartaruga(pai, x, y) {
+  var g = criar("g", { transform: "translate(" + x + " " + y + ") scale(1.3)" }, pai);
+  criar("circle", { cx: -11, cy: 0, r: 3.6, fill: "#8cc63f", stroke: "#2f5d1a", "stroke-width": 1.2 }, g);
+  criar("circle", { cx: -12, cy: -1, r: 0.9, fill: "#1a1a1a" }, g);
+  [[-6, 6], [6, 6]].forEach(function (p) {
+    criar("ellipse", { cx: p[0], cy: p[1], rx: 2.2, ry: 2.6, fill: "#8cc63f", stroke: "#2f5d1a", "stroke-width": 1 }, g);
+  });
+  criar("path", { d: "M-9 3 q0 -12 9 -12 q9 0 9 12 Z", fill: "#3f8f3f", stroke: "#1f4d1f", "stroke-width": 1.4 }, g);
+  criar("path", { d: "M-4 3 l1 -6 l6 0 l1 6 M-3 -3 l-3 -3 M3 -3 l3 -3", fill: "none", stroke: "#a3d977", "stroke-width": 1.2 }, g);
+}
+
+function caracol(pai, x, y) {
+  var g = criar("g", { transform: "translate(" + x + " " + y + ") scale(1.3)" }, pai);
+  criar("path", { d: "M-12 6 q10 2 22 0 q2 -2 0 -3 l-22 0 Z", fill: "#e9c46a", stroke: "#8a6a3d", "stroke-width": 1.1 }, g);
+  criar("path", { d: "M-10 3 l-2 -7 M-8 3 l1 -7", stroke: "#8a6a3d", "stroke-width": 1.1 }, g);
+  criar("circle", { cx: -12, cy: -4, r: 1.1, fill: "#1a1a1a" }, g);
+  criar("circle", { cx: -7, cy: -4, r: 1.1, fill: "#1a1a1a" }, g);
+  criar("circle", { cx: 3, cy: -3, r: 7, fill: "#d97a3a", stroke: "#7a3d12", "stroke-width": 1.3 }, g);
+  criar("path", { d: "M3 -3 m0 -1 a1.5 1.5 0 1 1 -1.5 2 a3.5 3.5 0 1 1 4.5 -4", fill: "none", stroke: "#7a3d12", "stroke-width": 1.2 }, g);
+}
+
+/* Põe um bichinho perto do lugar desejado: procura em espiral o primeiro
+   lugar livre. */
+function soltarBicho(desenhar, alvo, ocupados, raio) {
+  for (var r = 0; r <= 90; r += 6) {
+    for (var v = 0; v < 12; v++) {
+      var a = (v / 12) * 2 * Math.PI;
+      var p = { x: alvo[0] + r * Math.cos(a), y: alvo[1] + r * Math.sin(a), raio: raio || 18 };
+      if (lugarLivre(p, p.raio, ocupados)) {
+        desenhar(p.x, p.y);
+        ocupados.push(p);
+        return;
+      }
+      if (r === 0) break;
+    }
+  }
+}
+
 function desenharEnfeites(svg) {
   var g = criar("g", {}, svg);
   var ocupados = rotulosDasCurvas.slice();   // não cobrir as alturas das curvas
@@ -455,6 +543,19 @@ function desenharEnfeites(svg) {
       ocupados.push(pp);
     }
   }
+
+  // Bichinhos fofos espalhados, antes das árvores para terem lugar
+  var bichos = [
+    [function (x, y) { coelho(g, x, y); }, [330, 470]],
+    [function (x, y) { coelho(g, x, y); }, [880, 430]],
+    [function (x, y) { capivara(g, x, y); }, [910, 545], 30],
+    [function (x, y) { passarinho(g, x, y, "#ffd23f"); }, [60, 470]],
+    [function (x, y) { passarinho(g, x, y, "#74c0fc"); }, [640, 40]],
+    [function (x, y) { joaninha(g, x, y); }, [250, 520]],
+    [function (x, y) { tartaruga(g, x, y); }, [770, 505]],
+    [function (x, y) { caracol(g, x, y); }, [500, 470]]
+  ];
+  for (var b = 0; b < bichos.length; b++) soltarBicho(bichos[b][0], bichos[b][1], ocupados, bichos[b][2]);
 
   // Árvores: araucárias no alto do morro, árvores redondas embaixo
   for (var t = 0; t < 3000 && ocupados.length < 95; t++) {
