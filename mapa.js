@@ -8,9 +8,9 @@
 
    Os pontos 1 a 5 são os que as perguntas citam (perguntas.js). Cada um
    tem um desenho, para a criança reconhecer o lugar sem ler o mapa:
-     - Ponto 1: casa na beira do rio ............ perigo de ENCHENTE
-     - Ponto 2: casa na encosta íngreme ......... perigo de DESLIZAMENTO
-     - Ponto 3: árvore sozinha e poste no campo . perigo no VENDAVAL e nos raios
+     - Ponto 1: casa de madeira com deck no rio . perigo de ENCHENTE
+     - Ponto 2: casa de palafitas na encosta .... perigo de DESLIZAMENTO
+     - Ponto 3: linha de alta tensão e árvores .. perigo no VENDAVAL e nos raios
      - Ponto 4: açude quase seco e lavoura ...... ESTIAGEM
      - Ponto 5: escola no topo plano ............ ABRIGO e ponto de encontro
    Se mudar um ponto de lugar aqui, confira as perguntas de mapa.
@@ -22,7 +22,7 @@
      2. Ferramentas de desenho
      3. Terreno: morro, curvas de nível e rio
      4. Trilhas das equipes
-     5. Enfeites: árvores, flores, pedras, bichos
+     5. Enfeites: árvores, flores, pedras e bichinhos
      6. Pontos das perguntas, título e norte
      7. Papel A4 ou A3
      8. Início
@@ -39,11 +39,11 @@ var LARGURA = 1000, ALTURA = 640;
 // tem, quanto espaço livre o desenho precisa em volta (raio) e onde fica o
 // número, em relação ao meio do desenho (numeroEm)
 var PONTOS_DO_MAPA = [
-  { numero: "1", x: 92,  y: 535, desenho: "casa",   raio: 42, numeroEm: [-36, -28] },  // casa na beira do rio
-  { numero: "2", x: 500, y: 66,  desenho: "casa",   raio: 42, numeroEm: [-44, -18] },  // casa na encosta íngreme
-  { numero: "3", x: 112, y: 170, desenho: "arvore", raio: 72, numeroEm: [-40, -46] },  // árvore sozinha e poste
-  { numero: "4", x: 900, y: 178, desenho: "acude",  raio: 62, numeroEm: [-46, -34] },  // açude quase seco e lavoura
-  { numero: "5", x: 500, y: 168, desenho: "escola", raio: 48, numeroEm: [0, -50] }     // escola no topo (abrigo)
+  { numero: "1", x: 96,  y: 530, desenho: "casaDoRio", raio: 50, numeroEm: [-46, -30] },  // casa na beira do rio
+  { numero: "2", x: 372, y: 74,  desenho: "casaDaEncosta", raio: 52, numeroEm: [-40, -24] },  // casa na encosta íngreme
+  { numero: "3", x: 118, y: 178, desenho: "altaTensao", raio: 94, numeroEm: [-86, -44] },  // linha de alta tensão e raio
+  { numero: "4", x: 880, y: 172, desenho: "acude",  raio: 80, numeroEm: [-96, -6] },  // açude quase seco e lavoura
+  { numero: "5", x: 500, y: 170, desenho: "escola", raio: 56, numeroEm: [62, -32] }     // escola no topo (abrigo)
 ];
 
 // Caminho de cada trilha: do INÍCIO (primeiro par) até a CHEGADA (último).
@@ -60,6 +60,10 @@ var COR_BAIXADA = "#e3f0c4";
 var CORES_DO_MORRO = ["#d5e8ad", "#c9df9a", "#d9d98f", "#e2cf86", "#dcbd77", "#d3ab69"];
 var COR_CURVA = "#7a4b22";
 var QUANTAS_CURVAS = 6;   // cada curva = 10 metros a mais
+
+// Área de seca no canto de cima à direita (em volta do ponto 4): um quarto
+// de elipse com o centro no canto do mapa. Ali não nascem árvores nem flores.
+var ZONA_SECA = { cx: LARGURA, cy: 0, rx: 330, ry: 310 };
 
 
 /* --------------------------------------------------------------------------
@@ -156,6 +160,36 @@ function metadeDoRio(x) {
   return 24 + x * 0.01;   // o rio fica um pouco mais largo para a direita
 }
 
+/* Diz se um lugar (com a folga dada) cai dentro da área de seca. */
+function naZonaSeca(p, folga) {
+  var dx = (p.x - ZONA_SECA.cx) / (ZONA_SECA.rx + folga), dy = (p.y - ZONA_SECA.cy) / (ZONA_SECA.ry + folga);
+  return dx * dx + dy * dy < 1;
+}
+
+/* Chão seco e rachado da área de seca. Fica embaixo do morro. */
+function desenharZonaSeca(svg) {
+  var z = ZONA_SECA, partes = [];
+  for (var i = 0; i <= 40; i++) {
+    var a = Math.PI / 2 + (i / 40) * Math.PI / 2;       // do canto de baixo até o de cima
+    var f = 1 + 0.04 * Math.sin(i * 1.7) + 0.03 * Math.sin(i * 3.1);
+    partes.push((z.cx + z.rx * f * Math.cos(a)).toFixed(1) + " " + (z.cy + z.ry * f * Math.sin(a)).toFixed(1));
+  }
+  var d = "M" + LARGURA + " 0 L" + partes.join(" L") + " Z";
+  criar("path", { d: d, fill: "#ead39c", stroke: "#c9a26b", "stroke-width": 3 }, svg);
+
+  // Rachaduras: linhas em zigue-zague, sempre no mesmo lugar
+  var g = criar("g", { fill: "none", stroke: "#b8925a", "stroke-width": 1.8, "stroke-linecap": "round", "stroke-linejoin": "round" }, svg);
+  var n = 7;
+  function proximo() { n = (n * 9301 + 49297) % 233280; return n / 233280; }
+  for (var r = 0; r < 70; r++) {
+    var p = { x: LARGURA - proximo() * z.rx, y: proximo() * z.ry };
+    if (!naZonaSeca(p, -18)) continue;
+    var c = "M" + p.x.toFixed(1) + " " + p.y.toFixed(1);
+    for (var k = 0; k < 3; k++) c += " l" + (proximo() * 22 - 11).toFixed(1) + " " + (proximo() * 22 - 11).toFixed(1);
+    criar("path", { d: c }, g);
+  }
+}
+
 function desenharMorro(svg) {
   // Cores do terreno, uma faixa para cada altura
   for (var k = 0; k < QUANTAS_CURVAS; k++) {
@@ -182,22 +216,28 @@ var rotulosDasCurvas = [];
 function escreverAlturas(pai) {
   for (var n = 0; n < QUANTAS_CURVAS; n++) {
     // procura pela encosta da esquerda, começando de baixo; depois pela da
-    // direita. Pula o lado de cima, onde as curvas ficam juntas demais.
-    for (var passo = 0; passo <= 80; passo++) {
-      var a = passo <= 35 ? 0.6 + passo * 0.02 : 0.4 - (passo - 36) * 0.02;
+    // direita. O lado de cima, onde as curvas ficam juntas demais, fica por
+    // último, só se não houver lugar nos outros.
+    for (var passo = 0; passo <= 100; passo++) {
+      var a = passo <= 35 ? 0.6 + passo * 0.02 : passo <= 80 ? 0.4 - (passo - 36) * 0.02 : 1.32 + (passo - 81) * 0.02;
       var p = pontoDaCurva(n, a * Math.PI);
       var livre = true;
       for (var r = 0; r < rotulosDasCurvas.length && livre; r++) {
         if (distancia(p, rotulosDasCurvas[r]) < 70) livre = false;
       }
       for (var k = 0; k < PONTOS_DO_MAPA.length && livre; k++) {
-        if (distancia(p, PONTOS_DO_MAPA[k]) < PONTOS_DO_MAPA[k].raio + 12) livre = false;
+        var ponto = PONTOS_DO_MAPA[k];
+        if (distancia(p, ponto) < ponto.raio + 12) livre = false;
+        if (distancia(p, { x: ponto.x + ponto.numeroEm[0], y: ponto.y + ponto.numeroEm[1] }) < 36) livre = false;
       }
       for (var i = 0; i < pontosDasTrilhas.length && livre; i++) {
         if (distancia(p, pontosDasTrilhas[i]) < 48) livre = false;
       }
       for (var j = 0; j < casasDesenhadas.length && livre; j++) {
         if (distancia(p, casasDesenhadas[j]) < 60) livre = false;
+      }
+      for (var b = 0; b < bandeirasDesenhadas.length && livre; b++) {
+        if (distancia(p, bandeirasDesenhadas[b]) < 40) livre = false;
       }
       if (!livre) continue;
       escrever(pai, (n + 1) * 10 + " m", p.x.toFixed(1), (p.y + 5).toFixed(1), {
@@ -246,6 +286,7 @@ function desenharRio(svg) {
    -------------------------------------------------------------------------- */
 var casasDesenhadas = [];    // centro de cada casa (para os enfeites não ficarem em cima)
 var pontosDasTrilhas = [];   // pontos ao longo das trilhas (idem)
+var bandeirasDesenhadas = [];   // bandeirinhas das chegadas (idem)
 
 function desenharTrilhas(svg) {
   var chao = criar("g", {}, svg);    // a terra das trilhas fica embaixo das casas
@@ -277,6 +318,7 @@ function desenharTrilhas(svg) {
       var p = guia.getPointAtLength(folgaDoInicio + (comprimento - folgaDoInicio) * n / total);
       desenharCasa(casas, p.x, p.y, n, equipe, n === total);
       casasDesenhadas.push({ x: p.x, y: p.y });
+      if (n === total) bandeirasDesenhadas.push({ x: p.x + 12, y: p.y - 48 });
     }
     var inicio = guia.getPointAtLength(0);
     desenharInicio(casas, inicio.x, inicio.y, equipe);
@@ -316,14 +358,20 @@ function lugarLivre(p, raio, ocupados) {
   if (p.y > meioDoRio(p.x) - metadeDoRio(p.x) - raio - 8) return false;     // rio
   if (p.x < 290 && p.y < 82) return false;                                   // título
   if (p.x > 920 && p.y < 110) return false;                                  // norte
+  if (naZonaSeca(p, raio)) return false;                                     // seca
   for (var i = 0; i < pontosDasTrilhas.length; i++) {
     if (distancia(p, pontosDasTrilhas[i]) < raio + 24) return false;
   }
   for (var j = 0; j < casasDesenhadas.length; j++) {
     if (distancia(p, casasDesenhadas[j]) < raio + 52) return false;
   }
+  for (var b = 0; b < bandeirasDesenhadas.length; b++) {
+    if (distancia(p, bandeirasDesenhadas[b]) < raio + 30) return false;
+  }
   for (var k = 0; k < PONTOS_DO_MAPA.length; k++) {
-    if (distancia(p, PONTOS_DO_MAPA[k]) < raio + PONTOS_DO_MAPA[k].raio) return false;
+    var ponto = PONTOS_DO_MAPA[k];
+    if (distancia(p, ponto) < raio + ponto.raio) return false;
+    if (distancia(p, { x: ponto.x + ponto.numeroEm[0], y: ponto.y + ponto.numeroEm[1] }) < raio + 22) return false;
   }
   for (var o = 0; o < ocupados.length; o++) {
     if (distancia(p, ocupados[o]) < raio + ocupados[o].raio + 4) return false;
@@ -397,6 +445,92 @@ function borboleta(pai, x, y, cor) {
   criar("ellipse", { cx: 0, cy: 0, rx: 1.4, ry: 5, fill: "#1a1a1a" }, g);
 }
 
+/* Bichinhos fofos. Cada um cabe num círculo de raio ~16 em volta de (x, y). */
+function coelho(pai, x, y) {
+  var g = criar("g", { transform: "translate(" + x + " " + y + ") scale(1.3)" }, pai);
+  var pelo = { fill: "#f4f1ea", stroke: "#4d4d4d", "stroke-width": 1.3 };
+  criar("ellipse", Object.assign({ cx: -6, cy: -12, rx: 2.6, ry: 7, transform: "rotate(-12 -6 -12)" }, pelo), g);
+  criar("ellipse", Object.assign({ cx: 0, cy: -13, rx: 2.6, ry: 7, transform: "rotate(10 0 -13)" }, pelo), g);
+  criar("ellipse", { cx: -6, cy: -12, rx: 1.1, ry: 4.5, fill: "#ffb3c7", transform: "rotate(-12 -6 -12)" }, g);
+  criar("ellipse", { cx: 0, cy: -13, rx: 1.1, ry: 4.5, fill: "#ffb3c7", transform: "rotate(10 0 -13)" }, g);
+  criar("ellipse", Object.assign({ cx: 4, cy: 4, rx: 9, ry: 7 }, pelo), g);
+  criar("circle", Object.assign({ cx: 12, cy: 3, r: 3 }, pelo), g);
+  criar("circle", Object.assign({ cx: -3, cy: -3, r: 6.5 }, pelo), g);
+  criar("circle", { cx: -5, cy: -4, r: 1.2, fill: "#1a1a1a" }, g);
+  criar("circle", { cx: -8.6, cy: -2, r: 1, fill: "#ff6b9a" }, g);
+  criar("circle", { cx: -1, cy: -1, r: 1.4, fill: "#ffb3c7", opacity: 0.8 }, g);
+}
+
+function capivara(pai, x, y) {
+  var g = criar("g", { transform: "translate(" + x + " " + y + ") scale(1.3)" }, pai);
+  criar("ellipse", { cx: 2, cy: 2, rx: 14, ry: 8.5, fill: "#a8774a", stroke: "#5a3a1c", "stroke-width": 1.4 }, g);
+  criar("path", { d: "M-8 -2 q-4 -8 -14 -5 q-4 4 -2 9 q6 4 15 1 Z", fill: "#a8774a", stroke: "#5a3a1c", "stroke-width": 1.4 }, g);
+  criar("circle", { cx: -10, cy: -7, r: 2, fill: "#8a5a2b", stroke: "#5a3a1c", "stroke-width": 1 }, g);
+  criar("circle", { cx: -15, cy: -3, r: 1.2, fill: "#1a1a1a" }, g);
+  criar("circle", { cx: -23, cy: 0, r: 1, fill: "#3b2a1a" }, g);
+  criar("circle", { cx: -12, cy: 0, r: 1.5, fill: "#ffb3c7", opacity: 0.8 }, g);
+  criar("rect", { x: -6, y: 8, width: 3, height: 4, fill: "#8a5a2b" }, g);
+  criar("rect", { x: 8, y: 8, width: 3, height: 4, fill: "#8a5a2b" }, g);
+}
+
+function passarinho(pai, x, y, cor) {
+  var g = criar("g", { transform: "translate(" + x + " " + y + ") scale(1.3)" }, pai);
+  criar("path", { d: "M7 0 l7 -4 l-1 7 Z", fill: cor, stroke: "#1a1a1a", "stroke-width": 1 }, g);
+  criar("circle", { cx: 0, cy: 0, r: 7.5, fill: cor, stroke: "#1a1a1a", "stroke-width": 1.3 }, g);
+  criar("path", { d: "M-1 1 q4 6 8 0", fill: "#ffffff", opacity: 0.6 }, g);
+  criar("path", { d: "M-7 -1 l-5 1.5 l5 1.5 Z", fill: "#f08c00", stroke: "#1a1a1a", "stroke-width": 0.8 }, g);
+  criar("circle", { cx: -3.5, cy: -2.5, r: 1.3, fill: "#1a1a1a" }, g);
+  criar("path", { d: "M-1 7 l-1 4 M2 7 l1 4", stroke: "#f08c00", "stroke-width": 1.3 }, g);
+}
+
+function joaninha(pai, x, y) {
+  var g = criar("g", { transform: "translate(" + x + " " + y + ") scale(1.3)" }, pai);
+  criar("circle", { cx: -7, cy: 0, r: 3.5, fill: "#1a1a1a" }, g);
+  criar("circle", { cx: 0, cy: 0, r: 7, fill: "#e03131", stroke: "#1a1a1a", "stroke-width": 1.3 }, g);
+  criar("line", { x1: -7, y1: 0, x2: 7, y2: 0, stroke: "#1a1a1a", "stroke-width": 1.1 }, g);
+  [[-2, -3.5], [3, -3], [-2, 3.5], [3, 3]].forEach(function (b) {
+    criar("circle", { cx: b[0], cy: b[1], r: 1.4, fill: "#1a1a1a" }, g);
+  });
+}
+
+function tartaruga(pai, x, y) {
+  var g = criar("g", { transform: "translate(" + x + " " + y + ") scale(1.3)" }, pai);
+  criar("circle", { cx: -11, cy: 0, r: 3.6, fill: "#8cc63f", stroke: "#2f5d1a", "stroke-width": 1.2 }, g);
+  criar("circle", { cx: -12, cy: -1, r: 0.9, fill: "#1a1a1a" }, g);
+  [[-6, 6], [6, 6]].forEach(function (p) {
+    criar("ellipse", { cx: p[0], cy: p[1], rx: 2.2, ry: 2.6, fill: "#8cc63f", stroke: "#2f5d1a", "stroke-width": 1 }, g);
+  });
+  criar("path", { d: "M-9 3 q0 -12 9 -12 q9 0 9 12 Z", fill: "#3f8f3f", stroke: "#1f4d1f", "stroke-width": 1.4 }, g);
+  criar("path", { d: "M-4 3 l1 -6 l6 0 l1 6 M-3 -3 l-3 -3 M3 -3 l3 -3", fill: "none", stroke: "#a3d977", "stroke-width": 1.2 }, g);
+}
+
+function caracol(pai, x, y) {
+  var g = criar("g", { transform: "translate(" + x + " " + y + ") scale(1.3)" }, pai);
+  criar("path", { d: "M-12 6 q10 2 22 0 q2 -2 0 -3 l-22 0 Z", fill: "#e9c46a", stroke: "#8a6a3d", "stroke-width": 1.1 }, g);
+  criar("path", { d: "M-10 3 l-2 -7 M-8 3 l1 -7", stroke: "#8a6a3d", "stroke-width": 1.1 }, g);
+  criar("circle", { cx: -12, cy: -4, r: 1.1, fill: "#1a1a1a" }, g);
+  criar("circle", { cx: -7, cy: -4, r: 1.1, fill: "#1a1a1a" }, g);
+  criar("circle", { cx: 3, cy: -3, r: 7, fill: "#d97a3a", stroke: "#7a3d12", "stroke-width": 1.3 }, g);
+  criar("path", { d: "M3 -3 m0 -1 a1.5 1.5 0 1 1 -1.5 2 a3.5 3.5 0 1 1 4.5 -4", fill: "none", stroke: "#7a3d12", "stroke-width": 1.2 }, g);
+}
+
+/* Põe um bichinho perto do lugar desejado: procura em espiral o primeiro
+   lugar livre. */
+function soltarBicho(desenhar, alvo, ocupados, raio) {
+  for (var r = 0; r <= 90; r += 6) {
+    for (var v = 0; v < 12; v++) {
+      var a = (v / 12) * 2 * Math.PI;
+      var p = { x: alvo[0] + r * Math.cos(a), y: alvo[1] + r * Math.sin(a), raio: raio || 18 };
+      if (lugarLivre(p, p.raio, ocupados)) {
+        desenhar(p.x, p.y);
+        ocupados.push(p);
+        return;
+      }
+      if (r === 0) break;
+    }
+  }
+}
+
 function desenharEnfeites(svg) {
   var g = criar("g", {}, svg);
   var ocupados = rotulosDasCurvas.slice();   // não cobrir as alturas das curvas
@@ -410,12 +544,25 @@ function desenharEnfeites(svg) {
     }
   }
 
+  // Bichinhos fofos espalhados, antes das árvores para terem lugar
+  var bichos = [
+    [function (x, y) { coelho(g, x, y); }, [330, 470]],
+    [function (x, y) { coelho(g, x, y); }, [880, 430]],
+    [function (x, y) { capivara(g, x, y); }, [910, 545], 30],
+    [function (x, y) { passarinho(g, x, y, "#ffd23f"); }, [60, 470]],
+    [function (x, y) { passarinho(g, x, y, "#74c0fc"); }, [640, 40]],
+    [function (x, y) { joaninha(g, x, y); }, [250, 520]],
+    [function (x, y) { tartaruga(g, x, y); }, [770, 505]],
+    [function (x, y) { caracol(g, x, y); }, [500, 470]]
+  ];
+  for (var b = 0; b < bichos.length; b++) soltarBicho(bichos[b][0], bichos[b][1], ocupados, bichos[b][2]);
+
   // Árvores: araucárias no alto do morro, árvores redondas embaixo
   for (var t = 0; t < 3000 && ocupados.length < 95; t++) {
     var p = { x: 15 + sortear() * (LARGURA - 30), y: 15 + sortear() * (ALTURA - 60), raio: 10 + sortear() * 6 };
     if (!lugarLivre(p, p.raio, ocupados)) continue;
     var altura = alturaDoLugar(p);
-    if (altura === QUANTAS_CURVAS - 1 && sortear() < 0.6) continue;   // topo mais aberto
+    if (altura === QUANTAS_CURVAS - 1) continue;   // topo livre para a escola
     if (altura >= 2) araucaria(g, p.x, p.y, p.raio + 2);
     else arvoreRedonda(g, p.x, p.y, p.raio);
     ocupados.push(p);
@@ -451,6 +598,106 @@ function desenhoCasa(g) {
   criar("rect", { x: 4, y: 3, width: 13, height: 12, fill: "#9ad0ff", stroke: "#1a1a1a", "stroke-width": 2 }, g);
 }
 
+/* Casa de encosta: pequena, em cima de palafitas (vigas da fundação à
+   mostra), com o chão do morro descendo em diagonal embaixo dela. Não tem
+   fundo pintado, para as curvas de nível continuarem aparecendo. */
+function desenhoCasaDaEncosta(fora) {
+  var g = criar("g", { transform: "scale(1.25)" }, fora);
+  var borda = "#1a1a1a";
+  function chao(x) { return 20 - 0.42 * x; }   // o morro desce para a esquerda
+  // Chão inclinado
+  criar("line", { x1: -34, y1: chao(-34), x2: 34, y2: chao(34), stroke: "#7a4b22", "stroke-width": 3.5, "stroke-linecap": "round" }, g);
+  // Vigas da fundação: cada uma desce até o chão, umas mais compridas
+  var vigas = [-17, -6, 6, 17];
+  for (var i = 0; i < vigas.length; i++) {
+    criar("rect", { x: vigas[i] - 2.2, y: 2, width: 4.4, height: chao(vigas[i]) - 2, fill: "#8d8d8d", stroke: borda, "stroke-width": 1.3 }, g);
+  }
+  // Travas em X entre as vigas
+  var travas = criar("g", { stroke: "#5f5a52", "stroke-width": 1.6 }, g);
+  for (var j = 0; j < vigas.length - 1; j++) {
+    var a = vigas[j], b = vigas[j + 1];
+    criar("line", { x1: a, y1: 4, x2: b, y2: chao(b) - 1 }, travas);
+    criar("line", { x1: b, y1: 4, x2: a, y2: Math.min(chao(a), chao(b) + 6) }, travas);
+  }
+  // Laje e casa
+  criar("rect", { x: -22, y: -1, width: 44, height: 5, fill: "#a7a29a", stroke: borda, "stroke-width": 1.8 }, g);
+  criar("rect", { x: -19, y: -24, width: 38, height: 23, fill: "#fff3d6", stroke: borda, "stroke-width": 2.2 }, g);
+  criar("path", { d: "M-24 -22 L0 -40 L24 -22 Z", fill: "#d9480f", stroke: borda, "stroke-width": 2.2, "stroke-linejoin": "round" }, g);
+  criar("rect", { x: -13, y: -16, width: 10, height: 15, fill: "#8a5a2b", stroke: borda, "stroke-width": 1.6 }, g);
+  criar("rect", { x: 3, y: -18, width: 11, height: 9, fill: "#9ad0ff", stroke: borda, "stroke-width": 1.6 }, g);
+}
+
+/* Casa de madeira na beira do rio, com um deck de madeira que avança
+   sobre a água e uma canoa amarrada. */
+function desenhoCasaDoRio(g) {
+  var tabua = "#b77b42", borda = "#1a1a1a";
+  // Deck: piso de tábuas na frente da casa, avançando sobre a água, com
+  // estacas fincadas no rio e um corrimão
+  [-40, -10, 22, 52].forEach(function (x) {
+    criar("rect", { x: x - 2.5, y: 30, width: 5, height: 24, fill: "#6b4423", stroke: borda, "stroke-width": 1.2 }, g);
+  });
+  criar("path", { d: "M-46 22 L60 22 L64 34 L-42 34 Z", fill: "#c98d52", stroke: borda, "stroke-width": 2.2, "stroke-linejoin": "round" }, g);
+  for (var t = -36; t < 62; t += 9) {
+    criar("line", { x1: t, y1: 22, x2: t + 3, y2: 34, stroke: "#8a5a2b", "stroke-width": 1.3 }, g);
+  }
+  criar("path", { d: "M30 22 L30 8 L62 8 L62 22 M46 8 L46 22", fill: "none", stroke: "#6b4423", "stroke-width": 2.6, "stroke-linejoin": "round" }, g);
+  // Casa de tábuas
+  criar("rect", { x: -24, y: -10, width: 48, height: 34, fill: tabua, stroke: borda, "stroke-width": 2.5 }, g);
+  for (var y = -2; y < 24; y += 7) {
+    criar("line", { x1: -24, y1: y, x2: 24, y2: y, stroke: "#8a5a2b", "stroke-width": 1.3 }, g);
+  }
+  criar("path", { d: "M-31 -8 L0 -34 L31 -8 Z", fill: "#7a4b22", stroke: borda, "stroke-width": 2.5, "stroke-linejoin": "round" }, g);
+  criar("rect", { x: -15, y: 4, width: 12, height: 20, fill: "#5a3a1c", stroke: borda, "stroke-width": 2 }, g);
+  criar("rect", { x: 4, y: 0, width: 13, height: 11, fill: "#9ad0ff", stroke: borda, "stroke-width": 2 }, g);
+  // Canoa amarrada no deck
+  criar("path", { d: "M40 50 q16 10 34 0 l-4 -6 l-26 0 Z", fill: "#d9480f", stroke: borda, "stroke-width": 2 }, g);
+  criar("path", { d: "M60 30 q4 10 2 14", fill: "none", stroke: "#3b2a1a", "stroke-width": 1.5 }, g);
+}
+
+/* Linha de alta tensão: duas torres de ferro com os cabos passando por
+   cima de árvores, uma nuvem de tempestade e um raio caindo numa árvore. */
+function desenhoAltaTensao(g) {
+  var borda = "#1a1a1a";
+  // Árvores embaixo da linha
+  [[-34, 22, 17], [2, 30, 19], [38, 22, 16]].forEach(function (a) {
+    criar("ellipse", { cx: a[0] + 3, cy: a[1] + a[2] + 4, rx: a[2], ry: 4, fill: "#000000", opacity: 0.15 }, g);
+    criar("rect", { x: a[0] - 3, y: a[1] + 6, width: 6, height: a[2] - 2, fill: "#7a4b22", stroke: borda, "stroke-width": 1.5 }, g);
+    criar("circle", { cx: a[0], cy: a[1], r: a[2], fill: "#2f7d3a", stroke: borda, "stroke-width": 2 }, g);
+    criar("circle", { cx: a[0] - a[2] * 0.3, cy: a[1] - a[2] * 0.32, r: a[2] * 0.4, fill: "#5aa84f" }, g);
+  });
+  // Torres de ferro (treliça)
+  function torre(x, y) {
+    var t = criar("g", { transform: "translate(" + x + " " + y + ")", fill: "none", stroke: "#4d4d4d", "stroke-width": 2, "stroke-linejoin": "round" }, g);
+    criar("path", { d: "M-11 44 L-3 -28 L3 -28 L11 44 M-9 26 L9 26 M-7 8 L7 8 M-5 -10 L5 -10 M-9 26 L7 8 M9 26 L-7 8 M-7 8 L5 -10 M7 8 L-5 -10" }, t);
+    criar("path", { d: "M-16 -24 L16 -24 M-12 -16 L12 -16", "stroke-width": 2.6 }, t);
+  }
+  torre(-70, -2);
+  torre(74, -8);
+  // Cabos: saem da borda do mapa, passam pelas torres e por cima das árvores
+  var cabos = criar("g", { fill: "none", stroke: "#1a1a1a", "stroke-width": 1.6 }, g);
+  [[-26, -16], [-18, -8]].forEach(function (c, i) {
+    var yA = c[0] + 0, yB = c[0] - 6, xA = -70 + (i ? 12 : -16), xB = 74 + (i ? 12 : -16);
+    var xA2 = -70 + (i ? -12 : 16), xB2 = 74 + (i ? -12 : 16);
+    criar("path", { d: "M-130 " + (yA + 6) + " Q-100 " + (yA + 14) + " " + xA + " " + yA }, cabos);
+    criar("path", { d: "M" + xA2 + " " + (yA + (i ? 8 : 0)) + " Q2 " + (yA + 26) + " " + xB + " " + (yB + (i ? 8 : 0)) }, cabos);
+  });
+  // Nuvem de tempestade
+  var nuvem = criar("g", { fill: "#8d96a6", stroke: borda, "stroke-width": 2 }, g);
+  criar("path", { d: "M-34 -58 q-14 0 -14 -11 q0 -11 14 -11 q4 -13 20 -11 q8 -10 22 -4 q16 -3 18 11 q12 2 10 13 q-2 13 -16 13 Z" }, nuvem);
+  // Raio caindo na árvore do meio
+  criar("path", {
+    d: "M-2 -58 L-14 -28 L-2 -28 L-6 12 L12 -34 L0 -34 L10 -58 Z",
+    fill: "#ffd23f", stroke: borda, "stroke-width": 2, "stroke-linejoin": "round"
+  }, g);
+  var brilho = criar("g", { stroke: "#ffd23f", "stroke-width": 3, "stroke-linecap": "round" }, g);
+  criar("path", { d: "M-16 8 l-8 -5 M-16 16 l-9 1 M4 8 l8 -5 M5 16 l9 1" }, brilho);
+  // Vento
+  var vento = criar("g", { fill: "none", stroke: "#1f6fa8", "stroke-width": 3, "stroke-linecap": "round" }, g);
+  criar("path", { d: "M-118 34 h16 q8 0 8 -7" }, vento);
+  criar("path", { d: "M-122 46 h22" }, vento);
+  criar("path", { d: "M-118 58 h14 q8 0 8 7" }, vento);
+}
+
 /* Árvore grande e sozinha, um poste com fio e riscos de vento. */
 function desenhoArvore(g) {
   criar("ellipse", { cx: -8, cy: 34, rx: 30, ry: 7, fill: "#000000", opacity: 0.15 }, g);
@@ -468,36 +715,84 @@ function desenhoArvore(g) {
   criar("path", { d: "M-62 -2 h16 q8 0 8 7" }, vento);
 }
 
-/* Açude quase seco (chão rachado e uma poça) e a lavoura murcha ao lado. */
+/* Estiagem: açude grande quase seco (fundo rachado e uma poça), ossada de
+   boi, lavoura murcha e um arbusto seco. Tudo em volta do ponto 4. */
 function desenhoAcude(g) {
+  // Açude: margem de barro, fundo rachado e só uma poça no meio
   criar("path", {
-    d: "M-52 -6 C-50 -30 -10 -38 12 -30 C34 -22 40 2 26 16 C10 30 -30 30 -46 18 C-56 10 -54 2 -52 -6 Z",
-    fill: "#c9a26b", stroke: "#7a4b22", "stroke-width": 2.5
+    d: "M-78 -4 C-76 -44 -20 -58 18 -50 C58 -42 74 -8 62 20 C48 50 -10 56 -48 44 C-74 34 -80 16 -78 -4 Z",
+    fill: "#c9a26b", stroke: "#7a4b22", "stroke-width": 3
   }, g);
-  var rachaduras = criar("g", { fill: "none", stroke: "#7a4b22", "stroke-width": 1.6, "stroke-linecap": "round" }, g);
-  criar("path", { d: "M-40 -10 l10 6 l-4 10 M-30 -4 l12 -4 M-8 -24 l4 10 l-8 8 M14 -18 l-6 12 l10 6 M-24 16 l8 -8 l10 4" }, rachaduras);
-  criar("ellipse", { cx: 0, cy: 2, rx: 13, ry: 7, fill: "#4fa3e3", stroke: "#1f6fa8", "stroke-width": 2 }, g);
-  // Lavoura: fileiras de plantinhas amareladas
-  for (var linha = 0; linha < 4; linha++) {
-    for (var col = 0; col < 3; col++) {
-      var x = 44 + col * 9, y = -30 + linha * 13;
-      criar("path", { d: "M" + x + " " + (y + 6) + " l0 -8 M" + x + " " + (y + 1) + " l-4 -4 M" + x + " " + (y + 1) + " l4 -4", fill: "none", stroke: "#b08d1e", "stroke-width": 2, "stroke-linecap": "round" }, g);
+  criar("path", {
+    d: "M-62 -2 C-60 -32 -16 -44 14 -38 C46 -32 58 -6 48 14 C36 38 -10 42 -40 32 C-60 24 -64 12 -62 -2 Z",
+    fill: "#d9b47c"
+  }, g);
+  var rachaduras = criar("g", { fill: "none", stroke: "#7a4b22", "stroke-width": 1.8, "stroke-linecap": "round" }, g);
+  criar("path", { d: "M-54 -6 l14 8 l-6 14 M-40 2 l16 -6 M-20 -36 l6 14 l-12 10 M24 -30 l-8 16 l14 8 M-34 26 l12 -10 l14 6 M30 10 l14 -6 l6 12 M6 26 l-4 -10" }, rachaduras);
+  criar("ellipse", { cx: 2, cy: -2, rx: 16, ry: 8, fill: "#4fa3e3", stroke: "#1f6fa8", "stroke-width": 2 }, g);
+
+  // Ossada de boi: caveira com chifres e costelas, em cima do açude
+  var boi = criar("g", { transform: "translate(-50 -96)" }, g);
+  var osso = { fill: "#fbf7ec", stroke: "#1a1a1a", "stroke-width": 2, "stroke-linejoin": "round" };
+  criar("path", Object.assign({ d: "M-10 -6 C-22 -10 -30 -20 -32 -30 C-24 -22 -16 -18 -8 -14 Z" }, osso), boi);
+  criar("path", Object.assign({ d: "M10 -6 C22 -10 30 -20 32 -30 C24 -22 16 -18 8 -14 Z" }, osso), boi);
+  criar("path", Object.assign({ d: "M-13 -14 C-13 -20 13 -20 13 -14 L10 6 C8 16 -8 16 -10 6 Z" }, osso), boi);
+  criar("ellipse", { cx: -6, cy: -8, rx: 3.6, ry: 3, fill: "#1a1a1a" }, boi);
+  criar("ellipse", { cx: 6, cy: -8, rx: 3.6, ry: 3, fill: "#1a1a1a" }, boi);
+  criar("path", { d: "M-3 8 l0 3 M3 8 l0 3", stroke: "#1a1a1a", "stroke-width": 2, "stroke-linecap": "round" }, boi);
+  var costelas = criar("g", { transform: "translate(36 4)" }, boi);
+  criar("path", Object.assign({ d: "M-4 -2 L52 -2 L52 3 L-4 3 Z" }, osso), costelas);
+  for (var c = 0; c < 5; c++) {
+    var x = 4 + c * 11;
+    criar("path", { d: "M" + x + " 3 q-8 10 -2 20 M" + x + " -2 q-8 -10 -2 -20", fill: "none", stroke: "#1a1a1a", "stroke-width": 5.5, "stroke-linecap": "round" }, costelas);
+    criar("path", { d: "M" + x + " 3 q-8 10 -2 20 M" + x + " -2 q-8 -10 -2 -20", fill: "none", stroke: "#fbf7ec", "stroke-width": 3, "stroke-linecap": "round" }, costelas);
+  }
+
+  // Lavoura murcha: fileiras de pés de milho secos, embaixo à direita
+  for (var linha = 0; linha < 3; linha++) {
+    for (var col = 0; col < 5; col++) {
+      var px = 36 + col * 16 - linha * 4, py = 66 + linha * 18;
+      criar("path", {
+        d: "M" + px + " " + (py + 8) + " l0 -14 M" + px + " " + (py + 1) + " q-7 -2 -9 4 M" + px + " " + (py - 3) + " q7 -2 8 5",
+        fill: "none", stroke: "#a07a1a", "stroke-width": 2.4, "stroke-linecap": "round"
+      }, g);
     }
   }
+
+  // Arbusto seco, só galhos
+  var arbusto = criar("g", { transform: "translate(92 -40)", fill: "none", stroke: "#6b4423", "stroke-width": 2.4, "stroke-linecap": "round" }, g);
+  criar("path", { d: "M0 18 L0 0 M0 6 l-10 -10 M0 2 l9 -12 M-6 0 l-4 -8 M5 -4 l6 -2" }, arbusto);
 }
 
-/* Escola: o abrigo no topo do morro. */
+/* Escola: prédio comprido com torre do sino, placa ESCOLA, fileira de
+   janelas e bandeira do Brasil no mastro. É o abrigo no topo do morro. */
 function desenhoEscola(g) {
-  criar("ellipse", { cx: 3, cy: 26, rx: 46, ry: 7, fill: "#000000", opacity: 0.15 }, g);
-  criar("rect", { x: -40, y: -8, width: 80, height: 34, fill: "#ffffff", stroke: "#1a1a1a", "stroke-width": 2.5 }, g);
-  criar("path", { d: "M-46 -6 L0 -28 L46 -6 Z", fill: "#1d6b40", stroke: "#1a1a1a", "stroke-width": 2.5, "stroke-linejoin": "round" }, g);
-  criar("circle", { cx: 0, cy: -14, r: 5, fill: "#ffe066", stroke: "#1a1a1a", "stroke-width": 1.5 }, g);
-  criar("rect", { x: -7, y: 8, width: 14, height: 18, fill: "#8a5a2b", stroke: "#1a1a1a", "stroke-width": 2 }, g);
-  criar("rect", { x: -31, y: 2, width: 14, height: 11, fill: "#9ad0ff", stroke: "#1a1a1a", "stroke-width": 2 }, g);
-  criar("rect", { x: 17, y: 2, width: 14, height: 11, fill: "#9ad0ff", stroke: "#1a1a1a", "stroke-width": 2 }, g);
+  criar("ellipse", { cx: 3, cy: 28, rx: 58, ry: 7, fill: "#000000", opacity: 0.15 }, g);
+  // Prédio de tijolos e telhado
+  criar("rect", { x: -48, y: -12, width: 96, height: 40, fill: "#e8735a", stroke: "#1a1a1a", "stroke-width": 2.5 }, g);
+  criar("path", { d: "M-54 -10 L-40 -26 L40 -26 L54 -10 Z", fill: "#8b3a2b", stroke: "#1a1a1a", "stroke-width": 2.5, "stroke-linejoin": "round" }, g);
+  // Torre do sino
+  criar("rect", { x: -11, y: -46, width: 22, height: 22, fill: "#fff3d6", stroke: "#1a1a1a", "stroke-width": 2.2 }, g);
+  criar("path", { d: "M-15 -45 L0 -60 L15 -45 Z", fill: "#8b3a2b", stroke: "#1a1a1a", "stroke-width": 2.2, "stroke-linejoin": "round" }, g);
+  criar("path", { d: "M-6 -28 q0 -12 6 -12 q6 0 6 12 Z", fill: "#ffd23f", stroke: "#1a1a1a", "stroke-width": 1.6 }, g);
+  // Placa
+  criar("rect", { x: -30, y: -8, width: 60, height: 14, rx: 3, fill: "#ffffff", stroke: "#1a1a1a", "stroke-width": 1.8 }, g);
+  escrever(g, "ESCOLA", 0, 3.5, { "font-size": 11, "font-weight": "bold", fill: "#1d6b40", "letter-spacing": "1" });
+  // Janelas e porta
+  var janelas = [-42, -28, 16, 30];
+  for (var i = 0; i < janelas.length; i++) {
+    criar("rect", { x: janelas[i], y: 10, width: 11, height: 10, fill: "#9ad0ff", stroke: "#1a1a1a", "stroke-width": 1.6 }, g);
+  }
+  criar("rect", { x: -9, y: 10, width: 18, height: 18, fill: "#8a5a2b", stroke: "#1a1a1a", "stroke-width": 2 }, g);
+  criar("line", { x1: 0, y1: 10, x2: 0, y2: 28, stroke: "#1a1a1a", "stroke-width": 1.4 }, g);
+  // Mastro com a bandeira do Brasil
+  criar("rect", { x: -66, y: -50, width: 3, height: 78, fill: "#3b2a1a" }, g);
+  criar("rect", { x: -63, y: -50, width: 26, height: 18, fill: "#1f9e44", stroke: "#1a1a1a", "stroke-width": 1.4 }, g);
+  criar("path", { d: "M-60 -41 L-50 -48 L-40 -41 L-50 -34 Z", fill: "#ffd23f" }, g);
+  criar("circle", { cx: -50, cy: -41, r: 4, fill: "#1f4fa8" }, g);
 }
 
-var DESENHOS_DOS_PONTOS = { casa: desenhoCasa, arvore: desenhoArvore, acude: desenhoAcude, escola: desenhoEscola };
+var DESENHOS_DOS_PONTOS = { casa: desenhoCasa, altaTensao: desenhoAltaTensao, casaDaEncosta: desenhoCasaDaEncosta, casaDoRio: desenhoCasaDoRio, arvore: desenhoArvore, acude: desenhoAcude, escola: desenhoEscola };
 
 function desenharPontos(svg) {
   for (var i = 0; i < PONTOS_DO_MAPA.length; i++) {
@@ -533,6 +828,7 @@ function desenharNorte(svg) {
 function desenharMapa() {
   var svg = document.getElementById("desenho-mapa");
   criar("rect", { x: 0, y: 0, width: LARGURA, height: ALTURA, fill: COR_BAIXADA }, svg);
+  desenharZonaSeca(svg);
   desenharMorro(svg);
   desenharRio(svg);
   var camadaAlturas = criar("g", {}, svg);    // as alturas e os enfeites ficam
