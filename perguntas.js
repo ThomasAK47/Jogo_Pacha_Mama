@@ -15,7 +15,7 @@
     {
       id: "INF-ENC-99",
       nivel: "infantil",
-      tema: "enchentes",
+      tema: "inundacoes",
       pergunta: "Texto da pergunta?",
       opcoes: ["Primeira opção", "Segunda opção"],
       correta: "A",
@@ -26,7 +26,7 @@
    - id .......... um código ÚNICO para a pergunta (não pode repetir).
                    Sugestão: NÍVEL-TEMA-NÚMERO, ex.: "INT-DES-07".
    - nivel ....... "infantil", "intermediario" ou "adulto".
-   - tema ........ "enchentes", "deslizamentos", "estiagem", "vendaval",
+   - tema ........ "inundacoes", "deslizamentos", "estiagem", "vendaval",
                    "mapas" ou "mochila".
    - pergunta .... o enunciado que a professora lê em voz alta.
    - opcoes ...... as opções de resposta, entre colchetes [ ], separadas
@@ -43,7 +43,7 @@
 
    PONTOS DO MAPA IMPRESSO (combinação usada nas perguntas)
    Cada ponto tem um desenho e mostra um perigo; só o ponto 5 é seguro.
-   - Ponto 1: casa na beira do rio (o lugar mais baixo) ... enchente
+   - Ponto 1: casa na beira do rio (o lugar mais baixo) ... inundação
    - Ponto 2: casa na encosta íngreme (curvas juntas) ..... deslizamento
    - Ponto 3: linha de alta tensão sobre árvores ......... vendaval e raios
    - Ponto 4: açude quase seco e lavoura .................. estiagem
@@ -71,32 +71,32 @@ var PERGUNTAS = [
      Linguagem simples. Foco no que a criança pode fazer.
      ==================================================================== */
 
-  /* ---------- Infantil · Enchentes ---------- */
+  /* ---------- Infantil · Inundações ---------- */
 
   { // REVISAR
     id: "INF-ENC-01",
     nivel: "infantil",
-    tema: "enchentes",
+    tema: "inundacoes",
     pergunta: "Choveu muito e a rua ficou cheia de água. O que a gente faz?",
     opcoes: ["Brincar na água da rua", "Ficar longe da água e chamar um adulto"],
     correta: "B",
-    explicacao: "A água da enchente pode esconder buracos e ser suja. O certo é ficar longe e avisar um adulto."
+    explicacao: "A água da rua alagada pode esconder buracos e ser suja. O certo é ficar longe e avisar um adulto."
   },
 
   { // REVISAR
     id: "INF-ENC-02",
     nivel: "infantil",
-    tema: "enchentes",
-    pergunta: "Podemos beber a água da enchente?",
+    tema: "inundacoes",
+    pergunta: "Podemos beber a água da inundação?",
     opcoes: ["Sim, é só água da chuva", "Não, ela pode estar suja"],
     correta: "B",
-    explicacao: "A água da enchente se mistura com lixo e esgoto e pode deixar a gente doente. Só bebemos água limpa."
+    explicacao: "A água da inundação se mistura com resíduos e esgoto e pode deixar a gente doente. Só bebemos água potável, a água boa para beber."
   },
 
   { // REVISAR
     id: "INF-ENC-03",
     nivel: "infantil",
-    tema: "enchentes",
+    tema: "inundacoes",
     pergunta: "Qual é o número da Defesa Civil, que ajuda as pessoas em emergências?",
     opcoes: ["123", "199"],
     correta: "B",
@@ -106,7 +106,7 @@ var PERGUNTAS = [
   { // REVISAR
     id: "INF-ENC-04",
     nivel: "infantil",
-    tema: "enchentes",
+    tema: "inundacoes",
     pergunta: "Se a água começar a entrar em casa, o que as crianças fazem?",
     opcoes: ["Ficam junto dos adultos e fazem o que eles pedem", "Se escondem embaixo da cama"],
     correta: "A",
@@ -116,7 +116,7 @@ var PERGUNTAS = [
   { // REVISAR
     id: "INF-ENC-05",
     nivel: "infantil",
-    tema: "enchentes",
+    tema: "inundacoes",
     pergunta: "Quando chove muito, onde é melhor brincar?",
     opcoes: ["Dentro de casa", "Perto do arroio"],
     correta: "A",
@@ -140,9 +140,9 @@ var PERGUNTAS = [
     nivel: "infantil",
     tema: "deslizamentos",
     pergunta: "O que ajuda a segurar a terra do morro?",
-    opcoes: ["As raízes das árvores e plantas", "O lixo jogado no morro"],
+    opcoes: ["As raízes das árvores e plantas", "Os resíduos jogados no morro"],
     correta: "A",
-    explicacao: "As raízes seguram a terra como se fossem uma rede. O lixo junta água e deixa a terra mais fraca."
+    explicacao: "As raízes seguram a terra como se fossem uma rede. Os resíduos juntam água e deixam a terra mais fraca."
   },
 
   { // REVISAR
@@ -412,12 +412,12 @@ var PERGUNTAS = [
      NÍVEL INTERMEDIÁRIO — 3 opções (A ▲, B ●, C ■)
      ==================================================================== */
 
-  /* ---------- Intermediário · Enchentes ---------- */
+  /* ---------- Intermediário · Inundações ---------- */
 
   { // REVISAR
     id: "INT-ENC-01",
     nivel: "intermediario",
-    tema: "enchentes",
+    tema: "inundacoes",
     pergunta: "A Defesa Civil avisou que o rio vai subir. O que a família deve fazer?",
     opcoes: [
       "Esperar a água entrar em casa para decidir",
@@ -431,7 +431,7 @@ var PERGUNTAS = [
   { // REVISAR
     id: "INT-ENC-02",
     nivel: "intermediario",
-    tema: "enchentes",
+    tema: "inundacoes",
     pergunta: "Por que não se deve atravessar uma rua alagada a pé?",
     opcoes: [
       "A água pode esconder buracos e ter correnteza",
@@ -445,7 +445,7 @@ var PERGUNTAS = [
   { // REVISAR
     id: "INT-ENC-03",
     nivel: "intermediario",
-    tema: "enchentes",
+    tema: "inundacoes",
     pergunta: "Qual é o número de telefone da Defesa Civil?",
     opcoes: ["190", "193", "199"],
     correta: "C",
@@ -455,21 +455,21 @@ var PERGUNTAS = [
   { // REVISAR
     id: "INT-ENC-04",
     nivel: "intermediario",
-    tema: "enchentes",
-    pergunta: "Por que a água da enchente pode deixar a gente doente?",
+    tema: "inundacoes",
+    pergunta: "Por que a água da inundação pode deixar a gente doente?",
     opcoes: [
       "Porque ela vem do mar",
-      "Porque se mistura com esgoto e lixo",
+      "Porque se mistura com esgoto e resíduos",
       "Porque é muito fria"
     ],
     correta: "B",
-    explicacao: "A água da enchente carrega esgoto, lixo e até urina de ratos, que causa a leptospirose. Evite contato com ela."
+    explicacao: "A água da inundação carrega esgoto, resíduos e até urina de ratos, que causa a leptospirose. Evite contato com ela."
   },
 
   { // REVISAR
     id: "INT-ENC-05",
     nivel: "intermediario",
-    tema: "enchentes",
+    tema: "inundacoes",
     pergunta: "Antes de a água entrar em casa, os adultos devem desligar o quê?",
     opcoes: ["A chave geral de energia", "O despertador", "A campainha"],
     correta: "A",
@@ -497,7 +497,7 @@ var PERGUNTAS = [
     nivel: "intermediario",
     tema: "deslizamentos",
     pergunta: "O que ajuda a prevenir deslizamentos num morro?",
-    opcoes: ["Cortar as árvores", "Plantar árvores e plantas", "Jogar entulho no barranco"],
+    opcoes: ["Cortar as árvores", "Plantar árvores e plantas", "Jogar resíduos de obra no barranco"],
     correta: "B",
     explicacao: "As raízes seguram o solo, e as plantas fazem a água da chuva escorrer mais devagar."
   },
@@ -592,7 +592,7 @@ var PERGUNTAS = [
       "Jogar fora a água da chuva"
     ],
     correta: "A",
-    explicacao: "A água que sai da máquina de lavar ainda serve para lavar o quintal ou a calçada, sem gastar água limpa."
+    explicacao: "A água que sai da máquina de lavar ainda serve para lavar o quintal ou a calçada, sem gastar água potável."
   },
 
   { // REVISAR
@@ -600,9 +600,9 @@ var PERGUNTAS = [
     nivel: "intermediario",
     tema: "estiagem",
     pergunta: "Na estiagem, o ar seco e o mato seco aumentam o risco de quê?",
-    opcoes: ["Neve", "Granizo", "Incêndios e queimadas"],
+    opcoes: ["Neve", "Granizo", "Incêndios florestais"],
     correta: "C",
-    explicacao: "Com tudo seco, o fogo se espalha fácil. Nunca brinque com fogo e não queime lixo."
+    explicacao: "Com tudo seco, o fogo se espalha fácil. Nunca brinque com fogo e não queime resíduos."
   },
 
   { // REVISAR
@@ -610,7 +610,7 @@ var PERGUNTAS = [
     nivel: "intermediario",
     tema: "estiagem",
     pergunta: "Olhem o mapa: o açude do ponto 4 está quase seco e a lavoura está murcha. Que desastre é esse?",
-    opcoes: ["Enchente", "Granizo", "Estiagem"],
+    opcoes: ["Inundação", "Granizo", "Estiagem"],
     correta: "C",
     explicacao: "Na estiagem passa muito tempo sem chuva. Açudes e rios baixam e as plantações secam.",
     pontosMapa: ["4"]
@@ -813,12 +813,12 @@ var PERGUNTAS = [
      NÍVEL ADULTO — 4 opções (A ▲, B ●, C ■, D ★)
      ==================================================================== */
 
-  /* ---------- Adulto · Enchentes ---------- */
+  /* ---------- Adulto · Inundações ---------- */
 
   { // REVISAR
     id: "ADU-ENC-01",
     nivel: "adulto",
-    tema: "enchentes",
+    tema: "inundacoes",
     pergunta: "Para receber alertas da Defesa Civil por SMS, o que se envia para o número 40199?",
     opcoes: ["O CEP da sua casa", "O seu CPF", "A palavra AJUDA", "O nome da sua cidade"],
     correta: "A",
@@ -828,7 +828,7 @@ var PERGUNTAS = [
   { // REVISAR
     id: "ADU-ENC-02",
     nivel: "adulto",
-    tema: "enchentes",
+    tema: "inundacoes",
     pergunta: "Dirigindo, você encontra uma rua alagada. Qual é a atitude correta?",
     opcoes: [
       "Acelerar para passar rápido",
@@ -843,8 +843,8 @@ var PERGUNTAS = [
   { // REVISAR
     id: "ADU-ENC-03",
     nivel: "adulto",
-    tema: "enchentes",
-    pergunta: "Ao voltar para casa depois de uma enchente, o que fazer antes de religar a energia?",
+    tema: "inundacoes",
+    pergunta: "Ao voltar para casa depois de uma inundação, o que fazer antes de religar a energia?",
     opcoes: [
       "Ligar todos os aparelhos para testar",
       "Pedir a um eletricista que verifique a instalação",
@@ -858,8 +858,8 @@ var PERGUNTAS = [
   { // REVISAR
     id: "ADU-ENC-04",
     nivel: "adulto",
-    tema: "enchentes",
-    pergunta: "Qual doença, transmitida pela urina de ratos, é comum depois de enchentes?",
+    tema: "inundacoes",
+    pergunta: "Qual doença, transmitida pela urina de ratos, é comum depois de inundações?",
     opcoes: ["Leptospirose", "Dengue", "Sarampo", "Catapora"],
     correta: "A",
     explicacao: "A leptospirose pega pelo contato com água ou lama contaminadas. Use botas e luvas na limpeza e procure atendimento se tiver febre."
@@ -868,7 +868,7 @@ var PERGUNTAS = [
   { // REVISAR
     id: "ADU-ENC-05",
     nivel: "adulto",
-    tema: "enchentes",
+    tema: "inundacoes",
     pergunta: "Os rios Jacuí, Taquari, Caí e dos Sinos fazem parte de qual região hidrográfica do RS?",
     opcoes: ["Região do Uruguai", "Região Litorânea", "Região do Guaíba", "Região Amazônica"],
     correta: "C",
@@ -884,12 +884,12 @@ var PERGUNTAS = [
     pergunta: "Qual atitude ajuda a prevenir deslizamentos em encostas?",
     opcoes: [
       "Retirar a vegetação da encosta",
-      "Jogar lixo e entulho no morro",
+      "Jogar resíduos e restos de obra no morro",
       "Manter a vegetação e cuidar da drenagem",
       "Fazer cortes no barranco para construir"
     ],
     correta: "C",
-    explicacao: "As raízes seguram o solo e a água bem drenada não encharca o terreno. Lixo, cortes e desmatamento aumentam o risco."
+    explicacao: "As raízes seguram o solo e a água bem drenada não encharca o terreno. Resíduos, cortes e desmatamento aumentam o risco."
   },
 
   { // REVISAR
@@ -1011,7 +1011,7 @@ var PERGUNTAS = [
       "Porque os rios enchem"
     ],
     correta: "A",
-    explicacao: "Mato seco e baixa umidade fazem o fogo se espalhar rápido. Não queime lixo nem jogue bitucas de cigarro na beira da estrada."
+    explicacao: "Mato seco e baixa umidade fazem o fogo se espalhar rápido. Não queime resíduos nem jogue bitucas de cigarro na beira da estrada."
   },
 
   { // REVISAR
@@ -1120,10 +1120,10 @@ var PERGUNTAS = [
     id: "ADU-MAP-02",
     nivel: "adulto",
     tema: "mapas",
-    pergunta: "Olhem o mapa: os pontos 2 e 5 ficam no morro. Por que só o 5 serve de abrigo numa enchente?",
+    pergunta: "Olhem o mapa: os pontos 2 e 5 ficam no morro. Por que só o 5 serve de abrigo numa inundação?",
     opcoes: ["O 5 fica mais perto do rio", "Os dois servem igualmente", "O 5 é alto e plano; o 2 fica na encosta", "O 2 fica numa área de estiagem"],
     correta: "C",
-    explicacao: "O abrigo precisa estar longe da cheia e fora de área de deslizamento. O ponto 5 é o topo plano; o 2 fica na encosta íngreme.",
+    explicacao: "O abrigo precisa estar longe da área que inunda e fora de área de deslizamento. O ponto 5 é o topo plano; o 2 fica na encosta íngreme.",
     pontosMapa: ["2", "5"]
   },
 

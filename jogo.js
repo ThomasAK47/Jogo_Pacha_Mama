@@ -238,7 +238,7 @@ var partida = null;      // partida em andamento (nível, rodada...) ou null
 var telaAtual = "inicial";
 var esperaPergunta = null;  // temporizador entre a roleta parar e a pergunta abrir
 var contando = false;       // contagem "3, 2, 1" acontecendo
-var etapaAlerta = null;     // alerta de enchente: null (fechado), "tremendo", "titulo" ou "regra"
+var etapaAlerta = null;     // alerta de inundação: null (fechado), "tremendo", "titulo" ou "regra"
 var avisoRoleta = "";       // recado temporário embaixo do botão GIRAR
 
 // Tempo que o tema sorteado fica na tela antes de abrir a pergunta (milissegundos)
@@ -264,7 +264,9 @@ function carregarPartida() {
   if (!Array.isArray(salva.rodadasComAlerta)) salva.rodadasComAlerta = [];
   if (salva.alerta !== true && salva.alerta !== false) salva.alerta = null;
   // Se o perguntas.js mudou e a pergunta da tela sumiu, volta para a roleta
-  if (salva.perguntaAtual && !acharPergunta(salva.perguntaAtual)) {
+  // (ou o tema da rodada mudou de nome no config.js)
+  if ((salva.perguntaAtual && !acharPergunta(salva.perguntaAtual)) ||
+      (salva.temaAtual && !temaPorChave(salva.temaAtual))) {
     salva.perguntaAtual = null;
     salva.temaAtual = null;
     salva.revelada = false;
@@ -1031,9 +1033,9 @@ function ligarTelaPergunta() {
 
 
 /* --------------------------------------------------------------------------
-   8b. RODADA DE ALERTA (evento especial da enchente)
+   8b. RODADA DE ALERTA (evento especial da inundação)
    Ao clicar em GIRAR, o jogo sorteia se a rodada é de alerta. Se for:
-   a roleta treme, toca a sirene, aparece "ALERTA! A ENCHENTE CHEGOU!" com
+   a roleta treme, toca a sirene, aparece "ALERTA! A INUNDAÇÃO CHEGOU!" com
    água subindo, depois a regra do nível e o botão "GIRAR A ROLETA".
    Os textos ficam no config.js (CONFIG.evento).
    -------------------------------------------------------------------------- */

@@ -835,7 +835,7 @@ body.na-pergunta .marca { display: none; }
 .alerta.agua-subiu .agua {
   height: 30vh;
 }
-/* Quando a regra aparece, a água baixa um pouco (a enchente passa) */
+/* Quando a regra aparece, a água baixa um pouco (a inundação passa) */
 .alerta.com-regra .agua {
   height: 14vh;
   transition: height 1.5s ease-in-out;
