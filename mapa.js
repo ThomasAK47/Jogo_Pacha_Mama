@@ -8,7 +8,7 @@
 
    Os pontos 1 a 5 são os que as perguntas citam (perguntas.js). Cada um
    tem um desenho, para a criança reconhecer o lugar sem ler o mapa:
-     - Ponto 1: casa na beira do rio ............ perigo de ENCHENTE
+     - Ponto 1: casa de madeira com deck no rio . perigo de ENCHENTE
      - Ponto 2: casa na encosta íngreme ......... perigo de DESLIZAMENTO
      - Ponto 3: árvore sozinha e poste no campo . perigo no VENDAVAL e nos raios
      - Ponto 4: açude quase seco e lavoura ...... ESTIAGEM
@@ -39,7 +39,7 @@ var LARGURA = 1000, ALTURA = 640;
 // tem, quanto espaço livre o desenho precisa em volta (raio) e onde fica o
 // número, em relação ao meio do desenho (numeroEm)
 var PONTOS_DO_MAPA = [
-  { numero: "1", x: 92,  y: 535, desenho: "casa",   raio: 42, numeroEm: [-36, -28] },  // casa na beira do rio
+  { numero: "1", x: 96,  y: 530, desenho: "casaDoRio", raio: 50, numeroEm: [-46, -30] },  // casa na beira do rio
   { numero: "2", x: 500, y: 66,  desenho: "casa",   raio: 42, numeroEm: [-44, -18] },  // casa na encosta íngreme
   { numero: "3", x: 112, y: 170, desenho: "arvore", raio: 72, numeroEm: [-40, -46] },  // árvore sozinha e poste
   { numero: "4", x: 880, y: 172, desenho: "acude",  raio: 80, numeroEm: [-96, -6] },  // açude quase seco e lavoura
@@ -493,6 +493,33 @@ function desenhoCasa(g) {
   criar("rect", { x: 4, y: 3, width: 13, height: 12, fill: "#9ad0ff", stroke: "#1a1a1a", "stroke-width": 2 }, g);
 }
 
+/* Casa de madeira na beira do rio, com um deck de madeira que avança
+   sobre a água e uma canoa amarrada. */
+function desenhoCasaDoRio(g) {
+  var tabua = "#b77b42", borda = "#1a1a1a";
+  // Deck: piso de tábuas na frente da casa, avançando sobre a água, com
+  // estacas fincadas no rio e um corrimão
+  [-40, -10, 22, 52].forEach(function (x) {
+    criar("rect", { x: x - 2.5, y: 30, width: 5, height: 24, fill: "#6b4423", stroke: borda, "stroke-width": 1.2 }, g);
+  });
+  criar("path", { d: "M-46 22 L60 22 L64 34 L-42 34 Z", fill: "#c98d52", stroke: borda, "stroke-width": 2.2, "stroke-linejoin": "round" }, g);
+  for (var t = -36; t < 62; t += 9) {
+    criar("line", { x1: t, y1: 22, x2: t + 3, y2: 34, stroke: "#8a5a2b", "stroke-width": 1.3 }, g);
+  }
+  criar("path", { d: "M30 22 L30 8 L62 8 L62 22 M46 8 L46 22", fill: "none", stroke: "#6b4423", "stroke-width": 2.6, "stroke-linejoin": "round" }, g);
+  // Casa de tábuas
+  criar("rect", { x: -24, y: -10, width: 48, height: 34, fill: tabua, stroke: borda, "stroke-width": 2.5 }, g);
+  for (var y = -2; y < 24; y += 7) {
+    criar("line", { x1: -24, y1: y, x2: 24, y2: y, stroke: "#8a5a2b", "stroke-width": 1.3 }, g);
+  }
+  criar("path", { d: "M-31 -8 L0 -34 L31 -8 Z", fill: "#7a4b22", stroke: borda, "stroke-width": 2.5, "stroke-linejoin": "round" }, g);
+  criar("rect", { x: -15, y: 4, width: 12, height: 20, fill: "#5a3a1c", stroke: borda, "stroke-width": 2 }, g);
+  criar("rect", { x: 4, y: 0, width: 13, height: 11, fill: "#9ad0ff", stroke: borda, "stroke-width": 2 }, g);
+  // Canoa amarrada no deck
+  criar("path", { d: "M40 50 q16 10 34 0 l-4 -6 l-26 0 Z", fill: "#d9480f", stroke: borda, "stroke-width": 2 }, g);
+  criar("path", { d: "M60 30 q4 10 2 14", fill: "none", stroke: "#3b2a1a", "stroke-width": 1.5 }, g);
+}
+
 /* Árvore grande e sozinha, um poste com fio e riscos de vento. */
 function desenhoArvore(g) {
   criar("ellipse", { cx: -8, cy: 34, rx: 30, ry: 7, fill: "#000000", opacity: 0.15 }, g);
@@ -587,7 +614,7 @@ function desenhoEscola(g) {
   criar("circle", { cx: -50, cy: -41, r: 4, fill: "#1f4fa8" }, g);
 }
 
-var DESENHOS_DOS_PONTOS = { casa: desenhoCasa, arvore: desenhoArvore, acude: desenhoAcude, escola: desenhoEscola };
+var DESENHOS_DOS_PONTOS = { casa: desenhoCasa, casaDoRio: desenhoCasaDoRio, arvore: desenhoArvore, acude: desenhoAcude, escola: desenhoEscola };
 
 function desenharPontos(svg) {
   for (var i = 0; i < PONTOS_DO_MAPA.length; i++) {
