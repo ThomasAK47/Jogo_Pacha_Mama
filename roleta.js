@@ -91,6 +91,11 @@ function criarIconeSVG(chaveTema) {
    A roleta é desenhada uma vez num <canvas>. Para girar, o canvas inteiro é
    rodado (transform: rotate). O ponteiro fica parado no topo.
    -------------------------------------------------------------------------- */
+// Cores do desenho da roleta
+var COR_ARO = "#1b0a3c";        // aro roxo bem escuro
+var COR_CONTORNO = "#1a1a1a";   // contorno dos nomes e ícones
+var CORES_LAMPADAS = ["#ffe600", "#00e5ff", "#ff1f8f", "#ffffff"];  // bolinhas do aro
+
 var Roleta = {
   canvas: null,
   ponteiro: null,
@@ -146,18 +151,18 @@ var Roleta = {
     var fatia = (Math.PI * 2) / this.temas.length;
     var fonte = getComputedStyle(document.body).fontFamily;
 
-    // Aro escuro com bolinhas (parece roleta de programa de auditório)
+    // Aro escuro com "lâmpadas" coloridas (parece roleta de programa de auditório)
     ctx.beginPath();
     ctx.arc(centro, centro, raioTotal, 0, Math.PI * 2);
-    ctx.fillStyle = "#2b2b2b";
+    ctx.fillStyle = COR_ARO;
     ctx.fill();
     var bolinhas = this.temas.length * 4;
     for (var b = 0; b < bolinhas; b++) {
       var ab = (b / bolinhas) * Math.PI * 2;
       ctx.beginPath();
       ctx.arc(centro + Math.cos(ab) * raioTotal * 0.96, centro + Math.sin(ab) * raioTotal * 0.96,
-              raioTotal * 0.018, 0, Math.PI * 2);
-      ctx.fillStyle = (b % 2 === 0) ? "#ffd166" : "#ffffff";
+              raioTotal * 0.02, 0, Math.PI * 2);
+      ctx.fillStyle = CORES_LAMPADAS[b % CORES_LAMPADAS.length];
       ctx.fill();
     }
 
@@ -195,8 +200,16 @@ var Roleta = {
         ctx.save();
         ctx.translate(-lado / 2, -raio * 0.40 - lado / 2);
         ctx.scale(lado / 24, lado / 24);
+        var desenho = new Path2D(icone.caminho);
+        if (!rotuloInativo) {
+          // contorno escuro, estilo adesivo
+          ctx.lineWidth = 2.4;
+          ctx.lineJoin = "round";
+          ctx.strokeStyle = COR_CONTORNO;
+          ctx.stroke(desenho);
+        }
         ctx.fillStyle = corDesenho;
-        ctx.fill(new Path2D(icone.caminho), icone.regra);
+        ctx.fill(desenho, icone.regra);
         ctx.restore();
       }
 
@@ -209,8 +222,9 @@ var Roleta = {
       for (var l = 0; l < linhas.length; l++) {
         var y = -this.raioDaLinha(raio, tamanhoLetra, l);
         if (!rotuloInativo) {
-          ctx.lineWidth = 4;
-          ctx.strokeStyle = "rgba(0, 0, 0, 0.35)";
+          // contorno escuro grosso: o branco fica legível em qualquer cor
+          ctx.lineWidth = Math.max(4, tamanhoLetra * 0.24);
+          ctx.strokeStyle = COR_CONTORNO;
           ctx.strokeText(linhas[l], 0, y);
         }
         ctx.fillStyle = corDesenho;
@@ -232,11 +246,11 @@ var Roleta = {
     ctx.fillStyle = "#ffffff";
     ctx.fill();
     ctx.lineWidth = raio * 0.03;
-    ctx.strokeStyle = "#2b2b2b";
+    ctx.strokeStyle = COR_ARO;
     ctx.stroke();
     ctx.beginPath();
     ctx.arc(centro, centro, raio * 0.05, 0, Math.PI * 2);
-    ctx.fillStyle = "#ffd166";
+    ctx.fillStyle = "#ff1f8f";
     ctx.fill();
   },
 
@@ -357,7 +371,7 @@ var Confete = {
   canvas: null,
   pedacos: [],
   animando: false,
-  cores: ["#ff595e", "#ffca3a", "#8ac926", "#1982c4", "#6a4c93", "#ff924c", "#ffffff"],
+  cores: ["#ff1f8f", "#ffe600", "#00e5ff", "#8f00ff", "#00e676", "#ff6d00", "#ffffff"],
 
   iniciar: function (canvas) {
     this.canvas = canvas;
