@@ -24,8 +24,9 @@
      4. Trilhas das equipes
      5. Enfeites: árvores, flores, pedras e bichinhos
      6. Pontos das perguntas, título e norte
-     7. Papel A4 ou A3
-     8. Início
+     7. Morro visto de lado (folha 2)
+     8. Papel A4 ou A3
+     9. Início
    ========================================================================== */
 
 
@@ -794,7 +795,8 @@ function desenhoEscola(g) {
 
 var DESENHOS_DOS_PONTOS = { casa: desenhoCasa, altaTensao: desenhoAltaTensao, casaDaEncosta: desenhoCasaDaEncosta, casaDoRio: desenhoCasaDoRio, arvore: desenhoArvore, acude: desenhoAcude, escola: desenhoEscola };
 
-function desenharPontos(svg) {
+function desenharPontos(fora) {
+  var svg = criar("g", { "class": "camada-pontos" }, fora);   // o perfil põe a linha do corte embaixo desta camada
   for (var i = 0; i < PONTOS_DO_MAPA.length; i++) {
     var ponto = PONTOS_DO_MAPA[i];
     var g = criar("g", { transform: "translate(" + ponto.x + " " + ponto.y + ")" }, svg);
@@ -843,22 +845,234 @@ function desenharMapa() {
 
 
 /* --------------------------------------------------------------------------
-   7. PAPEL A4 OU A3
+   7. MORRO VISTO DE LADO (FOLHA 2)
+   Para a criança entender que as curvas de nível são um morro: a folha 2
+   mostra o mesmo mapa, menor, com uma linha de corte A–B passando pela
+   escola, e embaixo o morro "cortado" nessa linha, visto de lado.
+   Cada curva do mapa vira uma camada do morro, com a mesma cor e a mesma
+   altura. As linhas tracejadas ligam cada curva do mapa à sua camada.
+   O desenho de lado é esticado para cima, senão o morro ficaria achatado.
+   -------------------------------------------------------------------------- */
+var LINHA_DO_CORTE = 200;          // altura (y) da linha A–B no mapa: passa pela escola
+var PERFIL_TOPO = 690;             // onde começa o quadro do perfil, embaixo do mapa
+var PERFIL_CHAO = 962;             // linha do chão (0 m) no perfil
+var PIXELS_POR_METRO = 3.0;        // quanto o morro sobe no desenho a cada metro
+
+function alturaNoPerfil(metros) { return PERFIL_CHAO - metros * PIXELS_POR_METRO; }
+
+/* Onde a curva k cruza a linha do corte: o x do lado esquerdo e do direito. */
+function cruzamentosDoCorte(k) {
+  var xs = [], antes = pontoDaCurva(k, 0);
+  for (var i = 1; i <= 2000; i++) {
+    var agora = pontoDaCurva(k, (i / 2000) * 2 * Math.PI);
+    if ((antes.y - LINHA_DO_CORTE) * (agora.y - LINHA_DO_CORTE) <= 0 && antes.y !== agora.y) {
+      var t = (LINHA_DO_CORTE - antes.y) / (agora.y - antes.y);
+      xs.push(antes.x + t * (agora.x - antes.x));
+    }
+    antes = agora;
+  }
+  return { oeste: Math.min.apply(null, xs), leste: Math.max.apply(null, xs) };
+}
+
+/* Árvore vista de lado: tronco e copa redonda, com o pé no chão (x, y). */
+function arvoreDeLado(pai, x, y, r) {
+  criar("rect", { x: x - r * 0.18, y: y - r * 1.1, width: r * 0.36, height: r * 1.1, fill: "#7a4b22", stroke: "#1a1a1a", "stroke-width": 1.5 }, pai);
+  criar("circle", { cx: x, cy: y - r * 1.55, r: r, fill: "#3f9142", stroke: "#1a1a1a", "stroke-width": 1.8 }, pai);
+  criar("circle", { cx: x - r * 0.3, cy: y - r * 1.85, r: r * 0.4, fill: "#6dbb5e" }, pai);
+}
+
+/* Bolinha amarela com o número do ponto (igual à do mapa, menor). */
+function numeroDoPonto(pai, numero, x, y) {
+  var n = criar("g", { transform: "translate(" + x + " " + y + ") scale(0.8)" }, pai);
+  criar("circle", { r: 18, fill: "#ffe066", stroke: "#1a1a1a", "stroke-width": 4 }, n);
+  escrever(n, numero, 0, 8.5, { "font-size": 24, "font-weight": "bold", fill: "#1a1a1a" });
+}
+
+/* Letra A ou B nas pontas da linha do corte. */
+function letraDoCorte(pai, letra, x, y) {
+  var g = criar("g", { transform: "translate(" + x + " " + y + ")" }, pai);
+  criar("circle", { r: 17, fill: "#ffffff", stroke: "#d62828", "stroke-width": 4 }, g);
+  escrever(g, letra, 0, 8, { "font-size": 23, "font-weight": "bold", fill: "#d62828" });
+}
+
+function desenharPerfil() {
+  var svg = document.getElementById("desenho-perfil");
+  var defs = criar("defs", {}, svg);
+
+  // ---- Mapa pequeno: cópia do mapa da folha 1, com a linha do corte ----
+  var mapa = document.getElementById("desenho-mapa");
+  var copia = criar("g", {}, svg);
+  for (var c = 0; c < mapa.childNodes.length; c++) copia.appendChild(mapa.childNodes[c].cloneNode(true));
+  var camadaPontos = copia.querySelector(".camada-pontos");
+  var corte = criar("g", {}, copia);
+  copia.insertBefore(corte, camadaPontos);       // a linha passa por baixo dos desenhos
+  criar("line", { x1: 30, y1: LINHA_DO_CORTE, x2: LARGURA - 30, y2: LINHA_DO_CORTE, stroke: "#ffffff", "stroke-width": 11, "stroke-linecap": "round" }, corte);
+  criar("line", { x1: 30, y1: LINHA_DO_CORTE, x2: LARGURA - 30, y2: LINHA_DO_CORTE, stroke: "#d62828", "stroke-width": 5, "stroke-dasharray": "16 9", "stroke-linecap": "round" }, corte);
+  criar("rect", { x: 1.5, y: 1.5, width: LARGURA - 3, height: ALTURA - 3, rx: 12, fill: "none", stroke: "#1a1a1a", "stroke-width": 3 }, svg);
+  letraDoCorte(svg, "A", 30, LINHA_DO_CORTE);
+  letraDoCorte(svg, "B", LARGURA - 30, LINHA_DO_CORTE);
+
+  // ---- Onde cada curva cruza o corte e a forma do morro de lado ----
+  var cruzamentos = [];
+  for (var k = 0; k < QUANTAS_CURVAS; k++) cruzamentos.push(cruzamentosDoCorte(k));
+  var forma = [[-20, 3], [80, 4], [LARGURA + 20, 3]];   // baixada, quase plana
+  for (var m = 0; m < QUANTAS_CURVAS; m++) {
+    forma.push([cruzamentos[m].oeste, (m + 1) * 10]);
+    forma.push([cruzamentos[m].leste, (m + 1) * 10]);
+  }
+  var topo = cruzamentos[QUANTAS_CURVAS - 1];
+  forma.push([topo.oeste + (topo.leste - topo.oeste) * 0.3, QUANTAS_CURVAS * 10 + 3]);   // topo quase plano
+  forma.push([topo.oeste + (topo.leste - topo.oeste) * 0.7, QUANTAS_CURVAS * 10 + 3]);
+  forma.sort(function (a, b) { return a[0] - b[0]; });
+  var pontos = forma.map(function (p) { return [+p[0].toFixed(1), +alturaNoPerfil(p[1]).toFixed(1)]; });
+  var chaoDoMorro = caminhoSuave(pontos);
+  var formaFechada = chaoDoMorro + " L" + (LARGURA + 20) + " " + (PERFIL_CHAO + 80) + " L-20 " + (PERFIL_CHAO + 80) + " Z";
+
+  // Quadro do perfil, com céu
+  var recorte = criar("clipPath", { id: "quadro-perfil" }, defs);
+  criar("rect", { x: 0, y: PERFIL_TOPO, width: LARGURA, height: 1000 - PERFIL_TOPO, rx: 12 }, recorte);
+  var ceu = criar("linearGradient", { id: "ceu-perfil", x1: 0, y1: 0, x2: 0, y2: 1 }, defs);
+  criar("stop", { offset: "0", "stop-color": "#bfe3ff" }, ceu);
+  criar("stop", { offset: "1", "stop-color": "#eef8ff" }, ceu);
+  var quadro = criar("g", { "clip-path": "url(#quadro-perfil)" }, svg);
+  criar("rect", { x: 0, y: PERFIL_TOPO, width: LARGURA, height: 1000 - PERFIL_TOPO, fill: "url(#ceu-perfil)" }, quadro);
+
+  // Sol e nuvem
+  var sol = criar("g", { transform: "translate(905 742)" }, quadro);
+  var raios = criar("g", { stroke: "#f2a516", "stroke-width": 4, "stroke-linecap": "round" }, sol);
+  for (var r = 0; r < 8; r++) {
+    var a = r * Math.PI / 4;
+    criar("line", { x1: (30 * Math.cos(a)).toFixed(1), y1: (30 * Math.sin(a)).toFixed(1), x2: (40 * Math.cos(a)).toFixed(1), y2: (40 * Math.sin(a)).toFixed(1) }, raios);
+  }
+  criar("circle", { r: 22, fill: "#ffd23f", stroke: "#1a1a1a", "stroke-width": 2 }, sol);
+  criar("path", { d: "M210 748 q-16 0 -16 -12 q0 -12 16 -12 q5 -14 22 -12 q9 -11 24 -4 q18 -3 20 12 q13 2 11 14 q-2 14 -18 14 Z", fill: "#ffffff", stroke: "#1a1a1a", "stroke-width": 2 }, quadro);
+
+  // Terra embaixo do chão
+  criar("rect", { x: 0, y: PERFIL_CHAO, width: LARGURA, height: 1000 - PERFIL_CHAO, fill: "#a87645" }, quadro);
+
+  // Morro em camadas: cada faixa de 10 m com a mesma cor do mapa
+  var recorteMorro = criar("clipPath", { id: "forma-do-morro" }, defs);
+  criar("path", { d: formaFechada }, recorteMorro);
+  var camadas = criar("g", { "clip-path": "url(#forma-do-morro)" }, quadro);
+  criar("rect", { x: -20, y: alturaNoPerfil(10), width: LARGURA + 40, height: 200, fill: COR_BAIXADA }, camadas);
+  for (var f = 0; f < QUANTAS_CURVAS; f++) {
+    var de = alturaNoPerfil((f + 1) * 10), ate = f === QUANTAS_CURVAS - 1 ? alturaNoPerfil(100) : alturaNoPerfil((f + 2) * 10);
+    criar("rect", { x: -20, y: ate, width: LARGURA + 40, height: de - ate, fill: CORES_DO_MORRO[f] }, camadas);
+    criar("line", { x1: -20, y1: de, x2: LARGURA + 20, y2: de, stroke: COR_CURVA, "stroke-width": 1.6, "stroke-dasharray": "6 5", opacity: 0.7 }, camadas);
+  }
+  criar("rect", { x: -20, y: PERFIL_CHAO, width: LARGURA + 40, height: 80, fill: "#a87645" }, camadas);
+  // Pedrinhas na terra
+  var pedras = criar("g", { fill: "#8a5a2b" }, quadro);
+  for (var p = 0; p < 26; p++) {
+    criar("ellipse", { cx: 20 + p * 38 + (p % 3) * 7, cy: PERFIL_CHAO + 14 + (p % 4) * 8, rx: 4 + (p % 3), ry: 2.6, fill: "#8a5a2b" }, pedras);
+  }
+  // Contorno do chão
+  var linhaDoChao = criar("path", { d: chaoDoMorro, fill: "none", stroke: "#3b2a1a", "stroke-width": 4, "stroke-linejoin": "round" }, quadro);
+
+  // Altura do chão em cada x (para pôr árvores, escola e açude em cima dele)
+  var alturaDoChao = [];
+  var comprimento = linhaDoChao.getTotalLength();
+  for (var s = 0; s <= comprimento; s += 2) {
+    var q = linhaDoChao.getPointAtLength(s);
+    alturaDoChao[Math.round(q.x)] = q.y;
+  }
+  function chaoEm(x) {
+    for (var d = 0; d < 20; d++) {
+      if (alturaDoChao[Math.round(x) + d] !== undefined) return alturaDoChao[Math.round(x) + d];
+      if (alturaDoChao[Math.round(x) - d] !== undefined) return alturaDoChao[Math.round(x) - d];
+    }
+    return PERFIL_CHAO;
+  }
+
+  // Linhas tracejadas: cada curva do mapa desce até a sua camada
+  var ligacoes = criar("g", {}, svg);
+  var rotulos = criar("g", {}, svg);
+  for (var n = 0; n < QUANTAS_CURVAS; n++) {
+    [cruzamentos[n].oeste, cruzamentos[n].leste].forEach(function (x, lado) {
+      var y = alturaNoPerfil((n + 1) * 10);
+      criar("line", { x1: x.toFixed(1), y1: LINHA_DO_CORTE, x2: x.toFixed(1), y2: y.toFixed(1), stroke: "#7a4b22", "stroke-width": 1.6, "stroke-dasharray": "3 6", opacity: 0.55 }, ligacoes);
+      criar("circle", { cx: x.toFixed(1), cy: LINHA_DO_CORTE, r: 5.5, fill: "#ffffff", stroke: COR_CURVA, "stroke-width": 3 }, ligacoes);
+      criar("circle", { cx: x.toFixed(1), cy: y.toFixed(1), r: 5.5, fill: "#ffffff", stroke: COR_CURVA, "stroke-width": 3 }, ligacoes);
+      if (lado === 0) {
+        escrever(rotulos, (n + 1) * 10 + " m", (x + 12).toFixed(1), (y + 20).toFixed(1), {
+          "text-anchor": "start", "font-size": 18, "font-weight": "bold", fill: COR_CURVA,
+          stroke: "#ffffff", "stroke-width": 5, "paint-order": "stroke"
+        });
+      }
+    });
+  }
+
+  // Árvores: no topo e na encosta da direita, entre as curvas (na da
+  // esquerda ficam os números das alturas)
+  var enfeites = criar("g", {}, svg);
+  var lugaresDasArvores = [[topo.leste - 22, 12]];
+  for (var t = 0; t < QUANTAS_CURVAS - 1; t++) {
+    lugaresDasArvores.push([(cruzamentos[t].leste + cruzamentos[t + 1].leste) / 2, t % 2 ? 12 : 15]);
+  }
+  lugaresDasArvores.forEach(function (a) { arvoreDeLado(enfeites, a[0], chaoEm(a[0]) + 2, a[1]); });
+
+  // Ponto 3: torres da linha de alta tensão
+  var torres = criar("g", { fill: "none", stroke: "#4d4d4d", "stroke-width": 2.4, "stroke-linejoin": "round" }, enfeites);
+  [60, 160].forEach(function (x) {
+    var y = chaoEm(x);
+    criar("path", { d: "M" + (x - 9) + " " + y + " L" + (x - 2) + " " + (y - 62) + " L" + (x + 2) + " " + (y - 62) + " L" + (x + 9) + " " + y + " M" + (x - 7) + " " + (y - 16) + " L" + (x + 7) + " " + (y - 16) + " M" + (x - 5) + " " + (y - 36) + " L" + (x + 5) + " " + (y - 36) + " M" + (x - 7) + " " + (y - 16) + " L" + (x + 5) + " " + (y - 36) + " M" + (x + 7) + " " + (y - 16) + " L" + (x - 5) + " " + (y - 36) }, torres);
+    criar("path", { d: "M" + (x - 14) + " " + (y - 58) + " L" + (x + 14) + " " + (y - 58), "stroke-width": 3 }, torres);
+  });
+  criar("path", { d: "M0 " + (chaoEm(60) - 52) + " Q30 " + (chaoEm(60) - 44) + " 46 " + (chaoEm(60) - 58) + " M74 " + (chaoEm(60) - 58) + " Q110 " + (chaoEm(60) - 40) + " 146 " + (chaoEm(160) - 58) + " M174 " + (chaoEm(160) - 58) + " Q190 " + (chaoEm(160) - 48) + " 210 " + (chaoEm(160) - 44), fill: "none", stroke: "#1a1a1a", "stroke-width": 1.6 }, enfeites);
+  arvoreDeLado(enfeites, 110, chaoEm(110) + 2, 12);
+  numeroDoPonto(enfeites, "3", 110, chaoEm(110) - 74);
+
+  // Ponto 4: açude seco, rachado, com uma poça
+  var xa = 925, ya = chaoEm(xa);
+  criar("path", { d: "M" + (xa - 50) + " " + (ya - 1) + " q50 30 100 0 Z", fill: "#d9b47c" }, enfeites);
+  criar("path", { d: "M" + (xa - 50) + " " + (ya - 1) + " q50 30 100 0", fill: "none", stroke: "#7a4b22", "stroke-width": 2.5 }, enfeites);
+  criar("path", { d: "M" + (xa - 30) + " " + (ya + 3) + " l6 6 l-4 5 M" + (xa + 22) + " " + (ya + 2) + " l-5 7 l5 4", fill: "none", stroke: "#7a4b22", "stroke-width": 1.6, "stroke-linecap": "round" }, enfeites);
+  criar("ellipse", { cx: xa, cy: ya + 10, rx: 12, ry: 3.5, fill: "#4fa3e3", stroke: "#1f6fa8", "stroke-width": 1.5 }, enfeites);
+  var seco = criar("g", { transform: "translate(" + (xa - 58) + " " + chaoEm(xa - 58) + ")", fill: "none", stroke: "#6b4423", "stroke-width": 2.4, "stroke-linecap": "round" }, enfeites);
+  criar("path", { d: "M0 0 L0 -18 M0 -12 l-10 -10 M0 -16 l9 -12 M-6 -18 l-4 -8" }, seco);
+  numeroDoPonto(enfeites, "4", xa, ya - 34);
+
+  // Ponto 5: escola no topo
+  var xe = 500, escola = criar("g", { transform: "translate(" + xe + " " + (chaoEm(xe) - 22).toFixed(1) + ") scale(0.8)" }, enfeites);
+  desenhoEscola(escola);
+  numeroDoPonto(enfeites, "5", xe + 78, chaoEm(xe) - 46);
+
+  // Letras A e B nas pontas do corte, de novo no desenho de lado
+  letraDoCorte(svg, "A", 30, PERFIL_TOPO + 28);
+  letraDoCorte(svg, "B", LARGURA - 30, PERFIL_TOPO + 28);
+  criar("rect", { x: 1.5, y: PERFIL_TOPO + 1.5, width: LARGURA - 3, height: 1000 - PERFIL_TOPO - 3, rx: 12, fill: "none", stroke: "#1a1a1a", "stroke-width": 3 }, svg);
+}
+
+/* Liga ou desliga a folha 2 (morro visto de lado). */
+function mostrarPerfil(sim) {
+  document.getElementById("folha-perfil").hidden = !sim;
+  document.getElementById("perfil-sim").setAttribute("aria-pressed", sim ? "true" : "false");
+  document.getElementById("perfil-nao").setAttribute("aria-pressed", sim ? "false" : "true");
+  document.getElementById("resumo-folhas").textContent = sim ? "2 folhas deitadas" : "1 folha deitada";
+}
+
+
+/* --------------------------------------------------------------------------
+   8. PAPEL A4 OU A3
    O desenho é o mesmo; no A3 tudo fica 1,414 vez maior.
    -------------------------------------------------------------------------- */
 function escolherPapel(papel) {
   document.getElementById("tamanho-papel").textContent =
     "@page { size: " + papel + " landscape; margin: 8mm; }";
-  document.getElementById("folha-mapa").classList.toggle("a3", papel === "A3");
+  var folhas = document.querySelectorAll(".folha");
+  for (var i = 0; i < folhas.length; i++) folhas[i].classList.toggle("a3", papel === "A3");
   document.getElementById("papel-a4").setAttribute("aria-pressed", papel === "A4" ? "true" : "false");
   document.getElementById("papel-a3").setAttribute("aria-pressed", papel === "A3" ? "true" : "false");
 }
 
 
 /* --------------------------------------------------------------------------
-   8. INÍCIO
+   9. INÍCIO
    -------------------------------------------------------------------------- */
 desenharMapa();
+desenharPerfil();
+document.getElementById("perfil-sim").addEventListener("click", function () { mostrarPerfil(true); });
+document.getElementById("perfil-nao").addEventListener("click", function () { mostrarPerfil(false); });
 document.getElementById("papel-a4").addEventListener("click", function () { escolherPapel("A4"); });
 document.getElementById("papel-a3").addEventListener("click", function () { escolherPapel("A3"); });
 document.getElementById("botao-imprimir").addEventListener("click", function () { window.print(); });
