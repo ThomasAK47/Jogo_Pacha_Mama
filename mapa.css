@@ -84,8 +84,7 @@
 .folha-perfil {
   display: flex;
   align-items: center;
-  gap: 6mm;
-  padding: 0 1mm;
+  justify-content: center;
 }
 .folha-perfil.a3 { zoom: 1.4142; }
 
@@ -95,36 +94,4 @@
   width: 190mm;
   height: 190mm;           /* mesma proporção do viewBox: 1000 x 1000 */
   font-family: var(--fonte);
-}
-
-.texto-perfil {
-  font-size: 4.1mm;
-  line-height: 1.35;
-  display: flex;
-  flex-direction: column;
-  gap: 2.4mm;
-}
-.texto-perfil h2 {
-  font-size: 7mm;
-  line-height: 1.1;
-  color: var(--principal);
-}
-.texto-perfil h3 {
-  margin: 1.5mm 0 0;
-  font-size: 5mm;
-}
-.texto-perfil ul {
-  margin: 0;
-  padding-left: 5mm;
-  display: flex;
-  flex-direction: column;
-  gap: 1.6mm;
-}
-.texto-perfil .vermelho { color: #d62828; }
-.texto-perfil .marrom { color: #7a4b22; }
-.texto-perfil .nota {
-  font-size: 3.2mm;
-  color: var(--texto-suave);
-  border-top: 0.4mm solid #cccccc;
-  padding-top: 1.6mm;
 }
