@@ -32,16 +32,17 @@ var CONFIG = {
      TEMAS DA ROLETA
      - "chave": nome curto usado no arquivo perguntas.js (não mude).
      - "nome": como o tema aparece na roleta e na tela.
-     - "cor": cor da fatia na roleta. As cores evitam vermelho, azul, verde e
-       amarelo puros, para ninguém confundir com as cores das equipes.
+     - "cor": cor da fatia na roleta (cores vivas, estilo "elétrico").
+       Os nomes e ícones são desenhados em branco com contorno escuro, então
+       ficam legíveis em qualquer cor.
      ------------------------------------------------------------------------ */
   temas: [
-    { chave: "inundacoes",    nome: "Inundações",            cor: "#13808a" },
-    { chave: "deslizamentos", nome: "Deslizamentos",         cor: "#8b5a2b" },
-    { chave: "estiagem",      nome: "Estiagem",              cor: "#c25a10" },
-    { chave: "vendaval",      nome: "Vendaval e Granizo",    cor: "#56657c" },
-    { chave: "mapas",         nome: "Mapas e Satélites",     cor: "#6a3d9a" },
-    { chave: "mochila",       nome: "Mochila de Emergência", cor: "#bf3468" }
+    { chave: "inundacoes",    nome: "Inundações",            cor: "#0096ff" },
+    { chave: "deslizamentos", nome: "Deslizamentos",         cor: "#ff6d00" },
+    { chave: "estiagem",      nome: "Estiagem",              cor: "#ffc300" },
+    { chave: "vendaval",      nome: "Vendaval e Granizo",    cor: "#8f00ff" },
+    { chave: "mapas",         nome: "Mapas e Satélites",     cor: "#00c9a7" },
+    { chave: "mochila",       nome: "Mochila de Emergência", cor: "#ff1f8f" }
   ],
 
   /* ------------------------------------------------------------------------
