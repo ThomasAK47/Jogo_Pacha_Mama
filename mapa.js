@@ -24,7 +24,7 @@
      4. Trilhas das equipes
      5. Enfeites: árvores, flores, pedras e bichinhos
      6. Pontos das perguntas, título e norte
-     7. Papel A4 ou A3
+     7. Tamanho do papel (A4 a A0)
      8. Início
    ========================================================================== */
 
@@ -843,15 +843,51 @@ function desenharMapa() {
 
 
 /* --------------------------------------------------------------------------
-   7. PAPEL A4 OU A3
-   O desenho é o mesmo; no A3 tudo fica 1,414 vez maior.
+   7. TAMANHO DO PAPEL (A4, A3, A2, A1 ou A0)
+   O desenho é o mesmo em todos: na impressão, a folha inteira é ampliada.
+   Cada tamanho da série A é 1,414 vez (raiz de 2) maior que o anterior.
+   As medidas vão em milímetros porque o navegador não conhece os nomes
+   A2, A1 e A0 (só até o A3).
    -------------------------------------------------------------------------- */
-function escolherPapel(papel) {
+var PAPEIS = {
+  A4: { largura: 297,  altura: 210, escala: 1 },
+  A3: { largura: 420,  altura: 297, escala: Math.SQRT2 },
+  A2: { largura: 594,  altura: 420, escala: 2 },
+  A1: { largura: 841,  altura: 594, escala: 2 * Math.SQRT2 },
+  A0: { largura: 1189, altura: 841, escala: 4 }
+};
+
+// Tamanho da folha do mapa no A4, em mm (o mesmo de .folha.paisagem no impressao.css)
+var FOLHA_LARGURA = 281, FOLHA_ALTURA = 193;
+// Quantos mm uma unidade do desenho mede no A4 (281 mm para 1000 unidades)
+var MM_POR_UNIDADE = FOLHA_LARGURA / LARGURA;
+// Diâmetro de uma casa da trilha no desenho, com o contorno (ver desenharCasa)
+var DIAMETRO_CASA = 2 * (20 + 3.5);
+
+/* Número com vírgula e uma casa decimal: 29.7 → "29,7"; 21 → "21" */
+function emCm(mm) {
+  return String(Math.round(mm) / 10).replace(".", ",");
+}
+
+function escolherPapel(nome) {
+  var papel = PAPEIS[nome];
+  // Margens iguais dos dois lados, para o mapa ficar no meio da folha
+  // (meio milímetro a menos, para nunca escapar para uma segunda página)
+  var margemLados = Math.floor((papel.largura - FOLHA_LARGURA * papel.escala) / 2 * 10) / 10 - 0.5;
+  var margemTopo = Math.floor((papel.altura - FOLHA_ALTURA * papel.escala) / 2 * 10) / 10 - 0.5;
   document.getElementById("tamanho-papel").textContent =
-    "@page { size: " + papel + " landscape; margin: 8mm; }";
-  document.getElementById("folha-mapa").classList.toggle("a3", papel === "A3");
-  document.getElementById("papel-a4").setAttribute("aria-pressed", papel === "A4" ? "true" : "false");
-  document.getElementById("papel-a3").setAttribute("aria-pressed", papel === "A3" ? "true" : "false");
+    "@page { size: " + papel.largura + "mm " + papel.altura + "mm; margin: " + margemTopo + "mm " + margemLados + "mm; }\n" +
+    "@media print { .folha-mapa { zoom: " + papel.escala + "; } }";
+
+  for (var outro in PAPEIS) {
+    document.getElementById("papel-" + outro.toLowerCase())
+      .setAttribute("aria-pressed", outro === nome ? "true" : "false");
+  }
+  document.getElementById("resumo-papel").textContent =
+    "1 folha " + nome + " deitada (" + emCm(papel.largura) + " × " + emCm(papel.altura) + " cm)" +
+    " · casas da trilha com " + emCm(DIAMETRO_CASA * MM_POR_UNIDADE * papel.escala) + " cm";
+  // A2, A1 e A0 precisam de gráfica
+  document.getElementById("aviso-grafica").hidden = papel.escala < 2;
 }
 
 
@@ -859,6 +895,9 @@ function escolherPapel(papel) {
    8. INÍCIO
    -------------------------------------------------------------------------- */
 desenharMapa();
-document.getElementById("papel-a4").addEventListener("click", function () { escolherPapel("A4"); });
-document.getElementById("papel-a3").addEventListener("click", function () { escolherPapel("A3"); });
+Object.keys(PAPEIS).forEach(function (nome) {
+  document.getElementById("papel-" + nome.toLowerCase())
+    .addEventListener("click", function () { escolherPapel(nome); });
+});
+escolherPapel("A4");
 document.getElementById("botao-imprimir").addEventListener("click", function () { window.print(); });
