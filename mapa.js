@@ -877,7 +877,7 @@ function escolherPapel(nome) {
   var margemTopo = Math.floor((papel.altura - FOLHA_ALTURA * papel.escala) / 2 * 10) / 10 - 0.5;
   document.getElementById("tamanho-papel").textContent =
     "@page { size: " + papel.largura + "mm " + papel.altura + "mm; margin: " + margemTopo + "mm " + margemLados + "mm; }\n" +
-    "@media print { .folha-mapa { zoom: " + papel.escala + "; } }";
+    "@media print { .folhas .folha { zoom: " + papel.escala + "; } }";   // todas as folhas da página
 
   for (var outro in PAPEIS) {
     document.getElementById("papel-" + outro.toLowerCase())
