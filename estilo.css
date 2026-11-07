@@ -6,14 +6,26 @@
    ========================================================================== */
 
 :root {
-  --fundo: #f6f1e4;            /* fundo claro: funciona melhor em projetor */
+  /* Estilo "elétrico": cores vivas sobre fundo claro (o fundo claro
+     continua sendo o que funciona melhor em projetor) */
+  --fundo: #f7f4ff;
   --cartao: #ffffff;
   --texto: #1a1a1a;
   --texto-suave: #4d4d4d;
   --borda: #1a1a1a;
-  --principal: #1d6b40;        /* verde-mata dos botões principais */
-  --principal-escuro: #11452a;
-  --barra: #22303c;            /* barra do topo durante o jogo */
+  --principal: #8f00ff;        /* roxo elétrico dos botões principais */
+  --principal-escuro: #4b0094;
+  --destaque: #ff1f8f;         /* rosa elétrico do botão GIRAR */
+  --destaque-escuro: #a3005a;
+  --amarelo: #ffe600;          /* amarelo elétrico */
+  --certo: #00c853;            /* verde da resposta certa */
+  --certo-escuro: #007a33;
+  --certo-fundo: #d9ffe8;
+  --barra: #3a0ca3;            /* cor do texto sobre fundo branco na barra */
+  --barra-fundo: linear-gradient(90deg, #3a0ca3 0%, #7209b7 55%, #d4117a 100%);
+  /* contorno escuro para texto branco sobre as cores vivas dos temas */
+  --contorno-texto: 2px 2px 0 #1a1a1a, -2px 2px 0 #1a1a1a, 2px -2px 0 #1a1a1a, -2px -2px 0 #1a1a1a,
+                    0 2px 0 #1a1a1a, 2px 0 0 #1a1a1a, -2px 0 0 #1a1a1a, 0 -2px 0 #1a1a1a;
   --altura-barra: 64px;
   --altura-faixa: 0px;         /* altura da faixa "RODADA DE ALERTA" (o jogo.js ajusta) */
   --listras-alerta: repeating-linear-gradient(-45deg, #ffb703 0 70px, #fb8500 70px 140px);
@@ -30,7 +42,13 @@ html, body {
 }
 
 body {
-  background: var(--fundo);
+  background:
+    radial-gradient(circle at 6% 8%, rgba(255, 31, 143, 0.14), transparent 30%),
+    radial-gradient(circle at 96% 6%, rgba(255, 230, 0, 0.20), transparent 26%),
+    radial-gradient(circle at 94% 94%, rgba(0, 150, 255, 0.16), transparent 34%),
+    radial-gradient(circle at 4% 96%, rgba(0, 201, 167, 0.14), transparent 30%),
+    var(--fundo);
+  background-attachment: fixed;
   color: var(--texto);
   font-family: var(--fonte);
   font-size: 20px;
@@ -75,8 +93,9 @@ body.em-jogo .tela {
   box-shadow: 0 2px 0 rgba(0, 0, 0, 0.25);
 }
 .botao-principal {
-  background: var(--principal);
+  background: linear-gradient(135deg, var(--principal) 0%, var(--destaque) 100%);
   border-color: var(--principal-escuro);
+  box-shadow: 0 6px 0 var(--principal-escuro);
   color: #ffffff;
 }
 .botao-secundario {
@@ -99,7 +118,7 @@ body.em-jogo .tela {
 /* Contorno visível só para quem navega pelo teclado (Tab) */
 button:focus { outline: none; }
 button:focus-visible {
-  outline: 4px dashed #c25a10;
+  outline: 4px dashed var(--destaque);
   outline-offset: 4px;
 }
 
@@ -122,6 +141,16 @@ button:focus-visible {
 .cabecalho-inicial h1 {
   font-size: clamp(44px, 8vh, 72px);
   line-height: 1.1;
+  color: var(--principal);
+}
+/* Letras com degradê roxo → rosa → laranja (em navegadores que suportam) */
+@supports ((-webkit-background-clip: text) or (background-clip: text)) {
+  .cabecalho-inicial h1 {
+    background: linear-gradient(90deg, #7209b7 0%, #ff1f8f 55%, #ff6d00 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
 }
 
 .icones-temas {
@@ -131,8 +160,9 @@ button:focus-visible {
   margin-top: 14px;
 }
 .icones-temas span {
-  width: 48px;
-  height: 48px;
+  width: 52px;
+  height: 52px;
+  border: 3px solid var(--borda);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -167,12 +197,20 @@ button:focus-visible {
   color: var(--texto);
   transition: transform 0.1s, box-shadow 0.1s;
 }
-.botao-nivel:hover { transform: translateY(-4px); box-shadow: 0 12px 0 rgba(0, 0, 0, 0.25); }
-.botao-nivel:active { transform: translateY(4px); box-shadow: 0 4px 0 rgba(0, 0, 0, 0.25); }
+.botao-nivel[data-nivel="infantil"]      { --cor-nivel: #ff6d00; --cor-nivel-escura: #b34700; }
+.botao-nivel[data-nivel="intermediario"] { --cor-nivel: #8f00ff; --cor-nivel-escura: #4b0094; }
+.botao-nivel[data-nivel="adulto"]        { --cor-nivel: #0096ff; --cor-nivel-escura: #0057a3; }
+.botao-nivel {
+  border-color: var(--cor-nivel, var(--borda));
+  box-shadow: 0 8px 0 var(--cor-nivel-escura, rgba(0, 0, 0, 0.25));
+}
+.botao-nivel:hover { transform: translateY(-4px); box-shadow: 0 12px 0 var(--cor-nivel-escura, rgba(0, 0, 0, 0.25)); }
+.botao-nivel:active { transform: translateY(4px); box-shadow: 0 4px 0 var(--cor-nivel-escura, rgba(0, 0, 0, 0.25)); }
 .botao-nivel .nome-nivel {
   display: block;
   font-size: 44px;
   font-weight: bold;
+  color: var(--cor-nivel-escura, var(--texto));
 }
 .botao-nivel .publico-nivel {
   display: block;
@@ -253,8 +291,8 @@ button:focus-visible {
   color: var(--texto);
 }
 .alternar[aria-pressed="true"] {
-  background: var(--principal);
-  border-color: var(--principal-escuro);
+  background: var(--certo-escuro);
+  border-color: #004d20;
   color: #ffffff;
 }
 
@@ -276,7 +314,8 @@ button:focus-visible {
   cursor: pointer;
 }
 .opcao-modo[aria-pressed="true"] {
-  background: var(--barra);
+  background: var(--principal);
+  border-color: var(--principal-escuro);
   color: #ffffff;
 }
 
@@ -328,7 +367,7 @@ button:focus-visible {
 
 .barra-jogo {
   height: var(--altura-barra);
-  background: var(--barra);
+  background: var(--barra-fundo);
   color: #ffffff;
   display: grid;
   grid-template-columns: 1fr auto 1fr;
@@ -381,6 +420,16 @@ body.na-pergunta .marca { display: none; }
   color: var(--barra);
 }
 
+/* Ícones brancos sobre a cor do tema ganham contorno escuro (estilo adesivo) */
+.icones-temas .icone-tema path,
+.resultado .icone-tema path,
+.selo-tema .icone-tema path {
+  stroke: var(--borda);
+  stroke-width: 2.4px;
+  stroke-linejoin: round;
+  paint-order: stroke;
+}
+
 /* ----------------------------- Tela da roleta ----------------------------- */
 
 #tela-roleta {
@@ -399,7 +448,7 @@ body.na-pergunta .marca { display: none; }
   height: var(--lado);
   flex: none;
   border-radius: 50%;
-  box-shadow: 0 10px 0 rgba(0, 0, 0, 0.18);
+  box-shadow: 0 10px 0 rgba(58, 12, 163, 0.35), 0 0 40px rgba(255, 31, 143, 0.25);
   cursor: pointer;
 }
 .disco {
@@ -450,10 +499,12 @@ body.na-pergunta .marca { display: none; }
 
 /* Cartão com o tema sorteado */
 .resultado {
+  border: 5px solid var(--borda);
   border-radius: 26px;
   padding: 20px 20px 24px;
   color: #ffffff;
-  box-shadow: 0 8px 0 rgba(0, 0, 0, 0.25);
+  text-shadow: var(--contorno-texto);
+  box-shadow: 0 8px 0 rgba(0, 0, 0, 0.3);
   animation: aparece 0.45s cubic-bezier(0.2, 1.4, 0.4, 1);
 }
 .resultado-rotulo {
@@ -488,19 +539,28 @@ body.na-pergunta .marca { display: none; }
   font-size: clamp(48px, 10vh, 84px);
   padding: 18px 20px;
   border-radius: 28px;
-  background: var(--principal);
-  border-color: var(--principal-escuro);
+  background: linear-gradient(135deg, var(--destaque) 0%, #ff6d00 100%);
+  border-color: var(--destaque-escuro);
   color: #ffffff;
-  box-shadow: 0 10px 0 var(--principal-escuro);
+  text-shadow: 0 3px 0 rgba(0, 0, 0, 0.3);
+  box-shadow: 0 10px 0 var(--destaque-escuro);
   letter-spacing: 0.06em;
+}
+/* Brilho que "pulsa" em volta do botão, chamando para girar */
+.botao-girar:not(:disabled) {
+  animation: brilha-girar 1.8s ease-in-out infinite;
+}
+@keyframes brilha-girar {
+  0%, 100% { box-shadow: 0 10px 0 var(--destaque-escuro), 0 0 0 rgba(255, 31, 143, 0); }
+  50%      { box-shadow: 0 10px 0 var(--destaque-escuro), 0 0 34px rgba(255, 31, 143, 0.7); }
 }
 .botao-girar:active {
   transform: translateY(8px);
-  box-shadow: 0 2px 0 var(--principal-escuro);
+  box-shadow: 0 2px 0 var(--destaque-escuro);
 }
 .botao-girar:disabled {
   opacity: 0.6;
-  box-shadow: 0 10px 0 var(--principal-escuro);
+  box-shadow: 0 10px 0 var(--destaque-escuro);
 }
 
 /* Aviso embaixo do GIRAR (temas esgotados etc.) */
@@ -543,6 +603,7 @@ body.na-pergunta .marca { display: none; }
   font-size: 20px;
   font-weight: bold;
   white-space: nowrap;
+  text-shadow: 1px 1px 0 #1a1a1a, -1px 1px 0 #1a1a1a, 1px -1px 0 #1a1a1a, -1px -1px 0 #1a1a1a;
 }
 .selo-tema .icone-tema {
   width: 24px;
@@ -556,7 +617,7 @@ body.na-pergunta .marca { display: none; }
   gap: 10px;
   padding: 6px 20px 6px 12px;
   border-radius: 14px;
-  background: #ffd166;
+  background: var(--amarelo);
   border: 4px solid var(--borda);
   font-size: 28px;
   font-weight: bold;
@@ -635,7 +696,7 @@ body.na-pergunta .marca { display: none; }
 }
 .selo-certa {
   flex: none;
-  background: var(--principal);
+  background: var(--certo-escuro);
   color: #ffffff;
   font-size: 0.7em;
   font-weight: bold;
@@ -645,9 +706,9 @@ body.na-pergunta .marca { display: none; }
 
 /* Depois de revelar */
 .opcao.certa {
-  border-color: var(--principal-escuro);
-  background: #dcf2e2;
-  box-shadow: 0 0 0 6px var(--principal);
+  border-color: var(--certo-escuro);
+  background: var(--certo-fundo);
+  box-shadow: 0 0 0 6px var(--certo), 0 0 30px rgba(0, 200, 83, 0.55);
   animation: pulsa 0.55s ease-in-out 2;
 }
 .opcao.errada {
@@ -676,7 +737,7 @@ body.na-pergunta .marca { display: none; }
   flex: 1;
   background: var(--cartao);
   border: 3px solid var(--borda);
-  border-left: 14px solid var(--principal);
+  border-left: 14px solid var(--certo);
   border-radius: 16px;
   padding: 10px 20px;
   font-size: max(22px, calc(clamp(22px, 3.7vh, 32px) * var(--escala)));
@@ -687,7 +748,7 @@ body.na-pergunta .marca { display: none; }
   display: block;
   font-size: 0.75em;
   font-weight: bold;
-  color: var(--principal);
+  color: var(--certo-escuro);
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -825,16 +886,16 @@ body.na-pergunta .marca { display: none; }
 /* Cada desastre tem listras de uma cor diferente (a estiagem fica com
    o laranja de "atenção" padrão) */
 .alerta[data-evento="inundacao"] {
-  background-image: repeating-linear-gradient(-45deg, #bde0fe 0 70px, #8ecae6 70px 140px);
+  background-image: repeating-linear-gradient(-45deg, #8ff0ff 0 70px, #33d6ff 70px 140px);
 }
 .alerta[data-evento="temporal"] {
-  background-image: repeating-linear-gradient(-45deg, #c9c6e3 0 70px, #a9a4cf 70px 140px);
+  background-image: repeating-linear-gradient(-45deg, #c9b8ff 0 70px, #9d7dff 70px 140px);
 }
 .alerta[data-evento="deslizamento"] {
-  background-image: repeating-linear-gradient(-45deg, #f3dfbf 0 70px, #e2c08f 70px 140px);
+  background-image: repeating-linear-gradient(-45deg, #ffcf8a 0 70px, #ffa53d 70px 140px);
 }
 .alerta[data-evento="tornado"] {
-  background-image: repeating-linear-gradient(-45deg, #fad2e1 0 70px, #f4a9c4 70px 140px);
+  background-image: repeating-linear-gradient(-45deg, #ffa8dc 0 70px, #ff5cb8 70px 140px);
 }
 
 /* Desenhos de cada desastre. Só aparece o do desastre sorteado
@@ -1052,18 +1113,18 @@ body.na-pergunta .marca { display: none; }
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(20, 32, 44, 0.82);
+  background: rgba(58, 12, 163, 0.88);
 }
 .contagem-texto {
   color: #ffffff;
   font-size: min(45vh, 380px);
   font-weight: 900;
   line-height: 1;
-  text-shadow: 0 10px 0 rgba(0, 0, 0, 0.35);
+  text-shadow: 0 10px 0 var(--destaque);
 }
 .contagem-texto.palavra {
   font-size: min(17vh, 15vw);
-  color: #ffd166;
+  color: var(--amarelo);
 }
 .contagem-texto.anima { animation: numero 0.85s ease-out forwards; }
 .contagem-texto.palavra.anima { animation: palavra 0.6s cubic-bezier(0.2, 1.5, 0.4, 1) forwards; }

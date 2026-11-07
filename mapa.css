@@ -1,8 +1,9 @@
 /* ==========================================================================
    MAPA.CSS — APARÊNCIA DO MAPA PARA IMPRIMIR
    ==========================================================================
-   A folha é feita para A4 deitada. No A3, o mapa.js aumenta tudo na mesma
-   proporção (classe "a3"), então as medidas abaixo valem para os dois.
+   A folha é feita para A4 deitada. Nos papéis maiores (A3 a A0), o mapa.js
+   amplia tudo na mesma proporção só na impressão, então as medidas abaixo
+   valem para todos os tamanhos.
    O desenho em si (cores do morro, trilhas, árvores...) fica no mapa.js.
    ========================================================================== */
 
@@ -11,8 +12,15 @@
   flex-direction: column;
   gap: 1.5mm;
 }
-/* A3 tem 1,414 vez o tamanho do A4 */
-.folha-mapa.a3 { zoom: 1.4142; }
+
+/* Aviso de gráfica (A2, A1 e A0) */
+.aviso-grafica {
+  background: #fff3cd;
+  border: 3px solid #c79a00;
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-size: 16px;
+}
 
 .desenho-mapa {
   display: block;
@@ -86,7 +94,6 @@
   align-items: center;
   justify-content: center;
 }
-.folha-perfil.a3 { zoom: 1.4142; }
 
 .desenho-perfil {
   display: block;
