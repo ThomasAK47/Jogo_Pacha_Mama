@@ -68,9 +68,9 @@ var CONFIG = {
     ],
     faixa: "RODADA DE ALERTA",
     regras: {
-      infantil:      "Quem acertar anda 2 casas. Ninguém perde casa.",
-      intermediario: "Quem acertar anda 2 casas. Ninguém perde casa.",
-      adulto:        "Quem acertar anda 2 casas. Ninguém perde casa."
+      infantil:      "Quem acertar anda o dobro de casas.",
+      intermediario: "Quem acertar anda o dobro de casas.",
+      adulto:        "Quem acertar anda o dobro de casas."
     },
 
     // Regras fixas do sorteio do alerta (números de rodada):
