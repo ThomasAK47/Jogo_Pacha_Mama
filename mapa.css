@@ -86,19 +86,3 @@
   background: #ffe066;
 }
 
-
-/* ----------------------- Folha 2: o morro visto de lado ----------------------- */
-
-.folha-perfil {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.desenho-perfil {
-  display: block;
-  flex: none;
-  width: 190mm;
-  height: 190mm;           /* mesma proporção do viewBox: 1000 x 1000 */
-  font-family: var(--fonte);
-}
