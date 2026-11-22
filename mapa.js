@@ -733,9 +733,9 @@ function desenhoAcude(g) {
   criar("path", { d: "M-54 -6 l14 8 l-6 14 M-40 2 l16 -6 M-20 -36 l6 14 l-12 10 M24 -30 l-8 16 l14 8 M-34 26 l12 -10 l14 6 M30 10 l14 -6 l6 12 M6 26 l-4 -10" }, rachaduras);
   criar("ellipse", { cx: 2, cy: -2, rx: 16, ry: 8, fill: "#4fa3e3", stroke: "#1f6fa8", "stroke-width": 2 }, g);
 
-  // Ossada de boi: caveira com chifres e costelas, à esquerda do açude
+  // Ossada de boi: caveira com chifres e costelas, na beira de cima do açude
   // (em cima fica o quadro do morro de lado)
-  var boi = criar("g", { transform: "translate(-176 -36) scale(0.62)" }, g);
+  var boi = criar("g", { transform: "translate(-48 -40) scale(0.62)" }, g);
   var osso = { fill: "#fbf7ec", stroke: "#1a1a1a", "stroke-width": 2, "stroke-linejoin": "round" };
   criar("path", Object.assign({ d: "M-10 -6 C-22 -10 -30 -20 -32 -30 C-24 -22 -16 -18 -8 -14 Z" }, osso), boi);
   criar("path", Object.assign({ d: "M10 -6 C22 -10 30 -20 32 -30 C24 -22 16 -18 8 -14 Z" }, osso), boi);
